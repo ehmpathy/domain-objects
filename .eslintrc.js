@@ -27,5 +27,6 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     'import/no-cycle': 'off',
     'lines-between-class-members': 'off',
+    'max-classes-per-file': 'off',
   },
 };

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DomainObject validation Joi schema should throw a helpful error when does not pass joi schema 1`] = `
+"Errors on 1 properties were found while validating properties for domain object RocketShip.:
+[
+  {
+    \\"message\\": \\"\\\\\\"serialNumber\\\\\\" must be a valid GUID\\",
+    \\"path\\": \\"serialNumber\\",
+    \\"type\\": \\"string.guid\\"
+  }
+]
+
+Props Provided:
+{
+  \\"serialNumber\\": \\"__SOME_UUID__\\",
+  \\"fuelQuantity\\": 9001,
+  \\"passengers\\": 50
+}"
+`;
