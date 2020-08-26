@@ -1,0 +1,61 @@
+{
+  "name": "domain-objects",
+  "version": "0.0.0",
+  "description": "A simple, convenient way to represent domain objects and add runtime validation in your code base.",
+  "author": "UladKasach @uladkasach",
+  "license": "MIT",
+  "repository": "uladkasach/domain-objects",
+  "homepage": "https://github.com/uladkasach/domain-objects",
+  "keywords": [
+    "domain-driven-design",
+    "domain",
+    "driven",
+    "design",
+    "model",
+    "validation",
+    "schema",
+    "type",
+    "checking"
+  ],
+  "bugs": "https://github.com/uladkasach/domain-objects/issues",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/dist"
+  ],
+  "scripts": {
+    "build:clean": "rm -rf ./dist",
+    "build:ts": "tsc -p ./tsconfig.build.json",
+    "build": "npm run build:clean && npm run build:ts",
+    "test:types": "tsc --noEmit",
+    "test:lint": "eslint -c ./.eslintrc.js src/**/*.ts",
+    "test:unit": "jest --forceExit --verbose --passWithNoTests",
+    "test:integration": "jest -c ./jest.integration.config.js --forceExit --verbose --passWithNoTests",
+    "test": "npm run test:types && npm run test:lint && npm run test:unit && npm run test:integration",
+    "prepublish": "npm run build",
+    "preversion": "npm run prepublish && npm run test",
+    "postversion": "git push origin master --tags --no-verify"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/uuid": "^3.4.5",
+    "@typescript-eslint/eslint-plugin": "2.19.0",
+    "@typescript-eslint/parser": "2.19.0",
+    "dotenv": "^8.1.0",
+    "eslint": "6.1.0",
+    "eslint-config-airbnb-base": "14.0.0",
+    "eslint-config-airbnb-typescript": "7.0.0",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-prettier": "3.1.2",
+    "husky": "^1.3.1",
+    "jest": "^25.5.4",
+    "prettier": "^2.0.4",
+    "ts-jest": "^25.4.0",
+    "typescript": "^3.8.3",
+    "uuid": "^3.3.3"
+  },
+  "dependencies": {}
+}
