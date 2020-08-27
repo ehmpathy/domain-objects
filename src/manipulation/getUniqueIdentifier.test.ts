@@ -48,6 +48,21 @@ describe('getUniqueIdentifier', () => {
       const uniqueIdentifier = getUniqueIdentifier(ship);
       expect(uniqueIdentifier).toEqual({ serialNumber: 'SN5' });
     });
+    it('should throw an error if .unique is not defined on the entity', () => {
+      interface RocketShip {
+        serialNumber: string;
+        fuelQuantity: number;
+        passengers: number;
+      }
+      class RocketShip extends DomainEntity<RocketShip> implements RocketShip {}
+      const ship = new RocketShip({ serialNumber: 'SN5', fuelQuantity: 9001, passengers: 21 });
+      try {
+        getUniqueIdentifier(ship);
+        throw new Error('should not reach here');
+      } catch (error) {
+        expect(error.message).toEqual('`RocketShip.unique` must be defined, to be able to `getUniqueIdentifier`');
+      }
+    });
     it('should be able to get unique identifier accurately', () => {
       interface SmartPhone {
         uuid: string;

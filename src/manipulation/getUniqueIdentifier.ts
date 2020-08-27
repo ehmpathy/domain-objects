@@ -7,6 +7,8 @@ import { DomainObject } from '../instantiation/DomainObject';
 export const getUniqueIdentifier = <T extends DomainObject<T>>(obj: DomainEntity<T> | DomainValueObject<T>): Partial<T> => {
   if (obj instanceof DomainEntity) {
     const uniqueKeys = (obj.constructor as typeof DomainEntity).unique;
+    const className = (obj.constructor as typeof DomainEntity).name;
+    if (!uniqueKeys) throw new Error(`\`${className}.unique\` must be defined, to be able to \`getUniqueIdentifier\``);
     return pick(obj, uniqueKeys);
   }
   if (obj instanceof DomainValueObject) {

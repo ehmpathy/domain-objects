@@ -9,7 +9,7 @@ import { DomainObject } from './DomainObject';
  * - A `User { uuid, name, address, profilePicture }` is an entity. Properties like `name`, `address`, and `profilePicture` can change over time.
  * - A `Job { uuid, requestId, status }` is an entity. We expect `status` to change over time as the job goes from, for example, `QUEUED` to `FULFILLED`.
  */
-export abstract class DomainEntity<T> extends DomainObject<T> {
+export class DomainEntity<T> extends DomainObject<T> {
   /**
    * `DomainEntity.unique` defines all of the properties of the entity that the entity is naturally unique on
    *
