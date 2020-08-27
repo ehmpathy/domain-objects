@@ -17,7 +17,7 @@ export abstract class DomainEntity<T> extends DomainObject<T> {
    * - a `FileProcessingJob { uuid, filePath, status }` is likely going to be unique on the `filePath` if we only ever need to process the same file once.
    * - a `SupportTicket { uuid, userId, type, status }`, on the other hand, is likely only going to be unique on the `uuid`, because the same user can create the same support ticket over and over again
    */
-  public static unique: string[];
+  public static unique: readonly string[];
 
   /**
    * `DomainEntity.updatable` defines all of the properties of the entity that are updatable
@@ -26,5 +26,5 @@ export abstract class DomainEntity<T> extends DomainObject<T> {
    * - a `User { uuid, name, address, picture }` would likely have `unique = ['name', 'address', 'picture']`, to enable the user to update their information as it changes over time
    * - an `Email { uuid, externalId, toAddress, fromAddress, message, status }` is likely only going to have `status` be updatable, as by changing the `toAddress` would, in this case, make us consider it to be a different email!
    */
-  public static updatable: string[];
+  public static updatable: readonly string[];
 }

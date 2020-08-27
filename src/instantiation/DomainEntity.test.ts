@@ -1,5 +1,4 @@
 import uuid from 'uuid';
-
 import { DomainEntity } from './DomainEntity';
 import { DomainObject } from './DomainObject';
 
@@ -10,9 +9,18 @@ describe('DomainEntity', () => {
       fuelQuantity: number;
       passengers: number;
     }
+    const unique = ['serialNumber'] as const;
+    const updatable = ['fuelQuantity', 'passengers'] as const;
+
+    type UniqueIdentifier<T, U extends keyof T> = Pick<T, U>;
+
+    interface RocketShipUniqueIdentifier extends UniqueIdentifier<RocketShip, typeof unique[number]> {} // eslint-disable-line @typescript-eslint/no-empty-interface
+    class RocketShipUniqueIdentifier extends DomainObject<RocketShipUniqueIdentifier> implements RocketShipUniqueIdentifier {}
+
     class RocketShip extends DomainEntity<RocketShip> implements RocketShip {
-      public static unique = ['serialNumber'];
-      public static updatable = ['fuelQuantity', 'passengers'];
+      public static unique = unique;
+      public static updatable = updatable;
+      public static UniqueIdentifier = RocketShipUniqueIdentifier;
     }
     const ship = new RocketShip({
       serialNumber: uuid(),

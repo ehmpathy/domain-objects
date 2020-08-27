@@ -1,3 +1,4 @@
-export { DomainObject } from './DomainObject';
-export { DomainValueObject } from './DomainValueObject';
-export { DomainEntity } from './DomainEntity';
+export { DomainObject } from './instantiation/DomainObject';
+export { DomainValueObject } from './instantiation/DomainValueObject';
+export { DomainEntity } from './instantiation/DomainEntity';
+export { getUniqueIdentifier } from './manipulation/getUniqueIdentifier';
