@@ -3,7 +3,9 @@ import { DomainObject } from './DomainObject';
 /**
  * In Domain Driven Design, an Entity is a type of Domain Object for which:
  * - properties change over time (e.g., it has a life cycle)
- * - identity matters (e.g., two entities could have the same properties, differing only by id, and still be valid)
+ * - identity matters
+ *   - e.g., two entities could have the same properties, differing only by id, and are still considered different entities
+ *   - e.g., you can update properties on an entity and it is still considered the same entity
  *
  * For example,
  * - A `User { uuid, name, address, profilePicture }` is an entity. Properties like `name`, `address`, and `profilePicture` can change over time.

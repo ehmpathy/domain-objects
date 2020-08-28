@@ -11,7 +11,6 @@ describe('DomainEntity', () => {
     }
     class RocketShip extends DomainEntity<RocketShip> implements RocketShip {
       public static unique = ['serialNumber'];
-      public static updatable = ['serialNumber'];
     }
     const ship = new RocketShip({
       serialNumber: uuid(),
