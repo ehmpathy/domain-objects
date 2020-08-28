@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Schema as JoiSchema } from 'joi'; // only importing types -> dev dep
+import Joi, { Schema as JoiSchema } from 'joi'; // only importing types -> dev dep
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { Schema as YupSchema, ValidationError } from 'yup'; // only importing types -> dev dep
@@ -7,7 +7,7 @@ import { Schema as YupSchema, ValidationError } from 'yup'; // only importing ty
 import { HelpfulJoiValidationError } from './HelpfulJoiValidationError';
 import { HelpfulYupValidationError } from './HelpfulYupValidationError';
 
-export type SchemaOptions = JoiSchema | YupSchema<any>;
+export type SchemaOptions = YupSchema<any> | JoiSchema;
 
 const isJoiSchema = (schema: SchemaOptions): schema is JoiSchema => {
   if ((schema as JoiSchema).$) return true; // joi schemas have `$`, yup does not

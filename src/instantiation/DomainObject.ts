@@ -21,6 +21,8 @@ export class DomainObject<T> {
    * DomainObject.schema
    *
    * When set, will be used to validate the properties passed into the constructor at runtime (i.e., during instantiation)
+   *
+   * Supports [`Joi`](https://github.com/sideway/joi) and [`Yup`](https://github.com/jquense/yup)
    */
   public static schema?: SchemaOptions;
 }
