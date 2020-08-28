@@ -1,5 +1,8 @@
-import { Schema as JoiSchema } from 'joi';
-import { Schema as YupSchema, ValidationError } from 'yup';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Schema as JoiSchema } from 'joi'; // only importing types -> dev dep
+
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { Schema as YupSchema, ValidationError } from 'yup'; // only importing types -> dev dep
 
 import { HelpfulJoiValidationError } from './HelpfulJoiValidationError';
 import { HelpfulYupValidationError } from './HelpfulYupValidationError';

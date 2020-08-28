@@ -1,4 +1,5 @@
-import Joi from 'joi';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import Joi from 'joi'; // only importing types  > dev dep
 
 interface HelpfulJoiValidationErrorDetail {
   message: string;

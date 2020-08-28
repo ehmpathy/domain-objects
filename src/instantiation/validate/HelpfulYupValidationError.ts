@@ -1,4 +1,5 @@
-import { ValidationError } from 'yup';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { ValidationError } from 'yup'; // only importing types  > dev dep
 
 export class HelpfulYupValidationError extends Error {
   public details: string[];
