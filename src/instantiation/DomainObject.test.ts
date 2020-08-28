@@ -1,8 +1,10 @@
 import uuid from 'uuid';
 import Joi from 'joi';
+import * as yup from 'yup';
 
 import { DomainObject } from './DomainObject';
-import { JoiValidationError } from './validate/JoiValidationError';
+import { HelpfulJoiValidationError } from './validate/HelpfulJoiValidationError';
+import { HelpfulYupValidationError } from './validate/HelpfulYupValidationError';
 
 describe('DomainObject', () => {
   describe('domain modeling use cases', () => {
@@ -99,7 +101,44 @@ describe('DomainObject', () => {
           });
           throw new Error('should not reach here');
         } catch (error) {
-          expect(error).toBeInstanceOf(JoiValidationError);
+          expect(error).toBeInstanceOf(HelpfulJoiValidationError);
+          expect(error.message).toMatchSnapshot();
+        }
+      });
+    });
+    describe('Yup schema', () => {
+      interface RocketShip {
+        serialNumber: string;
+        fuelQuantity: number;
+        passengers: number;
+      }
+      const schema = yup.object({
+        serialNumber: yup.string().required(),
+        fuelQuantity: yup.number().required(),
+        passengers: yup.number().max(42).required(),
+      });
+      class RocketShip extends DomainObject<RocketShip> implements RocketShip {
+        public static schema = schema;
+      }
+      it('should not throw error if when valid', () => {
+        const ship = new RocketShip({
+          serialNumber: uuid(),
+          fuelQuantity: 9001,
+          passengers: 21,
+        });
+        expect(ship).toBeInstanceOf(RocketShip); // sanity check
+      });
+      it('should throw a helpful error when does not pass schema', () => {
+        try {
+          // eslint-disable-next-line no-new
+          new RocketShip({
+            serialNumber: '__SOME_UUID__',
+            fuelQuantity: 9001,
+            passengers: 50,
+          });
+          throw new Error('should not reach here');
+        } catch (error) {
+          expect(error).toBeInstanceOf(HelpfulYupValidationError);
           expect(error.message).toMatchSnapshot();
         }
       });

@@ -1,5 +1,4 @@
-import { Schema } from 'joi';
-import { validate } from './validate/validate';
+import { validate, SchemaOptions } from './validate/validate';
 
 /**
  * Domain Object
@@ -23,5 +22,5 @@ export class DomainObject<T> {
    *
    * When set, will be used to validate the properties passed into the constructor at runtime (i.e., during instantiation)
    */
-  public static schema?: Schema;
+  public static schema?: SchemaOptions;
 }

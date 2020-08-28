@@ -1,12 +1,12 @@
 import Joi from 'joi';
 
-interface JoiValidationErrorDetail {
+interface HelpfulJoiValidationErrorDetail {
   message: string;
   path: string;
   type: string;
 }
-export class JoiValidationError extends Error {
-  public details: JoiValidationErrorDetail[];
+export class HelpfulJoiValidationError extends Error {
+  public details: HelpfulJoiValidationErrorDetail[];
 
   public props: any;
 
