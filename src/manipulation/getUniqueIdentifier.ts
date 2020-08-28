@@ -4,6 +4,11 @@ import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainValueObject } from '../instantiation/DomainValueObject';
 import { DomainObject } from '../instantiation/DomainObject';
 
+/**
+ * Extracts an object that uniquely identifies the domain object, for DomainEntity and DomainValueObject.
+ *
+ * Uses the definition of a DomainEntity or DomainValueObject in order to extract the properties that uniquely define the domain object, generically.
+ */
 export const getUniqueIdentifier = <T extends DomainObject<T>>(obj: DomainEntity<T> | DomainValueObject<T>): Partial<T> => {
   if (obj instanceof DomainEntity) {
     const uniqueKeys = (obj.constructor as typeof DomainEntity).unique;

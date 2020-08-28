@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`serialize domain objects should add the domain object name as metadata recursively, for all nested domain objects too 1`] = `
+Object {
+  "_dobj": "Spaceport",
+  "address": Object {
+    "_dobj": "Address",
+    "continent": "North America",
+    "galaxy": "Milky Way",
+    "planet": "Earth",
+    "solarSystem": "Sun",
+  },
+  "spaceships": Array [
+    Object {
+      "_dobj": "Spaceship",
+      "serialNumber": "__SHIP_A__",
+    },
+    Object {
+      "_dobj": "Spaceship",
+      "serialNumber": "__SHIP_B__",
+    },
+  ],
+  "uuid": "__SPACEPORT_UUID__",
+}
+`;
