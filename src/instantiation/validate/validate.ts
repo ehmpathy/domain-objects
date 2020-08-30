@@ -1,8 +1,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import Joi, { Schema as JoiSchema } from 'joi'; // only importing types -> dev dep
+import { Schema as JoiSchema } from 'joi'; // only importing types -> dev dep
 
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { Schema as YupSchema, ValidationError } from 'yup'; // only importing types -> dev dep
+import { Schema as YupSchema } from 'yup'; // only importing types -> dev dep
 
 import { HelpfulJoiValidationError } from './HelpfulJoiValidationError';
 import { HelpfulYupValidationError } from './HelpfulYupValidationError';
@@ -28,7 +28,7 @@ export const validate = ({ domainObjectName, schema, props }: { domainObjectName
     try {
       schema.validateSync(props);
     } catch (error) {
-      if (error instanceof ValidationError) throw new HelpfulYupValidationError({ domainObject: domainObjectName, error, props }); // if we got a yup validation error, make it more helpful
+      if (error.constructor.name === 'ValidationError') throw new HelpfulYupValidationError({ domainObject: domainObjectName, error, props }); // if we got a yup validation error, make it more helpful
       throw error; // otherwise throw the error we got
     }
   }
