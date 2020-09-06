@@ -143,5 +143,28 @@ describe('DomainObject', () => {
         }
       });
     });
+
+    describe('hydration', () => {
+      it('should hydrate nested domain objects', () => {
+        // define the plant pot
+        interface PlantPot {
+          diameterInInches: number;
+        }
+        class PlantPot extends DomainObject<PlantPot> implements PlantPot {}
+
+        // define the plant
+        interface Plant {
+          pot: PlantPot;
+          lastWatered: string;
+        }
+        class Plant extends DomainObject<Plant> implements Plant {
+          public static nested = { pot: PlantPot };
+        }
+
+        // now show that we hydrate the pot
+        const plant = new Plant({ pot: { diameterInInches: 7 }, lastWatered: 'monday' });
+        expect(plant.pot).toBeInstanceOf(PlantPot);
+      });
+    });
   });
 });
