@@ -165,6 +165,26 @@ describe('DomainObject', () => {
         const plant = new Plant({ pot: { diameterInInches: 7 }, lastWatered: 'monday' });
         expect(plant.pot).toBeInstanceOf(PlantPot);
       });
+      it('should hydrate nested array of domain objects', () => {
+        // define the plant owners
+        interface PlantOwner {
+          name: string;
+        }
+        class PlantOwner extends DomainObject<PlantOwner> implements PlantOwner {}
+
+        // define the plant
+        interface Plant {
+          owners: PlantOwner[];
+          lastWatered: string;
+        }
+        class Plant extends DomainObject<Plant> implements Plant {
+          public static nested = { owners: PlantOwner };
+        }
+
+        // now show that we hydrate the pot
+        const plant = new Plant({ owners: [{ name: 'bob' }], lastWatered: 'monday' });
+        plant.owners.forEach((owner) => expect(owner).toBeInstanceOf(PlantOwner));
+      });
     });
   });
 });

@@ -1,4 +1,5 @@
-import { validate, SchemaOptions } from './validate/validate';
+import { hydrateNestedDomainObjects } from './hydrate/hydrateNestedDomainObjects';
+import { SchemaOptions, validate } from './validate/validate';
 
 /**
  * Domain Object
@@ -14,9 +15,8 @@ export class DomainObject<T extends Record<string, any>> {
     if (schema) validate({ props, schema, domainObjectName: this.constructor.name });
 
     // 2. hydrate any nested props present; just overwrite the orig props for each "nested" key
-    const hydratedProps: Record<string, any> = { ...props };
-    const nested = (this.constructor as typeof DomainObject).nested ?? {};
-    Object.keys(nested).forEach((key) => (hydratedProps[key] = new (nested[key] as typeof DomainObject)(props[key]))); // eslint-disable-line no-return-assign
+    const nested = ((this.constructor as typeof DomainObject).nested ?? {}) as Record<string, typeof DomainObject>;
+    const hydratedProps = hydrateNestedDomainObjects({ props, nested });
 
     // 3. assign all properties to self if passed validation
     Object.assign(this, hydratedProps);
@@ -44,18 +44,26 @@ export class DomainObject<T extends Record<string, any>> {
    * }
    * class PlantPot extends DomainObject<PlantPot> implements PlantPot {}
    *
+   * // define the plant owner
+   * interface PlantOwner {
+   *   diameterInInches: number;
+   * }
+   * class PlantOwner extends DomainObject<PlantOwner> implements PlantOwner {}
+   *
    * // define the plant
    * interface Plant {
    *   pot: PlantPot;
+   *   owners: PlantOwner[];
    *   lastWatered: string;
    * }
    * class Plant extends DomainObject<Plant> implements Plant {
-   *   public static nested = { pot: PlantPot }
+   *   public static nested = { pot: PlantPot, owners: PlantOwner }
    * }
    *
    * // and show that it hydrates the plant pot
-   * const plant = new Plant({ pot: { diameterInInches: 7 }, lastWatered: 'monday' }); // notice how the param of `pot` we're inputting is _not_ an instance of `PlantPot`
-   * expect(plant.pot).toBeInstanceOf(PlantPot); // now succeeds, as during instantiation we hydrated `pot` into an instance of `PlantPot`, due to `Plant.nested` being set
+   * const plant = new Plant({ pot: { diameterInInches: 7 }, owners: [{ name: 'bob' }], lastWatered: 'monday' }); // notice how the param of `pot` we're inputting is _not_ an instance of `PlantPot`, and `owners` are not instances of `PlantOwner`
+   * expect(plant.pot).toBeInstanceOf(PlantPot); // now succeeds, as during instantiation we hydrated `pot` into an instance of `PlantPot`, due to `Plant.nested.pot` being set
+   * plant.owners.forEach((owner) => expect(owner).toBeInstance(PlantOwner)); // also succeeds, since during instantiation we hydrated each `owner` into an instance of `PlantOwner`, due to `Plant.nested.owners` being set
    * ```
    */
   public static nested?: Record<string, DomainObject<any>>; // TODO: find a way to make this Record<keyof string>
