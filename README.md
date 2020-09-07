@@ -10,9 +10,10 @@ Guided by [Domain Driven Design](https://dddcommunity.org/learning-ddd/what_is_d
 # Purpose
 
 - promote speaking in a domain driven manner, in code and in speech, by formally defining domain objects
+- to make software safer and easier to debug, by supporting run time type checking
 - to leverage domain knowledge in your code base
-  - e.g., comparisons of objects
-  - e.g., schema based runtime validation
+  - e.g., in comparisons of objects
+  - e.g., in schema based runtime validation
 
 # Install
 
@@ -291,6 +292,58 @@ Props Provided:
   "passengers": 50
 }
 ```
+
+## Nested Hydration
+
+> _TL:DR;_ Without `DomainObject.nested`, you will need to manually instantiate nested domain objects every time. If you forget, `getUniqueIdentifier` and `serialize` will throw errors.
+
+Nested hydration is useful when instantiating DomainObjects that are composed of other DomainObjects. For example, in the `RocketShip` example above, `RocketShip` has `Address` as a nested property (i.e., `typeof Spaceship.address === Address`).
+
+When attempting to manipulate DomainObjects with nested DomainObjects, like the Spaceship.address example, it is important that all nested domain objects are instantiated with their class. Otherwise, if `RocketShip.address` is not an instanceof `Address`, then we will not be able to utilize the domain information baked into the static properties of `Address` (e.g., that it is a DomainValueObject).
+
+`domain-objects` makes it easy to instantiate nested DomainObjects, by exposing the `DomainObject.nested` static property.
+
+For example:
+
+```ts
+// define the domain objects that you'll be nesting
+interface PlantPot {
+  diameterInInches: number;
+}
+class PlantPot extends DomainValueObject<PlantPot> implements PlantPot {}
+interface PlantOwner {
+  name: string;
+}
+class PlantOwner extends DomainEntity<PlantOwner> implements PlantOwner {}
+
+// define the plant
+interface Plant {
+  pot: PlantPot;
+  owners: PlantOwner[];
+  lastWatered: string;
+}
+class Plant extends DomainEntity<Plant> implements Plant {
+  /**
+   * define that `pot` and `owners` are nested domain objects, and specify which domain objects they are, so that they can be hydrated during instantiation if needed.
+   */
+  public static nested = { pot: PlantPot, owners: PlantOwner };
+}
+
+// instantiate your domain object
+const plant = new Plant({
+  pot: { diameterInInches: 7 }, // note, not an instance of `PlantPot`
+  owners: [{ name: 'bob' }], // note, not an instance of `PlantOwner`
+  lastWatered: 'monday',
+});
+
+// and find that, because `.nested.pot` was defined, `pot` was instantiated as a `PlantPot`
+expect(plant.pot).toBeInstanceOf(PlantPot);
+
+// and find that, because `.nested.owners` was defined, each element of `owners` was instantiated as a `PlantOwner`
+plant.owners.forEach((owner) => expect(owner).toBeInstance(PlantOwner));
+```
+
+You may be thinking to yourself, "Didn't i just define what the nested DomainObjects were in the type definition, when defining the interface? Why do i have to define it again?". Agreed! Unfortunately, typescript removes all type information at runtime. Therefore, we have no choice but to repeat this information in another way if we want to use this information at runtime. (See #8 for progress on automating this).
 
 ## fn `getUniqueIdentifier(obj: DomainEntity | DomainValueObject)`
 
