@@ -1,7 +1,10 @@
+import uuid from 'uuid';
+
+import { DomainObjectNotSafeToManipulateError } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../instantiation/DomainEntity';
+import { DomainValueObject } from '../instantiation/DomainValueObject';
 /* eslint-disable no-useless-escape */
 import { serialize } from './serialize';
-import { DomainValueObject } from '../instantiation/DomainValueObject';
 
 describe('serialize', () => {
   describe('basic types', () => {
@@ -113,6 +116,7 @@ describe('serialize', () => {
     class Spaceport extends DomainEntity<Spaceport> implements Spaceport {
       public static unique = ['uuid'];
       public static updatable = ['spaceships'];
+      public static nested = { address: Address, spaceships: Spaceship };
     }
 
     // run the tests
@@ -186,6 +190,31 @@ describe('serialize', () => {
 
       // their serials should be equivalent, because, due to domain modeling, we know that those two space ports are still the same (i.e., they reference the same ships, even though the ship's updatable properties have changed!)
       expect(serialB).toEqual(serialA);
+    });
+    describe('safety', () => {
+      it('should throw an error if domain object is not safe to manipulate', () => {
+        interface PlaneManufacturer {
+          name: string;
+        }
+        interface Plane {
+          uuid: string;
+          manufacturer: PlaneManufacturer;
+          passengerLimit: number;
+        }
+        class Plane extends DomainEntity<Plane> implements Plane {
+          public static unique = ['uuid'];
+        }
+        const phone = new Plane({
+          uuid: uuid(),
+          manufacturer: { name: 'boeing' },
+          passengerLimit: 821,
+        });
+        try {
+          serialize(phone);
+        } catch (error) {
+          expect(error).toBeInstanceOf(DomainObjectNotSafeToManipulateError);
+        }
+      });
     });
   });
 });

@@ -1,6 +1,9 @@
+import uuid from 'uuid';
+
 import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainValueObject } from '../instantiation/DomainValueObject';
 import { getUniqueIdentifier } from './getUniqueIdentifier';
+import { DomainObjectNotSafeToManipulateError } from '../constraints/assertDomainObjectIsSafeToManipulate';
 
 describe('getUniqueIdentifier', () => {
   describe('value object', () => {
@@ -90,6 +93,31 @@ describe('getUniqueIdentifier', () => {
         brand: 'Pixel',
         model: 'Pixel 3a',
       });
+    });
+  });
+  describe('safety', () => {
+    it('should throw an error if domain object is not safe to manipulate', () => {
+      interface PlaneManufacturer {
+        name: string;
+      }
+      interface Plane {
+        uuid: string;
+        manufacturer: PlaneManufacturer;
+        passengerLimit: number;
+      }
+      class Plane extends DomainEntity<Plane> implements Plane {
+        public static unique = ['uuid'];
+      }
+      const phone = new Plane({
+        uuid: uuid(),
+        manufacturer: { name: 'boeing' },
+        passengerLimit: 821,
+      });
+      try {
+        getUniqueIdentifier(phone);
+      } catch (error) {
+        expect(error).toBeInstanceOf(DomainObjectNotSafeToManipulateError);
+      }
     });
   });
 });

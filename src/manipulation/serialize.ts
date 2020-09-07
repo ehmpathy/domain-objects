@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable no-underscore-dangle */
+import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainObject } from '../instantiation/DomainObject';
 import { DomainValueObject } from '../instantiation/DomainValueObject';
 import { getUniqueIdentifier } from './getUniqueIdentifier';
@@ -64,6 +65,9 @@ const toSerializableObject = (obj: Record<string, any>, root?: boolean) => {
 
   // if this object is a DomainObject, add its name to the serial parts as metadata (i.e., underscore suffix)
   if (obj instanceof DomainObject) stringifiableObj._dobj = obj.constructor.name;
+
+  // if this object is a domain object, make sure that it is safe to manipulate
+  if (obj instanceof DomainObject) assertDomainObjectIsSafeToManipulate(obj);
 
   // if this object is a DomainObject AND its not the root object we're serializing, then only consider its unique properties for serialization; (i.e., only consider which domain objects the root object references, not the current state of the domain objects the root object references)
   let objToMakeSerializable = obj;
