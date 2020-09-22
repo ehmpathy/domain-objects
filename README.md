@@ -72,6 +72,8 @@ const ship = new RocketShip({
 
 ### runtime validation
 
+> everyone has types until they get punched in the runtime - mike tyson
+
 ```ts
 // define your domain object with a schema this time
 interface Address {
