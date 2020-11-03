@@ -11,8 +11,11 @@ export const hydrateNestedDomainObjects = ({ props, nested }: { props: Record<st
     const isDomainObjectBased = NestedDomainObject.prototype instanceof DomainObject; // https://stackoverflow.com/a/14486171/3068233
     if (!isDomainObjectBased) throw new Error('each key of DomainObject.nested must be a typeof DomainObject');
 
-    // instantiate the prop into the nested DomainObject specified
+    // check that the nested props are an object - otherwise, this field must be nullable
     const nestedProps = props[key];
+    if (typeof nestedProps !== 'object' || nestedProps === null) return; // skip hydration if its not an object or is null - since no domain object would validate that
+
+    // instantiate the prop into the nested DomainObject specified
     const isArrayProp = Array.isArray(nestedProps);
     const hydratedProp = isArrayProp
       ? nestedProps.map((nestedPropsSet: any) => new NestedDomainObject(nestedPropsSet)) // if array, then hydrate each

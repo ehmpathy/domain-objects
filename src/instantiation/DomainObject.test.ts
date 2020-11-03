@@ -185,6 +185,26 @@ describe('DomainObject', () => {
         const plant = new Plant({ owners: [{ name: 'bob' }], lastWatered: 'monday' });
         plant.owners.forEach((owner) => expect(owner).toBeInstanceOf(PlantOwner));
       });
+      it('should not hydrate nullable nested domain objects when null', () => {
+        // define the plant owners
+        interface PlantOwner {
+          name: string;
+        }
+        class PlantOwner extends DomainObject<PlantOwner> implements PlantOwner {}
+
+        // define the plant
+        interface Plant {
+          owners: PlantOwner[] | null;
+          lastWatered: string;
+        }
+        class Plant extends DomainObject<Plant> implements Plant {
+          public static nested = { owners: PlantOwner };
+        }
+
+        // now show that we hydrate the pot
+        const plant = new Plant({ owners: null, lastWatered: 'monday' });
+        expect(plant.owners).toEqual(null); // should still be null - since should not have instantiated
+      });
     });
   });
 });
