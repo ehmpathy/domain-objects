@@ -4,6 +4,7 @@ import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainValueObject } from '../instantiation/DomainValueObject';
 import { getUniqueIdentifier } from './getUniqueIdentifier';
 import { DomainObjectNotSafeToManipulateError } from '../constraints/assertDomainObjectIsSafeToManipulate';
+import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 
 describe('getUniqueIdentifier', () => {
   describe('value object', () => {
@@ -63,7 +64,8 @@ describe('getUniqueIdentifier', () => {
         getUniqueIdentifier(ship);
         throw new Error('should not reach here');
       } catch (error) {
-        expect(error.message).toEqual('`RocketShip.unique` must be defined, to be able to `getUniqueIdentifier`');
+        expect(error.message).toContain('`RocketShip.unique` must be defined, to be able to `getUniqueIdentifier`');
+        expect(error).toBeInstanceOf(DomainEntityUniqueKeysMustBeDefinedError);
       }
     });
     it('should be able to get unique identifier accurately', () => {

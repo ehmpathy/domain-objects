@@ -4,6 +4,7 @@ import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainValueObject } from '../instantiation/DomainValueObject';
 import { DomainObject } from '../instantiation/DomainObject';
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
+import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 
 /**
  * Extracts an object that uniquely identifies the domain object, for DomainEntity and DomainValueObject.
@@ -24,7 +25,7 @@ export const getUniqueIdentifier = <T extends Record<string, any>>(obj: DomainEn
   if (obj instanceof DomainEntity) {
     const uniqueKeys = (obj.constructor as typeof DomainEntity).unique;
     const className = (obj.constructor as typeof DomainEntity).name;
-    if (!uniqueKeys) throw new Error(`\`${className}.unique\` must be defined, to be able to \`getUniqueIdentifier\``);
+    if (!uniqueKeys) throw new DomainEntityUniqueKeysMustBeDefinedError({ entityName: className, nameOfFunctionNeededFor: 'getUniqueIdentifier' });
     return pick(obj, uniqueKeys);
   }
 
