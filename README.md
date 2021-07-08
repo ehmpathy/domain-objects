@@ -26,6 +26,8 @@ npm install --save domain-objects
 ### value object
 
 ```ts
+import { DomainValueObject } from 'domain-objects';
+
 // define it
 interface Address {
   street: string;
@@ -49,6 +51,8 @@ const austin = new Address({
 ### entity
 
 ```ts
+import { DomainEntity } from 'domain-objects';
+
 // define it
 interface RocketShip {
   uuid?: string;
@@ -59,14 +63,51 @@ interface RocketShip {
 }
 class RocketShip extends DomainEntity<RocketShip> implements RocketShip {
   public static unique = ['serialNumber'];
+  public static updatable = ['fuelQuantity', 'homeAddress'];
 }
 
 // use it
 const ship = new RocketShip({
-  serialNumber: 'SN5,
+  serialNumber: 'SN5',
   fuelQuantity: 9001,
   passengers: 21,
   homeAddress: new Address({ ... }),
+});
+```
+
+
+### event
+
+```ts
+import { DomainEvent } from 'domain-objects';
+
+// define it
+interface AirQualityMeasuredEvent {
+  locationUuid: string;
+  sensorUuid: string;
+  occurredAt: string;
+  temperature: string;
+  humidity: string;
+  pressure: string;
+  pm2p5: string; // PM2.5 : fine inhalable particles, with diameters that are generally 2.5 micrometers
+  pm5p0: string; // PM5.0
+  pm10p0: string; // PM10.0
+}
+class AirQualityMeasuredEvent extends DomainEvent<AirQualityMeasuredEvent> implements AirQualityMeasuredEvent {
+  public static unique = ['locationUuid', 'sensorUuid'];
+}
+
+// use it
+const event = new AirQualityMeasuredEvent({
+  locationUuid: '8e34eb9b-2874-43e0-bc89-73a73d50ac5c',
+  sensorUuid: 'a17f7941-1211-44f4-a22a-b61f220527da',
+  occurredAt: '2021-07-08T11:13:38.780Z',
+  temperature: '31.52°C',
+  humidity: '27%rh',
+  pressure: '29.99bar',
+  pm2p5: '9ug/m3',
+  pm5p0: '11ug/m3',
+  pm10p0: '17ug/m3',
 });
 ```
 
