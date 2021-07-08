@@ -7,6 +7,8 @@ import { DomainObject } from './DomainObject';
  *   - e.g., two entities could have the same properties, differing only by id, and are still considered different entities
  *   - e.g., you can update properties on an entity and it is still considered the same entity
  *
+ * The purpose of a Domain Entity is to represent interesting objects for which distinct identities and life cycles are important in the domain.
+ *
  * For example,
  * - A `User { uuid, name, address, profilePicture }` is an entity. Properties like `name`, `address`, and `profilePicture` can change over time.
  * - A `Job { uuid, requestId, status }` is an entity. We expect `status` to change over time as the job goes from, for example, `QUEUED` to `FULFILLED`.

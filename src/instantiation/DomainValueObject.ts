@@ -7,8 +7,10 @@ import { DomainObject } from './DomainObject';
  *   - i.e., it is uniquely identifiable by its properties
  *   - i.e., if you change the value of any of its properties, it is now considered a new value-object
  *
+ * The purpose of a Domain Value Object is to represent interesting objects for which distinct identities and life cycles are not relevant in the domain.
+ *
  * For example,
  * - A `Address { street, city, state, country }` is a value object. Changing any of the properties, like `street`, produces a completely new address
- * - A `Name { first, last }` is a value object. Changing either property means you are dealing with a new name.
+ * - A `Geocode { latitude, longitude }` is a value object. Changing either property means you are dealing with a new name.
  */
 export abstract class DomainValueObject<T> extends DomainObject<T> {}
