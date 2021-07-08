@@ -61,7 +61,7 @@
     "yup": "^0.29.3"
   },
   "dependencies": {
-    "@types/joi": "^14.3.4",
+    "@types/joi": "^17.2.3",
     "@types/lodash.omit": "^4.5.6",
     "@types/yup": "^0.29.6",
     "lodash.omit": "^4.5.0",
