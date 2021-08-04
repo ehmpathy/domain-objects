@@ -1,4 +1,5 @@
 import uuid from 'uuid';
+import { DomainObject } from '..';
 
 import { DomainObjectNotSafeToManipulateError } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../instantiation/DomainEntity';
@@ -191,6 +192,22 @@ describe('serialize', () => {
       // their serials should be equivalent, because, due to domain modeling, we know that those two space ports are still the same (i.e., they reference the same ships, even though the ship's updatable properties have changed!)
       expect(serialB).toEqual(serialA);
     });
+
+    interface GlowWorm {
+      glowing: boolean;
+      color: string;
+    }
+    class GlowWorm extends DomainObject<GlowWorm> implements GlowWorm {}
+    it('should not throw an error trying to serialize a safe generic domain object', () => {
+      const worm = new GlowWorm({
+        glowing: true,
+        color: 'purple',
+      });
+      const serial = serialize(worm);
+      expect(serial).toContain('GlowWorm');
+      expect(serial).toEqual(`{\"_dobj\":\"GlowWorm\",\"color\":\"purple\",\"glowing\":true}`);
+    });
+
     describe('safety', () => {
       it('should throw an error if domain object is not safe to manipulate', () => {
         interface PlaneManufacturer {
