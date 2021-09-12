@@ -1,6 +1,6 @@
 {
   "name": "domain-objects",
-  "version": "0.7.3",
+  "version": "0.7.4",
   "description": "A simple, convenient way to represent domain objects, leverage domain knowledge, and add runtime validation in your code base.",
   "author": "UladKasach @uladkasach",
   "license": "MIT",
