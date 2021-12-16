@@ -16,3 +16,20 @@ For example:
 \`\`\`
     "
 `;
+
+exports[`assertDomainObjectIsSafeToManipulate should throw a helpful error if any of the properties are an array with nested objects not explicitly defined 1`] = `
+"
+DomainObject 'Plant' is not safe to manipulate.
+
+Specifically, the keys: [\\"pastPots\\"].
+
+Please make sure all nested objects are DomainObjects and are explicitly defined on the class definition, using the 'nested' static property.
+
+For example:
+\`\`\`ts
+  class Plant ... {
+    public static nested = { pastPots: ... };
+  }
+\`\`\`
+    "
+`;

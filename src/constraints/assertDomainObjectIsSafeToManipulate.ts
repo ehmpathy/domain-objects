@@ -29,11 +29,34 @@ export const assertDomainObjectIsSafeToManipulate = <T extends Record<string, an
   // grab all the keys that have objects defined for their values
   const nestedObjectKeys = Object.keys(obj).filter((key) => typeof obj[key] === 'object' && obj[key] !== null);
 
-  // grab all the "nested object keys" who's values are defines as "should be domain object"
+  // grab all the "nested object keys" who's values are defined as "should be domain object"
   const nestedDomainObjectKeysDefined = Object.keys((obj.constructor as typeof DomainObject).nested ?? {});
   const nestedNonDomainObjectObjectKeys = nestedObjectKeys.filter((key) => !nestedDomainObjectKeysDefined.includes(key)); // not explicitly defined as a nested domain object key
 
-  // if we have any nestedNonDomainObjectObjectKeys, then its not safe!
-  if (nestedNonDomainObjectObjectKeys.length)
-    throw new DomainObjectNotSafeToManipulateError({ unsafeKeys: nestedNonDomainObjectObjectKeys, className: obj.constructor.name });
+  // now apply some filters to those concerning keys
+  let concerningKeys = nestedNonDomainObjectObjectKeys;
+
+  // now filter out the keys which correspond to well known objects that we known are serializable and are not potentially DomainObjects (e.g., dates)
+  concerningKeys = concerningKeys.filter((concerningKey) => {
+    const value = obj[concerningKey];
+    if (value instanceof Date) return false; // if its a date, not concerning
+    if (value instanceof Buffer) return false; // if its a buffer, not concerning
+    return true; // if it wasn't filtered out by now, its still concerning
+  });
+
+  // now filter out the keys which correspond to arrays of objects which are safe to manipulate; // TODO: consider how we can move this check to not be dependent on runtime contents of the domain object instance
+  concerningKeys = concerningKeys.filter((concerningKey) => {
+    const value = obj[concerningKey];
+    if (!Array.isArray(value)) return true; // if its not an array, its still concerning
+    try {
+      assertDomainObjectIsSafeToManipulate(value);
+      return false; // if we reached here, that means that the contents of the array _are_ safe, so not concerning
+    } catch (error) {
+      if (error instanceof DomainObjectNotSafeToManipulateError) return true; // if it was this error, that means that this key is definitely still concerning
+      throw error; // otherwise its an error we couldn't handle, so we should pass it up
+    }
+  });
+
+  // if we have any concerningKeys still, then its not safe!
+  if (concerningKeys.length) throw new DomainObjectNotSafeToManipulateError({ unsafeKeys: concerningKeys, className: obj.constructor.name });
 };
