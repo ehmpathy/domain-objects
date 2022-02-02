@@ -94,7 +94,7 @@ interface AirQualityMeasuredEvent {
   pm10p0: string; // PM10.0
 }
 class AirQualityMeasuredEvent extends DomainEvent<AirQualityMeasuredEvent> implements AirQualityMeasuredEvent {
-  public static unique = ['locationUuid', 'sensorUuid'];
+  public static unique = ['locationUuid', 'sensorUuid', 'occurredAt];
 }
 
 // use it
