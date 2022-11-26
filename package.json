@@ -30,6 +30,7 @@
     "build:ts": "tsc -p ./tsconfig.build.json",
     "build": "npm run build:clean && npm run build:ts",
     "test:types": "tsc --noEmit",
+    "test:format": "prettier --parser typescript --check 'src/**/*.ts' --config ./prettier.config.js",
     "test:lint": "eslint -c ./.eslintrc.js src/**/*.ts",
     "test:unit": "jest --forceExit --verbose --passWithNoTests",
     "test:integration": "jest -c ./jest.integration.config.js --forceExit --verbose --passWithNoTests",
