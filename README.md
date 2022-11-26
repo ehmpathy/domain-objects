@@ -1,7 +1,7 @@
 # domain-objects
 
-![ci_on_commit](https://github.com/uladkasach/domain-objects/workflows/ci_on_commit/badge.svg)
-![deploy_on_tag](https://github.com/uladkasach/domain-objects/workflows/deploy_on_tag/badge.svg)
+![ci_on_commit](https://github.com/ehmpathy/domain-objects/workflows/ci_on_commit/badge.svg)
+![deploy_on_tag](https://github.com/ehmpathy/domain-objects/workflows/deploy_on_tag/badge.svg)
 
 A simple, convenient way to represent domain objects, leverage domain knowledge, and add runtime validation in your code base.
 
