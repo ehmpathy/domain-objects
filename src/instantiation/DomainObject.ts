@@ -16,7 +16,7 @@ export class DomainObject<T extends Record<string, any>> {
 
     // 2. hydrate any nested props present; just overwrite the orig props for each "nested" key
     const nested = ((this.constructor as typeof DomainObject).nested ?? {}) as Record<string, typeof DomainObject>;
-    const hydratedProps = hydrateNestedDomainObjects({ props, nested });
+    const hydratedProps = hydrateNestedDomainObjects({ domainObjectName: this.constructor.name, props, nested });
 
     // 3. assign all properties to self if passed validation
     Object.assign(this, hydratedProps);

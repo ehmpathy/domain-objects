@@ -89,6 +89,33 @@ describe('deserialize', () => {
       public static updatable = ['spaceships'];
       public static nested = { address: Address, spaceships: Spaceship };
     }
+    interface Human {
+      birthCode: string;
+      name: string;
+    }
+    class Human extends DomainEntity<Human> implements Human {
+      public static unique = ['birthCode'];
+      public static updatable = ['name'];
+    }
+    interface Robot {
+      serialNumber: string;
+      name: string;
+    }
+    class Robot extends DomainEntity<Robot> implements Robot {
+      public static unique = ['serialNumber'];
+      public static updatable = ['name'];
+    }
+    interface Captain {
+      ship: Spaceship;
+      agent: Robot | Human;
+    }
+    class Captain extends DomainEntity<Captain> implements Captain {
+      public static unique = ['ship', 'agent'];
+      public static nested = {
+        ship: Spaceship,
+        agent: [Robot, Human],
+      };
+    }
 
     // run the tests
     it('should deserialize domain objects', () => {
@@ -144,6 +171,44 @@ describe('deserialize', () => {
       expect(undone).toBeInstanceOf(Spaceport);
       expect(undone.address).toBeInstanceOf(Address);
       expect(undone.spaceships[0]).toBeInstanceOf(Spaceship);
+    });
+    it('recursively deserialize an array of domain objects', () => {
+      const shipA = new Spaceship({
+        serialNumber: '__SHIP_A__',
+        fuelQuantity: 7000,
+        passengers: 42,
+      });
+      const shipB = new Spaceship({
+        serialNumber: '__SHIP_B__',
+        fuelQuantity: 9001,
+        passengers: 21,
+      });
+      const original = [shipA, shipB];
+      const serial = serialize(original, { lossless: true });
+      const undone = deserialize<typeof original>(serial, { with: [Spaceport, Spaceship, Address] });
+      expect(undone).toEqual(original);
+      expect(undone[0]).toBeInstanceOf(Spaceship);
+    });
+    it('recursively deserialize a domain object which has a nested domain-object property instantiable with several options of domain objects', () => {
+      const ship = new Spaceship({
+        serialNumber: '__SHIP_A__',
+        fuelQuantity: 7000,
+        passengers: 42,
+      });
+      const agent = new Robot({
+        serialNumber: '821',
+        name: 'Bender',
+      });
+      const captain = new Captain({
+        ship,
+        agent,
+      });
+      const original = captain;
+      const serial = serialize(original, { lossless: true });
+      const undone = deserialize<typeof original>(serial, { with: [Spaceship, Human, Robot, Captain] });
+      expect(undone).toEqual(original);
+      expect(undone).toBeInstanceOf(Captain);
+      expect(undone.agent).toBeInstanceOf(Robot);
     });
   });
 });

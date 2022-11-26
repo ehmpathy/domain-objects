@@ -205,6 +205,32 @@ describe('DomainObject', () => {
         const plant = new Plant({ owners: null, lastWatered: 'monday' });
         expect(plant.owners).toEqual(null); // should still be null - since should not have instantiated
       });
+      it('should hydrate nested domain objects correctly when given choice of different options', () => {
+        // define the plant pot
+        interface PlantPot {
+          diameterInInches: number;
+        }
+        class PlantPot extends DomainObject<PlantPot> implements PlantPot {}
+
+        // define the plant bed
+        interface PlantBed {
+          location: string;
+        }
+        class PlantBed extends DomainObject<PlantBed> implements PlantBed {}
+
+        // define the plant
+        interface Plant {
+          plantedIn: PlantPot | PlantBed;
+          lastWatered: string;
+        }
+        class Plant extends DomainObject<Plant> implements Plant {
+          public static nested = { plantedIn: [PlantPot, PlantBed] };
+        }
+
+        // now show that we hydrate the pot correctly
+        const plant = new Plant({ plantedIn: { _dobj: 'PlantPot', diameterInInches: 7 } as PlantPot, lastWatered: 'monday' });
+        expect(plant.plantedIn).toBeInstanceOf(PlantPot);
+      });
     });
   });
 });
