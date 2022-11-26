@@ -3,6 +3,18 @@ import { DomainObject } from '../DomainObject';
 
 const isArray = <T>(val: T | Array<T>): val is Array<T> => Array.isArray(val);
 
+export class NestedDomainObjectHydrationError extends Error {
+  constructor(message: string, metadata: any) {
+    super(
+      `
+${message}
+
+${JSON.stringify(metadata, null, 2)}
+    `.trim(),
+    );
+  }
+}
+
 export const hydrateNestedDomainObjects = ({
   props,
   nested,
@@ -29,7 +41,10 @@ export const hydrateNestedDomainObjects = ({
       (NestedDomainObject) => NestedDomainObject.prototype instanceof DomainObject, // https://stackoverflow.com/a/14486171/3068233
     );
     if (!eachIsDomainObjectBased)
-      throw new Error('each key of DomainObject.nested must be a single typeof DomainObject or an array of options of typeof DomainObject');
+      throw new NestedDomainObjectHydrationError(
+        `each value of each ${domainObjectName}.nested key must be a single typeof DomainObject or an array of options of typeof DomainObject`,
+        { DeclaredNestedDomainObjectClassOptions },
+      );
 
     // check that the implemented value for this nested prop is an object - otherwise, this field must be nullable
     const nestedProp = props[key];
@@ -42,13 +57,12 @@ export const hydrateNestedDomainObjects = ({
       if (prop instanceof DomainObject) {
         const instantiatedClassName = prop.constructor.name;
         if (!declaredValidNestedClassNameOptionsForProp.includes(instantiatedClassName))
-          throw new Error(
-            `DomainObject property ${domainObjectName}.${key} was instantiated with a constructor which was not included in the list of valid declared DomainObject.nested options for the property.\n\n${JSON.stringify(
-              {
-                instantiatedClassName,
-                declaredValidNestedClassNameOptionsForProp,
-              },
-            )}`,
+          throw new NestedDomainObjectHydrationError(
+            `DomainObject property ${domainObjectName}.${key} was instantiated with a constructor which was not included in the list of valid declared DomainObject.nested options for the property.`,
+            {
+              instantiatedClassName,
+              declaredValidNestedClassNameOptionsForProp,
+            },
           );
         return prop; // otherwise, it's already instantiated as a valid domain object. good to go
       }
@@ -59,26 +73,22 @@ export const hydrateNestedDomainObjects = ({
       // otherwise, we must rely on the `_dobj` prop having been set by the `serialize` function or manually
       const declaredClassNameOfProp = prop._dobj;
       if (!declaredClassNameOfProp)
-        throw new Error(
-          `DomainObject property ${domainObjectName}.${key} was declared as a nested domain object with ${
-            DeclaredNestedDomainObjectClassOptions.length
-          } options but no ._dobj key was specified on the input. Can not determine which option to use without this.\n\n${JSON.stringify({
+        throw new NestedDomainObjectHydrationError(
+          `DomainObject property ${domainObjectName}.${key} was declared as a nested domain object with ${DeclaredNestedDomainObjectClassOptions.length} options but no ._dobj key was specified on the input. Can not determine which option to use without this.`,
+          {
             prop,
             declaredValidNestedClassNameOptionsForProp,
-          })}`,
+          },
         );
       const CorrectNestedDomainObject = DeclaredNestedDomainObjectClassOptions.find((ClassOption) => ClassOption.name === declaredClassNameOfProp);
       if (!CorrectNestedDomainObject)
-        throw new Error(
-          `DomainObject property ${domainObjectName}.${key} was declared as a nested domain object with ${
-            DeclaredNestedDomainObjectClassOptions.length
-          } options and had a ._dobj key specified on the input. However, the specified ._dobj was not found as one of the declared nested domain object options. In otherwords, the correct class constructor was not present on the DomainObject.nested definition. \n\n${JSON.stringify(
-            {
-              prop,
-              declaredClassNameOfProp,
-              declaredValidNestedClassNameOptionsForProp,
-            },
-          )}`,
+        throw new NestedDomainObjectHydrationError(
+          `DomainObject property ${domainObjectName}.${key} was declared as a nested domain object with ${DeclaredNestedDomainObjectClassOptions.length} options and had a ._dobj key specified on the input. However, the specified ._dobj was not found as one of the declared nested domain object options. In otherwords, the correct class constructor was not present on the DomainObject.nested definition.`,
+          {
+            prop,
+            declaredClassNameOfProp,
+            declaredValidNestedClassNameOptionsForProp,
+          },
         );
       return new CorrectNestedDomainObject(prop);
     };
