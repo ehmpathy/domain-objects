@@ -4,6 +4,9 @@ export const hydrateNestedDomainObjects = ({ props, nested }: { props: Record<st
   // create a new object, so as to not mutate original props
   const hydratedProps: Record<string, any> = { ...props };
 
+  // drop the "_dobj" prop, if one was defined due to serialization
+  delete hydratedProps._dobj; // eslint-disable-line no-underscore-dangle
+
   // for each key that we were told is a nested domain object
   Object.keys(nested).forEach((key) => {
     // check that the value of "nested" was defined as a DomainObject

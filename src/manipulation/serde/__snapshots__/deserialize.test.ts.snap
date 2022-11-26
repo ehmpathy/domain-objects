@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`deserialize domain objects should throw a helpful error if attempted to deserialize a domain object without its constructor being provided in the context 1`] = `
+"
+DomainObject 'Spaceship' was referenced in the string being deserialized but was missing from the context given to the deserialize method.
+
+Please make sure all DomainObjects serialized in the string have their classes defined in the context given to the deserialize method, using the 'with' property.
+    "
+`;

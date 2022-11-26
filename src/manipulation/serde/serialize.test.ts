@@ -1,9 +1,9 @@
 import uuid from 'uuid';
-import { DomainObject } from '..';
+import { DomainObject } from '../..';
 
-import { DomainObjectNotSafeToManipulateError } from '../constraints/assertDomainObjectIsSafeToManipulate';
-import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainValueObject } from '../instantiation/DomainValueObject';
+import { DomainObjectNotSafeToManipulateError } from '../../constraints/assertDomainObjectIsSafeToManipulate';
+import { DomainEntity } from '../../instantiation/DomainEntity';
+import { DomainValueObject } from '../../instantiation/DomainValueObject';
 /* eslint-disable no-useless-escape */
 import { serialize } from './serialize';
 
