@@ -1,5 +1,13 @@
 # Changelog
 
+### [0.9.1](https://www.github.com/ehmpathy/domain-objects/compare/v0.9.0...v0.9.1) (2022-11-26)
+
+
+### Bug Fixes
+
+* **errors:** add potential solutions to the nested hydration error messages ([e5fc797](https://www.github.com/ehmpathy/domain-objects/commit/e5fc7978899ae121e8fe99af69ef06071957d8c9))
+* **errors:** make errors on nested domain object hydration easier on the eyes ([d9230f1](https://www.github.com/ehmpathy/domain-objects/commit/d9230f140ed953383522455473be072643cabc7d))
+
 ## [0.9.0](https://www.github.com/ehmpathy/domain-objects/compare/v0.8.0...v0.9.0) (2022-11-26)
 
 
