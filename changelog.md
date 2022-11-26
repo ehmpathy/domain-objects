@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://www.github.com/ehmpathy/domain-objects/compare/v0.8.0...v0.9.0) (2022-11-26)
+
+
+### Features
+
+* **nested:** support nested domain objects being hydrated from an array of declared class options ([2424145](https://www.github.com/ehmpathy/domain-objects/commit/2424145f74d491c2150e5766a52dcd9b63c58e80))
+
 ## [0.8.0](https://www.github.com/ehmpathy/domain-objects/compare/v0.7.6...v0.8.0) (2022-11-26)
 
 
