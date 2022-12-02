@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.9.2](https://www.github.com/ehmpathy/domain-objects/compare/v0.9.1...v0.9.2) (2022-12-02)
+
+
+### Bug Fixes
+
+* **hydration:** drop over-cautious assertion after valid usecase found ([3f1c2d7](https://www.github.com/ehmpathy/domain-objects/commit/3f1c2d70faf171b426a6112313f134d21d73a44c))
+
 ### [0.9.1](https://www.github.com/ehmpathy/domain-objects/compare/v0.9.0...v0.9.1) (2022-11-26)
 
 
