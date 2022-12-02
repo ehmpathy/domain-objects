@@ -51,24 +51,13 @@ export const hydrateNestedDomainObjects = ({
     if (typeof nestedProp !== 'object' || nestedProp === null) return; // skip hydration if its not an object or is null - since no domain object would validate that
 
     // define how to instantiate a prop into the nested DomainObject out of the specified options
-    const declaredValidNestedClassNameOptionsForProp = DeclaredNestedDomainObjectClassOptions.map((ClassOption) => ClassOption.name);
+    const declaredNestedClassNameOptionsForProp = DeclaredNestedDomainObjectClassOptions.map((ClassOption) => ClassOption.name);
     const instantiateThisPropIfNeeded = (prop: any) => {
       // if it's already an instance of a domain object, then just check that it's one of the options specified and return it if so
-      if (prop instanceof DomainObject) {
-        const instantiatedClassName = prop.constructor.name;
-        if (!declaredValidNestedClassNameOptionsForProp.includes(instantiatedClassName))
-          throw new NestedDomainObjectHydrationError(
-            `
-DomainObject property ${domainObjectName}.${key} was instantiated with a constructor which was not included in the list of valid declared DomainObject.nested options for the property.
-
-Please check the declared nested domain object options for ${domainObjectName}.${key} and update it to include ${instantiatedClassName} or instantiate ${domainObjectName}.${key} with one of the declared options.
-            `.trim(),
-            {
-              instantiatedClassName,
-              declaredValidNestedClassNameOptionsForProp,
-            },
-          );
-        return prop; // otherwise, it's already instantiated as a valid domain object. good to go
+      const instantiatedClassName = prop instanceof DomainObject ? prop.constructor.name : null;
+      if (instantiatedClassName) {
+        // if the name is included in the valid nested class options, then return it
+        if (declaredNestedClassNameOptionsForProp.includes(instantiatedClassName)) return prop; //  it's already instantiated as a valid domain object. good to go
       }
 
       // try and instantiate it by leveraging the fact that there's only one option, if possible
@@ -79,14 +68,32 @@ Please check the declared nested domain object options for ${domainObjectName}.$
       if (!declaredClassNameOfProp)
         throw new NestedDomainObjectHydrationError(
           `
-DomainObject property ${domainObjectName}.${key} was declared as a nested domain object with ${DeclaredNestedDomainObjectClassOptions.length} options but was not already instantiated as a nested domain object nor did it have a ._dobj key specified from serialization. Can not determine which option to use without one of those two specifies.
+DomainObject property ${domainObjectName}.${key} was declared as a nested domain object with ${
+            DeclaredNestedDomainObjectClassOptions.length
+          } options but was not already instantiated as one of the declared nested domain objects nor did it have a ._dobj key specified from serialization. Can not determine which option to use without one of those two specified.
 
-Please either instantiate ${domainObjectName}.${key} as a nested DomainObject when instantiating ${domainObjectName} or make sure that you are using the 'serialize' method of this library if deserializing.
+Please try one of the following
+${[
+  // recommend adding the class the prop was instantiated with to the list of declared nested class options, if it was instantiated as a domain object already
+  instantiatedClassName
+    ? `- include the class ${instantiatedClassName}, which ${domainObjectName}.${key} was instantiated with, as one of the declared nested class options for this key`
+    : undefined,
+
+  // recommend instantiating the prop w/ the domain object manually, in case they are manually creating domain objects
+  `- instantiate ${domainObjectName}.${key} as a nested DomainObject when instantiating ${domainObjectName}`,
+
+  // recommend using the serialize method, in case they were trying to deserialize into domain objects
+  `- make sure that you are using the 'serialize' method of this library if deserializing`,
+]
+  .filter((str) => !!str)
+  .join('\n')}
+}
           `.trim(),
           {
             key,
             prop,
-            declaredValidNestedClassNameOptionsForProp,
+            instantiatedClassName,
+            declaredNestedClassNameOptionsForProp,
           },
         );
       const CorrectNestedDomainObject = DeclaredNestedDomainObjectClassOptions.find((ClassOption) => ClassOption.name === declaredClassNameOfProp);
@@ -101,7 +108,7 @@ Please check the declared nested domain object options for ${domainObjectName}.$
             key,
             prop,
             _dobj: declaredClassNameOfProp,
-            declaredValidNestedClassNameOptionsForProp,
+            declaredNestedClassNameOptionsForProp,
           },
         );
       return new CorrectNestedDomainObject(prop);
