@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.9.3](https://www.github.com/ehmpathy/domain-objects/compare/v0.9.2...v0.9.3) (2022-12-06)
+
+
+### Bug Fixes
+
+* **identity:** enable specifying custom metadata keys for value objects ([8d06f2a](https://www.github.com/ehmpathy/domain-objects/commit/8d06f2a88e7686bf1c2676f86abfb12fc088fc50))
+
 ### [0.9.2](https://www.github.com/ehmpathy/domain-objects/compare/v0.9.1...v0.9.2) (2022-12-02)
 
 
