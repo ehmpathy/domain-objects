@@ -21,7 +21,7 @@ describe('getUniqueIdentifier', () => {
       const unique = getUniqueIdentifier(address);
       expect(unique).toEqual({ street: '123 Elm Street', city: 'Austin', state: 'TX', postal: '78704' });
     });
-    it('should exclude uuid and id, if present', () => {
+    it('should exclude uuid and id, if present, and custom metadata keys are not specified', () => {
       interface Address {
         id?: number;
         uuid?: string;
@@ -33,6 +33,23 @@ describe('getUniqueIdentifier', () => {
       }
       class Address extends DomainValueObject<Address> implements Address {}
       const address = new Address({ id: 821, uuid: '__UUID__', street: '123 Elm Street', city: 'Austin', state: 'TX', postal: '78704' });
+      const unique = getUniqueIdentifier(address);
+      expect(unique).toEqual({ street: '123 Elm Street', city: 'Austin', state: 'TX', postal: '78704' });
+    });
+    it('should exclude uuid and createdAt, if present, and custom metadata keys are specified', () => {
+      interface Address {
+        uuid?: string;
+        createdAt?: string;
+        street: string;
+        suite?: string;
+        city: string;
+        state: string;
+        postal: string;
+      }
+      class Address extends DomainValueObject<Address> implements Address {
+        public static metadata = ['uuid', 'createdAt'];
+      }
+      const address = new Address({ uuid: '__UUID__', createdAt: '__NOW__', street: '123 Elm Street', city: 'Austin', state: 'TX', postal: '78704' });
       const unique = getUniqueIdentifier(address);
       expect(unique).toEqual({ street: '123 Elm Street', city: 'Austin', state: 'TX', postal: '78704' });
     });
