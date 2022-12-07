@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.0](https://www.github.com/ehmpathy/domain-objects/compare/v0.9.3...v0.10.0) (2022-12-07)
+
+
+### Features
+
+* **entity:** support entities being unique on more than one set of keys ([e39da1e](https://www.github.com/ehmpathy/domain-objects/commit/e39da1e6c55eb805af1c0b92577f426c5c90014b))
+* **metadata:** add DomainObject.metadata prop, expose getMetadataKeys and omitMetadataValues methods ([34b38f5](https://www.github.com/ehmpathy/domain-objects/commit/34b38f597eb2f592d14ea638620b1963672a317e))
+
 ### [0.9.3](https://www.github.com/ehmpathy/domain-objects/compare/v0.9.2...v0.9.3) (2022-12-06)
 
 
