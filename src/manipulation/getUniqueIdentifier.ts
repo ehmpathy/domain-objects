@@ -23,10 +23,10 @@ export const getUniqueIdentifier = <T extends Record<string, any>>(obj: DomainEn
 
   // handle DomainEntity
   if (obj instanceof DomainEntity) {
-    const uniqueKeys = (obj.constructor as typeof DomainEntity).unique;
     const className = (obj.constructor as typeof DomainEntity).name;
+    const uniqueKeys = (obj.constructor as typeof DomainEntity).unique;
     if (!uniqueKeys) throw new DomainEntityUniqueKeysMustBeDefinedError({ entityName: className, nameOfFunctionNeededFor: 'getUniqueIdentifier' });
-    return pick(obj, uniqueKeys);
+    return pick(obj, uniqueKeys.flat());
   }
 
   // handle DomainValueObject

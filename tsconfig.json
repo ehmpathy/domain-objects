@@ -10,10 +10,21 @@
     "sourceMap": true,
     "outDir": "dist",
     "strictPropertyInitialization": false,
-    "lib": ["es2017", "es7", "esnext.asynciterable"]
+    "lib": [
+      "es2017",
+      "es7",
+      "esnext",
+      "esnext.asynciterable"
+    ]
   },
-  "filesGlob": ["src/**/*.ts"],
-  "exclude": ["dist", "coverage", "node_modules"],
+  "filesGlob": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "dist",
+    "coverage",
+    "node_modules"
+  ],
   "atom": {
     "rewriteTsconfig": false
   }

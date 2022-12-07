@@ -15,13 +15,14 @@ import { DomainObject } from './DomainObject';
  */
 export class DomainEntity<T> extends DomainObject<T> {
   /**
-   * `DomainEntity.unique` defines all of the properties of the entity that the entity is naturally unique on
+   * `DomainEntity.unique` defines the set, or sets, of the properties of the entity that the entity is naturally unique on
    *
    * For example,
    * - a `FileProcessingJob { uuid, filePath, status }` is likely going to be unique on the `filePath` if we only ever need to process the same file once.
    * - a `SupportTicket { uuid, userId, type, status }`, on the other hand, is likely only going to be unique on the `uuid`, because the same user can create the same support ticket over and over again
+   * - a `GoogleAdsCampaign { resourceName, accountId, name }`, however, is probably unique on two sets of properties. First, a set containing the id assigned to it by google `[resourceName]`. Next, a set by which even google considers it unique `[accountUuid, name]`
    */
-  public static unique: readonly string[];
+  public static unique: readonly string[] | readonly string[][];
 
   /**
    * `DomainEntity.updatable` defines all of the properties of the entity that are updatable
