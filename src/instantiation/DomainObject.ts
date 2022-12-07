@@ -67,4 +67,23 @@ export class DomainObject<T extends Record<string, any>> {
    * ```
    */
   public static nested?: Record<string, DomainObject<any>>; // TODO: find a way to make this Record<keyof string>
+
+  /**
+   * DomainObject.metadata
+   *
+   * When set, customizes the keys that are considered as metadata of this domain object.
+   *
+   * Context,
+   * - domain objects are often persisted inside of storage mechanisms that assign metadata to them, such as ids or timestamps
+   * - metadata simply adds information _about_ the object, without contributing to _defining_ the object
+   *
+   * Relevance,
+   * - metadata properties do not contribute to the unique key of a DomainValueObject
+   * - metadata properties can be easily stripped from an object by using the `omitMetadataValues` method
+   *
+   * By default,
+   * - `id`, `createdAt`, `updatedAt`, and `effectiveAt` are considered metadata keys
+   * - `uuid` is also considered a metadata key, if it is not included in the unique key of the DomainEntity or DomainEvent
+   */
+  public static metadata: readonly string[];
 }
