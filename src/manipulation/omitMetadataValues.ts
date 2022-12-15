@@ -24,8 +24,12 @@ const recursivelyOmitMetadataValuesFromObjectValue: any = (thisValue: any) => {
 /**
  * omits all metadata values on a domain object
  *
+ * relevance:
+ * - often in change detection, metadata values are not relevant, this provides an easy way to omit them
+ *
  * features:
  * - utilizes the `.metadata` property of the domain object definition to identify metadata keys
+ *   - recall, the default is `id`, `uuid`, `createdAt`, `updatedAt`, `effectiveAt`
  * - recursive, applies omission deeply
  */
 export const omitMetadataValues = <T extends DomainObject<Record<string, any>>>(obj: T): T => {

@@ -28,7 +28,7 @@ interface SerializeOptions {
  * Use Cases:
  * - change detection
  *   - e.g., determine whether there has been a change to an entity or not, by serializing the previous and current versions, and comparing equality
- *   - i.e., `const areEqual = serialize(userBefore) === serialize(userNow);`
+ *   - i.e., `const areEqual = serialize(omitMetadataValues(userBefore)) === serialize(omitMetadataValues(userNow));`
  *
  * - identity comparison
  *   - e.g., determine whether two domain objects are the same, by getting their unique identities, serializing each and comparing equality
