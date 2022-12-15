@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.10.1](https://www.github.com/ehmpathy/domain-objects/compare/v0.10.0...v0.10.1) (2022-12-15)
+
+
+### Bug Fixes
+
+* **docs:** improve the helpfulness of omitMetadataValues jsdoc ([dedc363](https://www.github.com/ehmpathy/domain-objects/commit/dedc363c306f322e3b8b7ef79cb4d0ec820d2e31))
+
 ## [0.10.0](https://www.github.com/ehmpathy/domain-objects/compare/v0.9.3...v0.10.0) (2022-12-07)
 
 
