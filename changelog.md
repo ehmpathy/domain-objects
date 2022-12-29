@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.10.3](https://www.github.com/ehmpathy/domain-objects/compare/v0.10.2...v0.10.3) (2022-12-29)
+
+
+### Bug Fixes
+
+* **deps:** upgrade deps with npm audit fix ([255c4b0](https://www.github.com/ehmpathy/domain-objects/commit/255c4b0d177de0a63d8b16c0f4311fe8a362a595))
+
 ### [0.10.2](https://www.github.com/ehmpathy/domain-objects/compare/v0.10.1...v0.10.2) (2022-12-29)
 
 
