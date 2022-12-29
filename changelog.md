@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.10.2](https://www.github.com/ehmpathy/domain-objects/compare/v0.10.1...v0.10.2) (2022-12-29)
+
+
+### Bug Fixes
+
+* **constraints:** assert that domain object which has all nested objects already instantiated as safe ([741794b](https://www.github.com/ehmpathy/domain-objects/commit/741794b24c2ad6b5f89cf634edba61fd6f5f98b9))
+
 ### [0.10.1](https://www.github.com/ehmpathy/domain-objects/compare/v0.10.0...v0.10.1) (2022-12-15)
 
 
