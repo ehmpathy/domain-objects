@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.10.4](https://www.github.com/ehmpathy/domain-objects/compare/v0.10.3...v0.10.4) (2023-05-13)
+
+
+### Bug Fixes
+
+* **serialization:** preserve array order by default ([#25](https://www.github.com/ehmpathy/domain-objects/issues/25)) ([40a379f](https://www.github.com/ehmpathy/domain-objects/commit/40a379f11fd3ab5702f555cf8d492d3e2a9ddff8))
+
 ### [0.10.3](https://www.github.com/ehmpathy/domain-objects/compare/v0.10.2...v0.10.3) (2022-12-29)
 
 
