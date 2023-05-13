@@ -37,14 +37,14 @@ describe('serialize', () => {
   describe('arrays', () => {
     it('should be able to serialize arrays', () => {
       const serial = serialize(['821', 721, 'leopard', 7, 'apple', 3]);
-      expect(serial).toEqual(`[\"821"\,\"apple\",\"leopard\",3,7,721]`); // note that it sorts them
+      expect(serial).toEqual(`[\"821"\,721,\"leopard\",7,\"apple\",3]`);
     });
-    it('should serialize them deterministically - independent of order of values', () => {
+    it('should serialize them in a way that can be used to compare the order of items within the array', () => {
       const serialA = serialize([3, '821', 721, 'leopard', 'apple']);
       const serialB = serialize([721, 'leopard', 3, 'apple', '821']);
-      expect(serialB).toEqual(serialA); // should be equivalent, since it serializes deterministically by value (due to sorting)
+      expect(serialB).not.toEqual(serialA); // should not be equivalent, since order matters in arrays
     });
-    it('should serialize arrays even if they have objects - still deterministically', () => {
+    it('should serialize arrays even if they have objects within', () => {
       const serialA = serialize([
         'banana',
         { id: 1, value: 821, meaning: 42 },
@@ -52,12 +52,44 @@ describe('serialize', () => {
         { id: 0, value: undefined, meaning: null }, // should go first, because id is 0
       ]);
       const serialB = serialize([
-        { id: 0, value: undefined, meaning: null }, // should go first, because id is 0
+        'banana',
         { id: 1, value: 821, meaning: 42 },
         821,
-        'banana',
+        { id: 0, value: undefined, meaning: null }, // should go first, because id is 0
       ]);
       expect(serialB).toEqual(serialA); // should be equivalent
+    });
+    describe('orderless', () => {
+      it('should be able to serialize arrays deterministically when order does not matter', () => {
+        const serial = serialize(['821', 721, 'leopard', 7, 'apple', 3], { orderless: true });
+        expect(serial).toEqual(`[\"821"\,\"apple\",\"leopard\",3,7,721]`); // note that it sorts the values, for determinism, since order does not matter
+      });
+      it('should serialize them in a way that can be used to compare two arrays deterministically when order does not matter', () => {
+        const serialA = serialize([3, '821', 721, 'leopard', 'apple'], { orderless: true });
+        const serialB = serialize([721, 'leopard', 3, 'apple', '821'], { orderless: true });
+        expect(serialB).toEqual(serialA); // should be equivalent, since it serializes deterministically by value (due to sorting)
+      });
+      it('should serialize arrays even if they have objects, deterministically, when order does not matter', () => {
+        const serialA = serialize(
+          [
+            'banana',
+            { id: 1, value: 821, meaning: 42 },
+            821,
+            { id: 0, value: undefined, meaning: null }, // should go first, because id is 0
+          ],
+          { orderless: true },
+        );
+        const serialB = serialize(
+          [
+            { id: 0, value: undefined, meaning: null }, // should go first, because id is 0
+            { id: 1, value: 821, meaning: 42 },
+            821,
+            'banana',
+          ],
+          { orderless: true },
+        );
+        expect(serialB).toEqual(serialA); // should be equivalent
+      });
     });
   });
   describe('objects', () => {
@@ -66,8 +98,8 @@ describe('serialize', () => {
         color: 'blue',
         cost: 821,
         orders: [
-          { id: 1, value: 821, meaning: 42 },
           { id: 0, value: undefined, meaning: null },
+          { id: 1, value: 821, meaning: 42 },
         ],
         application: {
           type: 'PAINTING',

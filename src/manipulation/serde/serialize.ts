@@ -15,6 +15,15 @@ interface SerializeOptions {
    * - by default, this is set to false, so that this can be used for change detection
    */
   lossless?: boolean;
+
+  /**
+   * set this to true if the order of items in arrays does not matter in your usecase
+   *
+   * note
+   * - this will make it so that the original order of items in arrays is not preserved
+   * - by default, this is set to false, since order matters in arrays by common definition
+   */
+  orderless?: boolean;
 }
 
 /**
@@ -37,11 +46,11 @@ interface SerializeOptions {
  * - persistance
  *   - e.g., serialize domain objects into a persistant store in string format (to be later revived with the `deserialize` method)
  */
-export const serialize = (value: any, options: SerializeOptions = { lossless: false }): string => {
-  // 1. convert the value to a deterministically serializable object
+export const serialize = (value: any, options: SerializeOptions = { lossless: false, orderless: false }): string => {
+  // convert the value to a deterministically serializable object
   const serializableValue = toSerializable(value, options, true);
 
-  // 2. json stringify it last, so that we dont have a recursively growing set of nested quotes
+  // json stringify it last, so that we dont have a recursively growing set of nested quotes
   return JSON.stringify(serializableValue);
 };
 
@@ -57,8 +66,17 @@ const toSerializable = (value: any, options: SerializeOptions, root?: boolean): 
   // if its null, return it too (null is typeof 'object' in js :shrug:)
   if (value === null) return null;
 
-  // if its an array, then `toSerializable` each element, and sort the result
-  if (Array.isArray(value)) return value.map((el) => toSerializable(el, options)).sort((a, b) => (JSON.stringify(a) < JSON.stringify(b) ? -1 : 1)); // stringify to sort, to sort objects correctly
+  // if its an array, then `toSerializable` each element, and sort the result if needed
+  if (Array.isArray(value))
+    return value
+      .map((el) => toSerializable(el, options))
+      .sort((a, b) => {
+        // if order was said to not matter, then sort in ascending value of their stringified form, to allow for deterministic comparisons
+        if (options.orderless) return JSON.stringify(a) < JSON.stringify(b) ? -1 : 1;
+
+        // otherwise, retain original order
+        return 0;
+      });
 
   // if it has a `.toString()` method, use the `.toString()` method; (e.g., new Date().toString())
   if (value.toString()) {
