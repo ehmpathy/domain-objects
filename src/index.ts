@@ -9,3 +9,5 @@ export { getMetadataKeys } from './manipulation/getMetadataKeys';
 export { omitMetadataValues } from './manipulation/omitMetadataValues';
 export { serialize } from './manipulation/serde/serialize';
 export { deserialize } from './manipulation/serde/deserialize';
+export { isPropertyNameAReferenceExplicitly } from './relationships/isPropertyNameAReference/isPropertyNameAReferenceExplicitly';
+export { isPropertyNameAReferenceIntuitively } from './relationships/isPropertyNameAReference/isPropertyNameAReferenceIntuitively';
