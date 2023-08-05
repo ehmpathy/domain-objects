@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.2](https://github.com/ehmpathy/domain-objects/compare/v0.11.1...v0.11.2) (2023-08-05)
+
+
+### Bug Fixes
+
+* **deps:** ensure joi and yup usage imports only type references ([c8b3ed5](https://github.com/ehmpathy/domain-objects/commit/c8b3ed518f843907c9bc373c10d52e37d6e0854e))
+
 ## [0.11.1](https://github.com/ehmpathy/domain-objects/compare/v0.11.0...v0.11.1) (2023-08-05)
 
 
