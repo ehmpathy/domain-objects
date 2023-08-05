@@ -22,6 +22,16 @@ describe('isPropertyNameAReferenceIntuitively', () => {
       expectedResult: false,
     },
     {
+      propertyName: 'engineer',
+      domainObjectName: 'Engineer',
+      expectedResult: true,
+    },
+    {
+      propertyName: 'engineers',
+      domainObjectName: 'Engineer',
+      expectedResult: true,
+    },
+    {
       propertyName: 'engineerUuid',
       domainObjectName: 'Engineer',
       expectedResult: true,

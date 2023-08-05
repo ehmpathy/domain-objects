@@ -25,7 +25,7 @@ export const isPropertyNameAReferenceIntuitively = ({
 }: {
   propertyName: string;
   domainObjectName: string;
-}) => {
+}): boolean => {
   let qualifiersToDrop = 0;
   let iterationLimitExceeded = false;
   while (!iterationLimitExceeded) {

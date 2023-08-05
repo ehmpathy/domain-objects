@@ -24,7 +24,7 @@ export const isPropertyNameAReferenceExplicitly = ({
 }: {
   propertyName: string;
   domainObjectName: string;
-}) => {
+}): boolean => {
   // remove the potential `uuid` or `uuids` suffix of the property name (used in implicit uuid references)
   const propertyName = propertyNamePotentiallyWithIrrelevantSuffixes.replace(
     /Uuids?$/,
@@ -32,13 +32,15 @@ export const isPropertyNameAReferenceExplicitly = ({
   );
 
   // check whether the property is exactly named after it
-  const namedAfterItExactly = camelCase(domainObjectName) === propertyName;
+  const namedAfterItExactly = new RegExp(
+    `${camelCase(domainObjectName)}s?$`,
+  ).test(propertyName); // e.g., /leadEngineers?$/.test('leadEngineer');
   if (namedAfterItExactly) return true;
 
   // check whether the property is named after it as a suffix
   const namedAfterItAsASuffix = new RegExp(
-    `${pascalCase(domainObjectName)}$`,
-  ).test(propertyName); // e.g., /Engineer$/.test('leadEngineer');
+    `${pascalCase(domainObjectName)}s?$`,
+  ).test(propertyName); // e.g., /Engineers?$/.test('leadEngineer');
   if (namedAfterItAsASuffix) return true;
 
   // otherwise, false
