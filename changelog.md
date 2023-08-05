@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.3](https://github.com/ehmpathy/domain-objects/compare/v0.11.2...v0.11.3) (2023-08-05)
+
+
+### Bug Fixes
+
+* **relationships:** ensure that plural for of names is considered explicit reference ([21c2f80](https://github.com/ehmpathy/domain-objects/commit/21c2f80eb9cae8e002ad8079ad595f8a47ae3598))
+
 ## [0.11.2](https://github.com/ehmpathy/domain-objects/compare/v0.11.1...v0.11.2) (2023-08-05)
 
 
