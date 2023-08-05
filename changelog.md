@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.0](https://www.github.com/ehmpathy/domain-objects/compare/v0.10.4...v0.11.0) (2023-08-05)
+
+
+### Features
+
+* **relationships:** expose isPropertyNameAReference methods ([1f20166](https://www.github.com/ehmpathy/domain-objects/commit/1f20166e50afa9107f62b45aa1c9b0958c989048))
+
 ### [0.10.4](https://www.github.com/ehmpathy/domain-objects/compare/v0.10.3...v0.10.4) (2023-05-13)
 
 
