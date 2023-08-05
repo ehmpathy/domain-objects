@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.11.1](https://github.com/ehmpathy/domain-objects/compare/v0.11.0...v0.11.1) (2023-08-05)
+
+
+### Bug Fixes
+
+* **practs:** use latest best practices and resolve audit ([29d9be1](https://github.com/ehmpathy/domain-objects/commit/29d9be1336105c48bdabe2722a828dca2b6b17d6))
+
 ## [0.11.0](https://www.github.com/ehmpathy/domain-objects/compare/v0.10.4...v0.11.0) (2023-08-05)
 
 
