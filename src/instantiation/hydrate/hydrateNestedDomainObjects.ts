@@ -4,7 +4,8 @@ import { DomainObject } from '../DomainObject';
 const isArray = <T>(val: T | Array<T>): val is Array<T> => Array.isArray(val);
 
 export class NestedDomainObjectHydrationError extends Error {
-  constructor(message: string, metadata: any) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  constructor(message: string, metadata: Record<string, any>) {
     super(
       `
 ${message}
@@ -23,7 +24,7 @@ export const hydrateNestedDomainObjects = ({
   props: Record<string, any>;
   nested: Record<string, typeof DomainObject | typeof DomainObject[]>;
   domainObjectName: string;
-}) => {
+}): Record<string, any> => {
   // create a new object, so as to not mutate original props
   const hydratedProps: Record<string, any> = { ...props };
 
@@ -33,13 +34,16 @@ export const hydrateNestedDomainObjects = ({
   // for each key that we were told is a nested domain object
   Object.keys(nested).forEach((key) => {
     // check that the value of "nested" was defined as a DomainObject or an array of DomainObject choices
-    const declaredNestedDomainObjectValue = nested[key];
-    const DeclaredNestedDomainObjectClassOptions: typeof DomainObject[] = isArray(declaredNestedDomainObjectValue)
-      ? declaredNestedDomainObjectValue
-      : [declaredNestedDomainObjectValue];
-    const eachIsDomainObjectBased = DeclaredNestedDomainObjectClassOptions.every(
-      (NestedDomainObject) => NestedDomainObject.prototype instanceof DomainObject, // https://stackoverflow.com/a/14486171/3068233
-    );
+    const declaredNestedDomainObjectValue = nested[key]!;
+    const DeclaredNestedDomainObjectClassOptions: typeof DomainObject[] =
+      isArray(declaredNestedDomainObjectValue)
+        ? declaredNestedDomainObjectValue
+        : [declaredNestedDomainObjectValue];
+    const eachIsDomainObjectBased =
+      DeclaredNestedDomainObjectClassOptions.every(
+        (NestedDomainObject) =>
+          NestedDomainObject.prototype instanceof DomainObject, // https://stackoverflow.com/a/14486171/3068233
+      );
     if (!eachIsDomainObjectBased)
       throw new NestedDomainObjectHydrationError(
         `each value of each ${domainObjectName}.nested key must be a single typeof DomainObject or an array of options of typeof DomainObject`,
@@ -51,17 +55,25 @@ export const hydrateNestedDomainObjects = ({
     if (typeof nestedProp !== 'object' || nestedProp === null) return; // skip hydration if its not an object or is null - since no domain object would validate that
 
     // define how to instantiate a prop into the nested DomainObject out of the specified options
-    const declaredNestedClassNameOptionsForProp = DeclaredNestedDomainObjectClassOptions.map((ClassOption) => ClassOption.name);
+    const declaredNestedClassNameOptionsForProp =
+      DeclaredNestedDomainObjectClassOptions.map(
+        (ClassOption) => ClassOption.name,
+      );
     const instantiateThisPropIfNeeded = (prop: any) => {
       // if it's already an instance of a domain object, then just check that it's one of the options specified and return it if so
-      const instantiatedClassName = prop instanceof DomainObject ? prop.constructor.name : null;
+      const instantiatedClassName =
+        prop instanceof DomainObject ? prop.constructor.name : null;
       if (instantiatedClassName) {
         // if the name is included in the valid nested class options, then return it
-        if (declaredNestedClassNameOptionsForProp.includes(instantiatedClassName)) return prop; //  it's already instantiated as a valid domain object. good to go
+        if (
+          declaredNestedClassNameOptionsForProp.includes(instantiatedClassName)
+        )
+          return prop; //  it's already instantiated as a valid domain object. good to go
       }
 
       // try and instantiate it by leveraging the fact that there's only one option, if possible
-      if (DeclaredNestedDomainObjectClassOptions.length === 1) return new DeclaredNestedDomainObjectClassOptions[0](prop); // this case is easy, since there's only one option
+      if (DeclaredNestedDomainObjectClassOptions.length === 1)
+        return new DeclaredNestedDomainObjectClassOptions[0]!(prop); // this case is easy, since there's only one option
 
       // otherwise, we must rely on the `_dobj` prop having been set by the `serialize` function or manually
       const declaredClassNameOfProp = prop._dobj;
@@ -96,7 +108,10 @@ ${[
             declaredNestedClassNameOptionsForProp,
           },
         );
-      const CorrectNestedDomainObject = DeclaredNestedDomainObjectClassOptions.find((ClassOption) => ClassOption.name === declaredClassNameOfProp);
+      const CorrectNestedDomainObject =
+        DeclaredNestedDomainObjectClassOptions.find(
+          (ClassOption) => ClassOption.name === declaredClassNameOfProp,
+        );
       if (!CorrectNestedDomainObject)
         throw new NestedDomainObjectHydrationError(
           `

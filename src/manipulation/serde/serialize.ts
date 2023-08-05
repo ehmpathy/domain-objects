@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
+
 /* eslint-disable no-underscore-dangle */
 import { assertDomainObjectIsSafeToManipulate } from '../../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../../instantiation/DomainEntity';
@@ -46,7 +47,10 @@ interface SerializeOptions {
  * - persistance
  *   - e.g., serialize domain objects into a persistant store in string format (to be later revived with the `deserialize` method)
  */
-export const serialize = (value: any, options: SerializeOptions = { lossless: false, orderless: false }): string => {
+export const serialize = (
+  value: any,
+  options: SerializeOptions = { lossless: false, orderless: false },
+): string => {
   // convert the value to a deterministically serializable object
   const serializableValue = toSerializable(value, options, true);
 
@@ -59,7 +63,11 @@ export const serialize = (value: any, options: SerializeOptions = { lossless: fa
  *
  * converts any value to a deterministically serializable representation (i.e., sorts arrays + object keys, casts .toString(), handles domain objects, etc)
  */
-const toSerializable = (value: any, options: SerializeOptions, root?: boolean): any => {
+const toSerializable = (
+  value: any,
+  options: SerializeOptions,
+  root?: boolean,
+): any => {
   // if this value is not an array and is not an object, then it's a literal, so no more preparation required, return it itself
   if (!Array.isArray(value) && typeof value !== 'object') return value;
 
@@ -72,7 +80,8 @@ const toSerializable = (value: any, options: SerializeOptions, root?: boolean): 
       .map((el) => toSerializable(el, options))
       .sort((a, b) => {
         // if order was said to not matter, then sort in ascending value of their stringified form, to allow for deterministic comparisons
-        if (options.orderless) return JSON.stringify(a) < JSON.stringify(b) ? -1 : 1;
+        if (options.orderless)
+          return JSON.stringify(a) < JSON.stringify(b) ? -1 : 1;
 
         // otherwise, retain original order
         return 0;
@@ -93,18 +102,27 @@ const toSerializable = (value: any, options: SerializeOptions, root?: boolean): 
  *
  * converts all objects to deterministically serializable objects (e.g., sort keys, handle domain objects, etc)
  */
-const toSerializableObject = (obj: Record<string, any>, options: SerializeOptions, root?: boolean) => {
+const toSerializableObject = (
+  obj: Record<string, any>,
+  options: SerializeOptions,
+  root?: boolean,
+) => {
   const stringifiableObj: Record<string, any> = {};
 
   // if this object is a DomainObject, add its name to the serial parts as metadata (i.e., underscore suffix)
-  if (obj instanceof DomainObject) stringifiableObj._dobj = obj.constructor.name;
+  if (obj instanceof DomainObject)
+    stringifiableObj._dobj = obj.constructor.name;
 
   // if this object is a domain object, make sure that it is safe to manipulate
   if (obj instanceof DomainObject) assertDomainObjectIsSafeToManipulate(obj);
 
   // if this object is a persistable DomainObject AND its not the root object we're serializing && lossless is off, then only consider its unique properties for serialization; (i.e., only consider which domain objects the root object references, not the current state of the domain objects the root object references)
   let objToMakeSerializable = obj;
-  if (!root && !options.lossless && (obj instanceof DomainEntity || obj instanceof DomainValueObject)) {
+  if (
+    !root &&
+    !options.lossless &&
+    (obj instanceof DomainEntity || obj instanceof DomainValueObject)
+  ) {
     objToMakeSerializable = getUniqueIdentifier(obj);
   }
 

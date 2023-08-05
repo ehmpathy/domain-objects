@@ -1,4 +1,5 @@
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
+
 import { DomainObject } from '../instantiation/DomainObject';
 import { assertDomainObjectIsSafeToManipulate } from './assertDomainObjectIsSafeToManipulate';
 
@@ -47,7 +48,10 @@ describe('assertDomainObjectIsSafeToManipulate', () => {
     }
 
     // now show we still think its safe
-    const plant = new Plant({ pot: { diameterInInches: 7 }, lastWatered: 'monday' });
+    const plant = new Plant({
+      pot: { diameterInInches: 7 },
+      lastWatered: 'monday',
+    });
     assertDomainObjectIsSafeToManipulate(plant);
   });
   it('should not throw an error if DomainObject has an array of strings', () => {
@@ -59,7 +63,10 @@ describe('assertDomainObjectIsSafeToManipulate', () => {
     class PlantPot extends DomainObject<PlantPot> implements PlantPot {}
 
     // instantiate it
-    const pot = new PlantPot({ diameterInInches: 7, pastPlantUuids: [uuid(), uuid()] });
+    const pot = new PlantPot({
+      diameterInInches: 7,
+      pastPlantUuids: [uuid(), uuid()],
+    });
 
     // check if its safe
     assertDomainObjectIsSafeToManipulate(pot); // should be safe
@@ -81,7 +88,10 @@ describe('assertDomainObjectIsSafeToManipulate', () => {
     }
 
     // now show we still think its safe
-    const plant = new Plant({ pastPots: [{ diameterInInches: 7 }], lastWatered: 'monday' });
+    const plant = new Plant({
+      pastPots: [{ diameterInInches: 7 }],
+      lastWatered: 'monday',
+    });
     assertDomainObjectIsSafeToManipulate(plant);
   });
   it('should throw a helpful error if any of the properties are a nested object not explicitly defined', () => {
@@ -99,12 +109,18 @@ describe('assertDomainObjectIsSafeToManipulate', () => {
     class Plant extends DomainObject<Plant> implements Plant {}
 
     // now show we do not think its safe
-    const plant = new Plant({ pot: { diameterInInches: 7 }, lastWatered: 'monday' });
+    const plant = new Plant({
+      pot: { diameterInInches: 7 },
+      lastWatered: 'monday',
+    });
     try {
       assertDomainObjectIsSafeToManipulate(plant);
       throw new Error('should not reach here');
     } catch (error) {
-      expect(error.message).toContain(`DomainObject 'Plant' is not safe to manipulate.`);
+      if (!(error instanceof Error)) throw error;
+      expect(error.message).toContain(
+        `DomainObject 'Plant' is not safe to manipulate.`,
+      );
       expect(error.message).toContain(`["pot"]`); // should identify the culprits
       expect(error.message).toContain(
         `Please make sure all nested objects are DomainObjects and are explicitly defined on the class definition, using the 'nested' static property.`,
@@ -128,12 +144,18 @@ describe('assertDomainObjectIsSafeToManipulate', () => {
     class Plant extends DomainObject<Plant> implements Plant {}
 
     // now show we do not think its safe
-    const plant = new Plant({ pastPots: [{ diameterInInches: 7 }], lastWatered: 'monday' });
+    const plant = new Plant({
+      pastPots: [{ diameterInInches: 7 }],
+      lastWatered: 'monday',
+    });
     try {
       assertDomainObjectIsSafeToManipulate(plant);
       throw new Error('should not reach here');
     } catch (error) {
-      expect(error.message).toContain(`DomainObject 'Plant' is not safe to manipulate.`);
+      if (!(error instanceof Error)) throw error;
+      expect(error.message).toContain(
+        `DomainObject 'Plant' is not safe to manipulate.`,
+      );
       expect(error.message).toContain(`["pastPots"]`); // should identify the culprits
       expect(error.message).toContain(
         `Please make sure all nested objects are DomainObjects and are explicitly defined on the class definition, using the 'nested' static property.`,

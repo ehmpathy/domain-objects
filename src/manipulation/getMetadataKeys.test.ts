@@ -1,6 +1,6 @@
-import { getMetadataKeys } from './getMetadataKeys';
-import { DomainObject } from '../instantiation/DomainObject';
 import { DomainEntity } from '../instantiation/DomainEntity';
+import { DomainObject } from '../instantiation/DomainObject';
+import { getMetadataKeys } from './getMetadataKeys';
 
 describe('getMetadataKeys', () => {
   it('should return the defaults, if not explicitly defined', () => {
@@ -11,7 +11,13 @@ describe('getMetadataKeys', () => {
     class Mineral extends DomainObject<Mineral> implements Mineral {}
     const mineral = new Mineral({ name: 'magnesium' });
     const metadataKeys = getMetadataKeys(mineral);
-    expect(metadataKeys).toEqual(['id', 'uuid', 'createdAt', 'updatedAt', 'effectiveAt']);
+    expect(metadataKeys).toEqual([
+      'id',
+      'uuid',
+      'createdAt',
+      'updatedAt',
+      'effectiveAt',
+    ]);
   });
   it('should return the explicitly defined metadata keys, if defined', () => {
     interface Mineral {
@@ -36,6 +42,11 @@ describe('getMetadataKeys', () => {
     }
     const mineral = new Mineral({ uuid: '__UUID__', name: 'magnesium' });
     const metadataKeys = getMetadataKeys(mineral);
-    expect(metadataKeys).toEqual(['id', 'createdAt', 'updatedAt', 'effectiveAt']);
+    expect(metadataKeys).toEqual([
+      'id',
+      'createdAt',
+      'updatedAt',
+      'effectiveAt',
+    ]);
   });
 });

@@ -1,0 +1,14 @@
+ignores:
+  - depcheck
+  - declapract
+  - declapract-typescript-ehmpathy
+  - '@commitlint/config-conventional'
+  - '@trivago/prettier-plugin-sort-imports'
+  - '@tsconfig/node-lts-strictest'
+  - serverless-prune-plugin
+  - core-js
+  - ts-jest
+  - ts-node
+  - date-fns
+  - husky
+  - if-env

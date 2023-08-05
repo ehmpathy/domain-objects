@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { DomainObject } from '../..';
 
@@ -20,7 +21,10 @@ Please make sure all DomainObjects serialized in the string have their classes d
  * - persistance
  *   - e.g., deserialize domain objects from a string that was saved to a persistant store (i.e., a string produced by the `serialize` method)
  */
-export const deserialize = <T extends any>(serialized: string, context: { with?: DomainObject<any>[] } = {}): T => {
+export const deserialize = <T extends any>(
+  serialized: string,
+  context: { with?: DomainObject<any>[] } = {},
+): T => {
   // parse the string
   const parsed = JSON.parse(serialized);
 
@@ -33,7 +37,10 @@ export const deserialize = <T extends any>(serialized: string, context: { with?:
  *
  * hydrates any domain-objects in the previously serialized value, if present
  */
-const toHydrated = (value: any, context: { with: DomainObject<any>[] }): any => {
+const toHydrated = (
+  value: any,
+  context: { with: DomainObject<any>[] },
+): any => {
   // if this value is not an array and is not an object, then it's a literal, and there's no more hydration to be done
   if (!Array.isArray(value) && typeof value !== 'object') return value;
 
@@ -52,17 +59,24 @@ const toHydrated = (value: any, context: { with: DomainObject<any>[] }): any => 
  *
  * converts all objects to deterministically serializable objects (e.g., sort keys, handle domain objects, etc)
  */
-const toHydratedObject = (obj: Record<string, any>, context: { with: DomainObject<any>[] }) => {
+const toHydratedObject = (
+  obj: Record<string, any>,
+  context: { with: DomainObject<any>[] },
+) => {
   // if this object is a domain object, lookup its constructor and hydrate it
   if (obj._dobj) {
     // pull its name from the key that the `serialize` method sticks the name onto
     const domainObjectClassName = obj._dobj;
 
     // lookup the domain object constructor from context
-    const DomainObjectConstructor = context.with.find((constructor) => (constructor as typeof DomainObject).name === domainObjectClassName) as
-      | typeof DomainObject
-      | undefined;
-    if (!DomainObjectConstructor) throw new DeserializationMissingDomainObjectClassError({ className: domainObjectClassName });
+    const DomainObjectConstructor = context.with.find(
+      (constructor) =>
+        (constructor as typeof DomainObject).name === domainObjectClassName,
+    ) as typeof DomainObject | undefined;
+    if (!DomainObjectConstructor)
+      throw new DeserializationMissingDomainObjectClassError({
+        className: domainObjectClassName,
+      });
 
     // hydrate the domain object, now that it was given.
     return new DomainObjectConstructor(obj); // (note: domain objects hydrate their nested domain-object properties themselves, so we can just return the result here :smile:)

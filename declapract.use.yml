@@ -1,0 +1,6 @@
+# declapract.use.yml
+declarations: npm:declapract-typescript-ehmpathy
+useCase: npm-package # specify which use case your repo is following, see `declapract-typescript-ehmpathy:src/useCases.yml` for options
+variables: # specify the values of the variables to use against checks
+  organizationName: 'ehmpathy'
+  projectName: 'domain-objects'

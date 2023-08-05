@@ -14,7 +14,9 @@ import { DomainObject } from './DomainObject';
  * - An `ItemViewedEvent { itemUuid, customerUuid, occurredAt }` is an event. Changing when it `occurredAt` which `customerUuid` did it or which `itemUuid` it happened to would result in a new event.
  * - A `PowerSupplyMeasuredEvent { batteryUuid, current, voltage, temperature, occurredAt }` is an event. Changing when it `occurredAt` or which `batteryUuid` it occurred to would result in a new event. Note: changing the `current`, `voltage`, or `temperature` would _not_ result in a new event though, since only one measurement can be made at a time for a `batteryUuid`
  */
-export abstract class DomainEvent<T> extends DomainObject<T> {
+export abstract class DomainEvent<
+  T extends Record<string, any>,
+> extends DomainObject<T> {
   /**
    * `DomainEvent.unique` defines all of the properties of the event that the event is naturally unique on.
    *

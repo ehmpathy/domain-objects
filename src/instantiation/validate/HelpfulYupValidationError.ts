@@ -1,5 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { ValidationError } from 'yup'; // only importing types  > dev dep
+import { ValidationError } from 'yup';
+
+// only importing types  > dev dep
 
 export class HelpfulYupValidationError extends Error {
   public details: string[];
@@ -8,7 +10,15 @@ export class HelpfulYupValidationError extends Error {
 
   public domainObject: string;
 
-  constructor({ error, props, domainObject }: { error: ValidationError; props: any; domainObject: string }) {
+  constructor({
+    error,
+    props,
+    domainObject,
+  }: {
+    error: ValidationError;
+    props: any;
+    domainObject: string;
+  }) {
     const message = `
 Errors were found while validating properties for domain object ${domainObject}.:
 ${JSON.stringify(error.errors, null, 2)}

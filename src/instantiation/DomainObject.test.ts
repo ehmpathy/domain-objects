@@ -1,5 +1,5 @@
-import uuid from 'uuid';
 import Joi from 'joi';
+import { v4 as uuid } from 'uuid';
 import * as yup from 'yup';
 
 import { DomainObject } from './DomainObject';
@@ -14,7 +14,9 @@ describe('DomainObject', () => {
         conversationUuid: string;
         message: string;
       }
-      class ChatMessage extends DomainObject<ChatMessage> implements ChatMessage {}
+      class ChatMessage
+        extends DomainObject<ChatMessage>
+        implements ChatMessage {}
       const message = new ChatMessage({
         userUuid: uuid(),
         conversationUuid: uuid(),
@@ -44,7 +46,9 @@ describe('DomainObject', () => {
       conversationUuid: string;
       message: string;
     }
-    class ChatMessage extends DomainObject<ChatMessage> implements ChatMessage {}
+    class ChatMessage
+      extends DomainObject<ChatMessage>
+      implements ChatMessage {}
     it('should assign all properties in the constructor to the instance', () => {
       const message = new ChatMessage({
         userUuid: '__USER_UUID__',
@@ -61,10 +65,15 @@ describe('DomainObject', () => {
         conversationUuid: '__CONVO_UUID__',
         message: 'Hello, World!',
       });
-      const updatedMessage = new ChatMessage({ ...message, message: `Hello, World!\n Edit: You're great!` });
+      const updatedMessage = new ChatMessage({
+        ...message,
+        message: `Hello, World!\n Edit: You're great!`,
+      });
       expect(updatedMessage.userUuid).toEqual('__USER_UUID__');
       expect(updatedMessage.conversationUuid).toEqual('__CONVO_UUID__');
-      expect(updatedMessage.message).toEqual(`Hello, World!\n Edit: You're great!`);
+      expect(updatedMessage.message).toEqual(
+        `Hello, World!\n Edit: You're great!`,
+      );
     });
   });
 
@@ -101,6 +110,7 @@ describe('DomainObject', () => {
           });
           throw new Error('should not reach here');
         } catch (error) {
+          if (!(error instanceof Error)) throw error;
           expect(error).toBeInstanceOf(HelpfulJoiValidationError);
           expect(error.message).toMatchSnapshot();
         }
@@ -138,6 +148,7 @@ describe('DomainObject', () => {
           });
           throw new Error('should not reach here');
         } catch (error) {
+          if (!(error instanceof Error)) throw error;
           expect(error).toBeInstanceOf(HelpfulYupValidationError);
           expect(error.message).toMatchSnapshot();
         }
@@ -162,7 +173,10 @@ describe('DomainObject', () => {
         }
 
         // now show that we hydrate the pot
-        const plant = new Plant({ pot: { diameterInInches: 7 }, lastWatered: 'monday' });
+        const plant = new Plant({
+          pot: { diameterInInches: 7 },
+          lastWatered: 'monday',
+        });
         expect(plant.pot).toBeInstanceOf(PlantPot);
       });
       it('should hydrate nested array of domain objects', () => {
@@ -170,7 +184,9 @@ describe('DomainObject', () => {
         interface PlantOwner {
           name: string;
         }
-        class PlantOwner extends DomainObject<PlantOwner> implements PlantOwner {}
+        class PlantOwner
+          extends DomainObject<PlantOwner>
+          implements PlantOwner {}
 
         // define the plant
         interface Plant {
@@ -182,15 +198,22 @@ describe('DomainObject', () => {
         }
 
         // now show that we hydrate the pot
-        const plant = new Plant({ owners: [{ name: 'bob' }], lastWatered: 'monday' });
-        plant.owners.forEach((owner) => expect(owner).toBeInstanceOf(PlantOwner));
+        const plant = new Plant({
+          owners: [{ name: 'bob' }],
+          lastWatered: 'monday',
+        });
+        plant.owners.forEach((owner) =>
+          expect(owner).toBeInstanceOf(PlantOwner),
+        );
       });
       it('should not hydrate nullable nested domain objects when null', () => {
         // define the plant owners
         interface PlantOwner {
           name: string;
         }
-        class PlantOwner extends DomainObject<PlantOwner> implements PlantOwner {}
+        class PlantOwner
+          extends DomainObject<PlantOwner>
+          implements PlantOwner {}
 
         // define the plant
         interface Plant {
@@ -228,7 +251,10 @@ describe('DomainObject', () => {
         }
 
         // now show that we hydrate the pot correctly
-        const plant = new Plant({ plantedIn: { _dobj: 'PlantPot', diameterInInches: 7 } as PlantPot, lastWatered: 'monday' });
+        const plant = new Plant({
+          plantedIn: { _dobj: 'PlantPot', diameterInInches: 7 } as PlantPot,
+          lastWatered: 'monday',
+        });
         expect(plant.plantedIn).toBeInstanceOf(PlantPot);
       });
     });

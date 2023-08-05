@@ -1,8 +1,9 @@
 import { DomainEntity } from '../../instantiation/DomainEntity';
 import { DomainValueObject } from '../../instantiation/DomainValueObject';
+import { deserialize } from './deserialize';
+
 /* eslint-disable no-useless-escape */
 import { serialize } from './serialize';
-import { deserialize } from './deserialize';
 
 describe('deserialize', () => {
   describe('basic types', () => {
@@ -36,7 +37,12 @@ describe('deserialize', () => {
       expect(undone).toEqual(original); // sorted
     });
     it('should deserialize arrays even if they have objects', () => {
-      const original = ['banana', 821, { id: 0, meaning: null }, { id: 1, meaning: 42, value: 821 }];
+      const original = [
+        'banana',
+        821,
+        { id: 0, meaning: null },
+        { id: 1, meaning: 42, value: 821 },
+      ];
       const serial = serialize(original);
       const undone = deserialize(serial);
       expect(undone).toEqual(original);
@@ -142,6 +148,7 @@ describe('deserialize', () => {
         deserialize(serial, { with: [] });
         throw new Error('should not reach here');
       } catch (error) {
+        if (!(error instanceof Error)) throw error;
         expect(error.message).toContain(
           `DomainObject 'Spaceship' was referenced in the string being deserialized but was missing from the context given to the deserialize method`,
         );
@@ -161,12 +168,19 @@ describe('deserialize', () => {
       });
       const spaceport = new Spaceport({
         uuid: '__SPACEPORT_UUID__',
-        address: new Address({ galaxy: 'Milky Way', solarSystem: 'Sun', planet: 'Earth', continent: 'North America' }),
+        address: new Address({
+          galaxy: 'Milky Way',
+          solarSystem: 'Sun',
+          planet: 'Earth',
+          continent: 'North America',
+        }),
         spaceships: [shipA, shipB],
       });
       const original = spaceport;
       const serial = serialize(original, { lossless: true });
-      const undone = deserialize<Spaceport>(serial, { with: [Spaceport, Spaceship, Address] });
+      const undone = deserialize<Spaceport>(serial, {
+        with: [Spaceport, Spaceship, Address],
+      });
       expect(undone).toEqual(original);
       expect(undone).toBeInstanceOf(Spaceport);
       expect(undone.address).toBeInstanceOf(Address);
@@ -185,7 +199,9 @@ describe('deserialize', () => {
       });
       const original = [shipA, shipB];
       const serial = serialize(original, { lossless: true });
-      const undone = deserialize<typeof original>(serial, { with: [Spaceport, Spaceship, Address] });
+      const undone = deserialize<typeof original>(serial, {
+        with: [Spaceport, Spaceship, Address],
+      });
       expect(undone).toEqual(original);
       expect(undone[0]).toBeInstanceOf(Spaceship);
     });
@@ -205,7 +221,9 @@ describe('deserialize', () => {
       });
       const original = captain;
       const serial = serialize(original, { lossless: true });
-      const undone = deserialize<typeof original>(serial, { with: [Spaceship, Human, Robot, Captain] });
+      const undone = deserialize<typeof original>(serial, {
+        with: [Spaceship, Human, Robot, Captain],
+      });
       expect(undone).toEqual(original);
       expect(undone).toBeInstanceOf(Captain);
       expect(undone.agent).toBeInstanceOf(Robot);

@@ -19,15 +19,22 @@ import { isPropertyNameAReferenceExplicitly } from './isPropertyNameAReferenceEx
  *  - `headEngineerUuid: LeadEngineer` => true ✔️ // suffixes match -> intuitive, even though not explicit
  *  - `engineerUuid: LeadEngineer` => true ✔️ // suffixes match -> intuitive, even though not explicit
  */
-export const isPropertyNameAReferenceIntuitively = ({ propertyName, domainObjectName }: { propertyName: string; domainObjectName: string }) => {
+export const isPropertyNameAReferenceIntuitively = ({
+  propertyName,
+  domainObjectName,
+}: {
+  propertyName: string;
+  domainObjectName: string;
+}) => {
   let qualifiersToDrop = 0;
   let iterationLimitExceeded = false;
   while (!iterationLimitExceeded) {
     // for this qualifiersToDrop count, define the name for the domain object after dropping those qualifiers
-    const domainObjectNameMinusQualifiers = getDomainObjectNameAfterDroppingSomeQualifiers({
-      domainObjectName,
-      qualifiersToDrop,
-    });
+    const domainObjectNameMinusQualifiers =
+      getDomainObjectNameAfterDroppingSomeQualifiers({
+        domainObjectName,
+        qualifiersToDrop,
+      });
 
     // if dropping this qualifier produces no name, then its defo not a match, nothing else to try
     if (domainObjectNameMinusQualifiers === null) return false;
@@ -47,7 +54,9 @@ export const isPropertyNameAReferenceIntuitively = ({ propertyName, domainObject
     // safety check: if we passed more than 20 qualifiers, there's been some sort of error
     if (qualifiersToDrop > 20) {
       iterationLimitExceeded = true; // this is redundant, but feels better than having a `while(true)` defined
-      throw new Error('attempted to drop more than 20 qualifiers. does someone really have 20 qualifiers on a name? this is probably a bug');
+      throw new Error(
+        'attempted to drop more than 20 qualifiers. does someone really have 20 qualifiers on a name? this is probably a bug',
+      );
     }
   }
   throw new Error('something unexpected went wrong'); // we shouldn't reach here

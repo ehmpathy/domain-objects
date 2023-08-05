@@ -1,9 +1,10 @@
-import uuid from 'uuid';
-import { DomainObject } from '../..';
+import { v4 as uuid } from 'uuid';
 
 import { DomainObjectNotSafeToManipulateError } from '../../constraints/assertDomainObjectIsSafeToManipulate';
+import { DomainObject } from '../../index';
 import { DomainEntity } from '../../instantiation/DomainEntity';
 import { DomainValueObject } from '../../instantiation/DomainValueObject';
+
 /* eslint-disable no-useless-escape */
 import { serialize } from './serialize';
 
@@ -61,12 +62,18 @@ describe('serialize', () => {
     });
     describe('orderless', () => {
       it('should be able to serialize arrays deterministically when order does not matter', () => {
-        const serial = serialize(['821', 721, 'leopard', 7, 'apple', 3], { orderless: true });
+        const serial = serialize(['821', 721, 'leopard', 7, 'apple', 3], {
+          orderless: true,
+        });
         expect(serial).toEqual(`[\"821"\,\"apple\",\"leopard\",3,7,721]`); // note that it sorts the values, for determinism, since order does not matter
       });
       it('should serialize them in a way that can be used to compare two arrays deterministically when order does not matter', () => {
-        const serialA = serialize([3, '821', 721, 'leopard', 'apple'], { orderless: true });
-        const serialB = serialize([721, 'leopard', 3, 'apple', '821'], { orderless: true });
+        const serialA = serialize([3, '821', 721, 'leopard', 'apple'], {
+          orderless: true,
+        });
+        const serialB = serialize([721, 'leopard', 3, 'apple', '821'], {
+          orderless: true,
+        });
         expect(serialB).toEqual(serialA); // should be equivalent, since it serializes deterministically by value (due to sorting)
       });
       it('should serialize arrays even if they have objects, deterministically, when order does not matter', () => {
@@ -161,7 +168,9 @@ describe('serialize', () => {
       });
       const serial = serialize(ship);
       expect(serial).toContain('Spaceship');
-      expect(serial).toEqual(`{\"_dobj\":\"Spaceship\",\"fuelQuantity\":9001,\"passengers\":21,\"serialNumber\":\"__UUID__\"}`);
+      expect(serial).toEqual(
+        `{\"_dobj\":\"Spaceship\",\"fuelQuantity\":9001,\"passengers\":21,\"serialNumber\":\"__UUID__\"}`,
+      );
     });
     it('should add the domain object name as metadata recursively, for all nested domain objects too', () => {
       const shipA = new Spaceship({
@@ -176,7 +185,12 @@ describe('serialize', () => {
       });
       const spaceport = new Spaceport({
         uuid: '__SPACEPORT_UUID__',
-        address: new Address({ galaxy: 'Milky Way', solarSystem: 'Sun', planet: 'Earth', continent: 'North America' }),
+        address: new Address({
+          galaxy: 'Milky Way',
+          solarSystem: 'Sun',
+          planet: 'Earth',
+          continent: 'North America',
+        }),
         spaceships: [shipA, shipB],
       });
       const serial = serialize(spaceport);
@@ -202,13 +216,19 @@ describe('serialize', () => {
       });
       const spaceport = new Spaceport({
         uuid: '__SPACEPORT_UUID__',
-        address: new Address({ id: 821, galaxy: 'Milky Way', solarSystem: 'Sun', planet: 'Earth', continent: 'North America' }),
+        address: new Address({
+          id: 821,
+          galaxy: 'Milky Way',
+          solarSystem: 'Sun',
+          planet: 'Earth',
+          continent: 'North America',
+        }),
         spaceships: [shipA, shipB],
       });
       const serialA = serialize(spaceport);
 
       // now define spaceport again, but this time the fuel quantity of shipB has decreased (since it was flying)
-      spaceport.spaceships[1].fuelQuantity = 4200;
+      spaceport.spaceships[1]!.fuelQuantity = 4200;
       const serialB = serialize(spaceport);
 
       // we should not be tracking "fuelQuantity" or "passengers", because those properties are updatable and in domain modeling, we only care about which domain objects are being referenced (i.e., bounded scope of consideration) - not what state referenced object's updatable properties are in; that's why we only care about spaceship.serialNumber here, since that uniquely identifies the spaceship being referenced
@@ -237,7 +257,9 @@ describe('serialize', () => {
       });
       const serial = serialize(worm);
       expect(serial).toContain('GlowWorm');
-      expect(serial).toEqual(`{\"_dobj\":\"GlowWorm\",\"color\":\"purple\",\"glowing\":true}`);
+      expect(serial).toEqual(
+        `{\"_dobj\":\"GlowWorm\",\"color\":\"purple\",\"glowing\":true}`,
+      );
     });
 
     describe('safety', () => {

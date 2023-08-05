@@ -4,7 +4,7 @@ exports[`assertDomainObjectIsSafeToManipulate should throw a helpful error if an
 "
 DomainObject 'Plant' is not safe to manipulate.
 
-Specifically, the keys: [\\"pot\\"].
+Specifically, the keys: ["pot"].
 
 Please make sure all nested objects are DomainObjects and are explicitly defined on the class definition, using the 'nested' static property.
 
@@ -21,7 +21,7 @@ exports[`assertDomainObjectIsSafeToManipulate should throw a helpful error if an
 "
 DomainObject 'Plant' is not safe to manipulate.
 
-Specifically, the keys: [\\"pastPots\\"].
+Specifically, the keys: ["pastPots"].
 
 Please make sure all nested objects are DomainObjects and are explicitly defined on the class definition, using the 'nested' static property.
 

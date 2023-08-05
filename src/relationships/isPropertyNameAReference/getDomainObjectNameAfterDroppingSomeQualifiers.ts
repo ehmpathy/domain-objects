@@ -18,7 +18,8 @@ export const getDomainObjectNameAfterDroppingSomeQualifiers = ({
   qualifiersToDrop: number;
 }): string | null => {
   // sanity check
-  if (qualifiersToDrop < 0) throw new Error('qualifiers to drop must be greater than 0');
+  if (qualifiersToDrop < 0)
+    throw new Error('qualifiers to drop must be greater than 0');
 
   // handle base case
   if (qualifiersToDrop === 0) return domainObjectName; // nothing to do in this case
@@ -26,7 +27,9 @@ export const getDomainObjectNameAfterDroppingSomeQualifiers = ({
   // drop the qualifiers
   const partsOfName = noCase(domainObjectName) // no case splits up string w/ spaces
     .split(' ');
-  const nameWithoutRequestedQualifiers = pascalCase(partsOfName.slice(qualifiersToDrop).join(' '));
+  const nameWithoutRequestedQualifiers = pascalCase(
+    partsOfName.slice(qualifiersToDrop).join(' '),
+  );
 
   // check that its still a valid name
   if (nameWithoutRequestedQualifiers.length < 3) return null; // less than 3 char -> not a valid name

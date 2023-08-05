@@ -13,4 +13,6 @@ import { DomainObject } from './DomainObject';
  * - A `Address { street, city, state, country }` is a value object. Changing any of the properties, like `street`, produces a completely new address
  * - A `Geocode { latitude, longitude }` is a value object. Changing either property means you are dealing with a new name.
  */
-export abstract class DomainValueObject<T> extends DomainObject<T> {}
+export abstract class DomainValueObject<
+  T extends Record<string, any>,
+> extends DomainObject<T> {}

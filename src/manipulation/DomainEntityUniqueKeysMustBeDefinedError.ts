@@ -1,5 +1,11 @@
 export class DomainEntityUniqueKeysMustBeDefinedError extends Error {
-  constructor({ entityName, nameOfFunctionNeededFor }: { entityName: string; nameOfFunctionNeededFor: string }) {
+  constructor({
+    entityName,
+    nameOfFunctionNeededFor,
+  }: {
+    entityName: string;
+    nameOfFunctionNeededFor: string;
+  }) {
     const message = `
 \`${entityName}.unique\` must be defined, to be able to \`${nameOfFunctionNeededFor}\`.
 

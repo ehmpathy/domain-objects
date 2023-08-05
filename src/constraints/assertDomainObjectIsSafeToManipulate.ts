@@ -1,7 +1,13 @@
 import { DomainObject } from '../instantiation/DomainObject';
 
 export class DomainObjectNotSafeToManipulateError extends Error {
-  constructor({ unsafeKeys, className }: { unsafeKeys: string[]; className: string }) {
+  constructor({
+    unsafeKeys,
+    className,
+  }: {
+    unsafeKeys: string[];
+    className: string;
+  }) {
     const message = `
 DomainObject '${className}' is not safe to manipulate.
 
@@ -25,13 +31,23 @@ For example:
  *
  * Therefore, if any DomainObject has nested objects that are not instantiated as DomainObjects, there is a risk that the nested object is really a nested, uninstantiated DomainObject - which would cause bugs if uncaught.
  */
-export const assertDomainObjectIsSafeToManipulate = <T extends Record<string, any>>(obj: DomainObject<T> & Record<string, any>): void => {
+export const assertDomainObjectIsSafeToManipulate = <
+  T extends Record<string, any>,
+>(
+  obj: DomainObject<T> & Record<string, any>,
+): void => {
   // grab all the keys that have objects defined for their values
-  const nestedObjectKeys = Object.keys(obj).filter((key) => typeof obj[key] === 'object' && obj[key] !== null);
+  const nestedObjectKeys = Object.keys(obj).filter(
+    (key) => typeof obj[key] === 'object' && obj[key] !== null,
+  );
 
   // grab all the "nested object keys" who's values are defined as "should be domain object"
-  const nestedDomainObjectKeysDefined = Object.keys((obj.constructor as typeof DomainObject).nested ?? {});
-  const nestedNonDomainObjectObjectKeys = nestedObjectKeys.filter((key) => !nestedDomainObjectKeysDefined.includes(key)); // not explicitly defined as a nested domain object key
+  const nestedDomainObjectKeysDefined = Object.keys(
+    (obj.constructor as typeof DomainObject).nested ?? {},
+  );
+  const nestedNonDomainObjectObjectKeys = nestedObjectKeys.filter(
+    (key) => !nestedDomainObjectKeysDefined.includes(key),
+  ); // not explicitly defined as a nested domain object key
 
   // now apply some filters to those concerning keys
   let concerningKeys = nestedNonDomainObjectObjectKeys;
@@ -59,5 +75,9 @@ export const assertDomainObjectIsSafeToManipulate = <T extends Record<string, an
   });
 
   // if we have any concerningKeys still, then its not safe!
-  if (concerningKeys.length) throw new DomainObjectNotSafeToManipulateError({ unsafeKeys: concerningKeys, className: obj.constructor.name });
+  if (concerningKeys.length)
+    throw new DomainObjectNotSafeToManipulateError({
+      unsafeKeys: concerningKeys,
+      className: obj.constructor.name,
+    });
 };

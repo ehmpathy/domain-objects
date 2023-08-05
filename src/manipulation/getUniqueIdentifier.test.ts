@@ -1,10 +1,10 @@
-import uuid from 'uuid';
+import { v4 as uuid } from 'uuid';
 
+import { DomainObjectNotSafeToManipulateError } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainValueObject } from '../instantiation/DomainValueObject';
-import { getUniqueIdentifier } from './getUniqueIdentifier';
-import { DomainObjectNotSafeToManipulateError } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
+import { getUniqueIdentifier } from './getUniqueIdentifier';
 
 describe('getUniqueIdentifier', () => {
   describe('value object', () => {
@@ -17,9 +17,19 @@ describe('getUniqueIdentifier', () => {
         postal: string;
       }
       class Address extends DomainValueObject<Address> implements Address {}
-      const address = new Address({ street: '123 Elm Street', city: 'Austin', state: 'TX', postal: '78704' });
+      const address = new Address({
+        street: '123 Elm Street',
+        city: 'Austin',
+        state: 'TX',
+        postal: '78704',
+      });
       const unique = getUniqueIdentifier(address);
-      expect(unique).toEqual({ street: '123 Elm Street', city: 'Austin', state: 'TX', postal: '78704' });
+      expect(unique).toEqual({
+        street: '123 Elm Street',
+        city: 'Austin',
+        state: 'TX',
+        postal: '78704',
+      });
     });
     it('should exclude uuid and id, if present, and custom metadata keys are not specified', () => {
       interface Address {
@@ -32,9 +42,21 @@ describe('getUniqueIdentifier', () => {
         postal: string;
       }
       class Address extends DomainValueObject<Address> implements Address {}
-      const address = new Address({ id: 821, uuid: '__UUID__', street: '123 Elm Street', city: 'Austin', state: 'TX', postal: '78704' });
+      const address = new Address({
+        id: 821,
+        uuid: '__UUID__',
+        street: '123 Elm Street',
+        city: 'Austin',
+        state: 'TX',
+        postal: '78704',
+      });
       const unique = getUniqueIdentifier(address);
-      expect(unique).toEqual({ street: '123 Elm Street', city: 'Austin', state: 'TX', postal: '78704' });
+      expect(unique).toEqual({
+        street: '123 Elm Street',
+        city: 'Austin',
+        state: 'TX',
+        postal: '78704',
+      });
     });
     it('should exclude uuid and createdAt, if present, and custom metadata keys are specified', () => {
       interface Address {
@@ -49,9 +71,21 @@ describe('getUniqueIdentifier', () => {
       class Address extends DomainValueObject<Address> implements Address {
         public static metadata = ['uuid', 'createdAt'];
       }
-      const address = new Address({ uuid: '__UUID__', createdAt: '__NOW__', street: '123 Elm Street', city: 'Austin', state: 'TX', postal: '78704' });
+      const address = new Address({
+        uuid: '__UUID__',
+        createdAt: '__NOW__',
+        street: '123 Elm Street',
+        city: 'Austin',
+        state: 'TX',
+        postal: '78704',
+      });
       const unique = getUniqueIdentifier(address);
-      expect(unique).toEqual({ street: '123 Elm Street', city: 'Austin', state: 'TX', postal: '78704' });
+      expect(unique).toEqual({
+        street: '123 Elm Street',
+        city: 'Austin',
+        state: 'TX',
+        postal: '78704',
+      });
     });
   });
   describe('entity', () => {
@@ -65,7 +99,11 @@ describe('getUniqueIdentifier', () => {
         public static unique = ['serialNumber'];
         public static updatable = ['fuelQuantity', 'passengers'];
       }
-      const ship = new RocketShip({ serialNumber: 'SN5', fuelQuantity: 9001, passengers: 21 });
+      const ship = new RocketShip({
+        serialNumber: 'SN5',
+        fuelQuantity: 9001,
+        passengers: 21,
+      });
       const uniqueIdentifier = getUniqueIdentifier(ship);
       expect(uniqueIdentifier).toEqual({ serialNumber: 'SN5' });
     });
@@ -76,12 +114,19 @@ describe('getUniqueIdentifier', () => {
         passengers: number;
       }
       class RocketShip extends DomainEntity<RocketShip> implements RocketShip {}
-      const ship = new RocketShip({ serialNumber: 'SN5', fuelQuantity: 9001, passengers: 21 });
+      const ship = new RocketShip({
+        serialNumber: 'SN5',
+        fuelQuantity: 9001,
+        passengers: 21,
+      });
       try {
         getUniqueIdentifier(ship);
         throw new Error('should not reach here');
       } catch (error) {
-        expect(error.message).toContain('`RocketShip.unique` must be defined, to be able to `getUniqueIdentifier`');
+        if (!(error instanceof Error)) throw error;
+        expect(error.message).toContain(
+          '`RocketShip.unique` must be defined, to be able to `getUniqueIdentifier`',
+        );
         expect(error).toBeInstanceOf(DomainEntityUniqueKeysMustBeDefinedError);
       }
     });
@@ -122,7 +167,10 @@ describe('getUniqueIdentifier', () => {
         passengers: number;
       }
       class RocketShip extends DomainEntity<RocketShip> implements RocketShip {
-        public static unique = [['serialNumber'], ['federation', 'federationShipId']];
+        public static unique = [
+          ['serialNumber'],
+          ['federation', 'federationShipId'],
+        ];
         public static updatable = ['fuelQuantity', 'passengers'];
       }
       const ship = new RocketShip({
@@ -133,7 +181,11 @@ describe('getUniqueIdentifier', () => {
         passengers: 21,
       });
       const uniqueIdentifier = getUniqueIdentifier(ship);
-      expect(uniqueIdentifier).toEqual({ serialNumber: 'SN5', federation: 'Sol', federationShipId: 'earth:spacex:5' }); // properties from all unique key sets should be included
+      expect(uniqueIdentifier).toEqual({
+        serialNumber: 'SN5',
+        federation: 'Sol',
+        federationShipId: 'earth:spacex:5',
+      }); // properties from all unique key sets should be included
     });
   });
   describe('safety', () => {
