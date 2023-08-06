@@ -4,7 +4,11 @@ export { DomainEntity } from './instantiation/DomainEntity';
 export { DomainEvent } from './instantiation/DomainEvent';
 export { HelpfulJoiValidationError } from './instantiation/validate/HelpfulJoiValidationError';
 export { HelpfulYupValidationError } from './instantiation/validate/HelpfulYupValidationError';
+export { DomainEntityUniqueKeysMustBeDefinedError } from './manipulation/DomainEntityUniqueKeysMustBeDefinedError';
+export { DomainEntityUpdatablePropertiesMustBeDefinedError } from './manipulation/DomainEntityUpdatablePropertiesMustBeDefinedError';
+
 export { getUniqueIdentifier } from './manipulation/getUniqueIdentifier';
+export { getUpdatableProperties } from './manipulation/getUpdatableProperties';
 export { getMetadataKeys } from './manipulation/getMetadataKeys';
 export { omitMetadataValues } from './manipulation/omitMetadataValues';
 export { serialize } from './manipulation/serde/serialize';
