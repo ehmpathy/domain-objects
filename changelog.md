@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.0](https://github.com/ehmpathy/domain-objects/compare/v0.11.3...v0.12.0) (2023-08-06)
+
+
+### Features
+
+* **manipulation:** add method to getUpdatableProperties ([517ee23](https://github.com/ehmpathy/domain-objects/commit/517ee23a53fd5b0f53da0ce7cb25651385c452fe))
+
 ## [0.11.3](https://github.com/ehmpathy/domain-objects/compare/v0.11.2...v0.11.3) (2023-08-05)
 
 
