@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0](https://github.com/ehmpathy/domain-objects/compare/v0.12.0...v0.13.0) (2023-08-07)
+
+
+### Features
+
+* **manipulation:** add getUniqueIdentifierSlug method ([896864b](https://github.com/ehmpathy/domain-objects/commit/896864bc7ec6a5909b7cbd9e19347a5c0ab91188))
+
 ## [0.12.0](https://github.com/ehmpathy/domain-objects/compare/v0.11.3...v0.12.0) (2023-08-06)
 
 
