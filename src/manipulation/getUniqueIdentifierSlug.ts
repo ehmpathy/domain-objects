@@ -29,7 +29,7 @@ export const getUniqueIdentifierSlug = (
     .map((val) => JSON.stringify(val[1]))
     .join('.')}`
     .replace(/[^\w\-\_\.]/g, '') // strip non-safe characters
-    .slice(0, 321); // limit the characters
+    .slice(0, 128); // limit the characters
 
   // define the uniqueness guarantee part, to ensure that there's no collisions in uniqueness due to removing non-safe characters
   const uniquePart = new sha256()
