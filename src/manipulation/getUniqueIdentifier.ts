@@ -4,6 +4,7 @@ import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomai
 import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainObject } from '../instantiation/DomainObject';
 import { DomainValueObject } from '../instantiation/DomainValueObject';
+import { UnexpectedCodePathError } from '../utils/errors/UnexpectedCodePathError';
 import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 
 /**
@@ -46,5 +47,11 @@ export const getUniqueIdentifier = <T extends Record<string, any>>(
   }
 
   // throw error we get here, this is unexpected
-  throw new Error('unexpected domain object type');
+  throw new UnexpectedCodePathError(
+    'unexpected domain object type for getUniqueIdentifier. expected DomainValueObject or DomainEntity',
+    {
+      dobjClass: (obj as any)?.constructor?.name,
+      dobj: obj,
+    },
+  );
 };

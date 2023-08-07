@@ -3,6 +3,7 @@ import pick from 'lodash.pick';
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainObject } from '../instantiation/DomainObject';
+import { UnexpectedCodePathError } from '../utils/errors/UnexpectedCodePathError';
 import { DomainEntityUpdatablePropertiesMustBeDefinedError } from './DomainEntityUpdatablePropertiesMustBeDefinedError';
 
 /**
@@ -38,5 +39,11 @@ export const getUpdatableProperties = <T extends Record<string, any>>(
   }
 
   // throw error we get here, this is unexpected
-  throw new Error('unexpected domain object type');
+  throw new UnexpectedCodePathError(
+    'unexpected domain object type for getUpdatableProperties. expected DomainEntity',
+    {
+      dobjClass: (dobj as any)?.constructor?.name,
+      dobj,
+    },
+  );
 };
