@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.1](https://github.com/ehmpathy/domain-objects/compare/v0.13.0...v0.13.1) (2023-08-07)
+
+
+### Bug Fixes
+
+* **devexp:** make unexpected domain object errors more helpful ([83c4215](https://github.com/ehmpathy/domain-objects/commit/83c4215e508c63e59182e5fbc3a7ef4c15963228))
+
 ## [0.13.0](https://github.com/ehmpathy/domain-objects/compare/v0.12.0...v0.13.0) (2023-08-07)
 
 
