@@ -7,6 +7,7 @@
     "noUnusedParameters": false,
     "exactOptionalPropertyTypes": false,
     "noImplicitOverride": false,
+    "noUncheckedIndexedAccess": false, // dep cross-sha256 fails this; // TODO: fix that dep
     "resolveJsonModule": true,
     "sourceMap": true,
     "outDir": "dist",

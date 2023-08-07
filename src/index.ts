@@ -8,6 +8,7 @@ export { DomainEntityUniqueKeysMustBeDefinedError } from './manipulation/DomainE
 export { DomainEntityUpdatablePropertiesMustBeDefinedError } from './manipulation/DomainEntityUpdatablePropertiesMustBeDefinedError';
 
 export { getUniqueIdentifier } from './manipulation/getUniqueIdentifier';
+export { getUniqueIdentifierSlug } from './manipulation/getUniqueIdentifierSlug';
 export { getUpdatableProperties } from './manipulation/getUpdatableProperties';
 export { getMetadataKeys } from './manipulation/getMetadataKeys';
 export { omitMetadataValues } from './manipulation/omitMetadataValues';

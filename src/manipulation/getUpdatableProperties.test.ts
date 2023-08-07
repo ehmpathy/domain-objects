@@ -2,9 +2,7 @@ import { v4 as uuid } from 'uuid';
 
 import { DomainObjectNotSafeToManipulateError } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 import { DomainEntityUpdatablePropertiesMustBeDefinedError } from './DomainEntityUpdatablePropertiesMustBeDefinedError';
-import { getUniqueIdentifier } from './getUniqueIdentifier';
 import { getUpdatableProperties } from './getUpdatableProperties';
 
 describe('getUpdatableProperties', () => {
