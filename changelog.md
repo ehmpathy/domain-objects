@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.2](https://github.com/ehmpathy/domain-objects/compare/v0.13.1...v0.13.2) (2023-08-07)
+
+
+### Bug Fixes
+
+* **manip:** limit unique identifier slug to shorter string ([df74bda](https://github.com/ehmpathy/domain-objects/commit/df74bda3e0e341bcb4656a07ea428b84c12f2848))
+
 ## [0.13.1](https://github.com/ehmpathy/domain-objects/compare/v0.13.0...v0.13.1) (2023-08-07)
 
 
