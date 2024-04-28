@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.14.0](https://github.com/ehmpathy/domain-objects/compare/v0.13.2...v0.14.0) (2024-04-28)
+
+
+### Features
+
+* **relate:** add method to dedupe dobjs by identity ([ef13b1e](https://github.com/ehmpathy/domain-objects/commit/ef13b1ebda66e63a00bdc67ffb84e5bcdc694ee6))
+
 ## [0.13.2](https://github.com/ehmpathy/domain-objects/compare/v0.13.1...v0.13.2) (2023-08-07)
 
 
