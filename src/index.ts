@@ -12,6 +12,7 @@ export { getUniqueIdentifierSlug } from './manipulation/getUniqueIdentifierSlug'
 export { getUpdatableProperties } from './manipulation/getUpdatableProperties';
 export { getMetadataKeys } from './manipulation/getMetadataKeys';
 export { omitMetadataValues } from './manipulation/omitMetadataValues';
+export { dedupe } from './manipulation/relate/dedupe';
 export { serialize } from './manipulation/serde/serialize';
 export { deserialize } from './manipulation/serde/deserialize';
 export { isPropertyNameAReferenceExplicitly } from './relationships/isPropertyNameAReference/isPropertyNameAReferenceExplicitly';
