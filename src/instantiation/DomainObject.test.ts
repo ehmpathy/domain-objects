@@ -1,10 +1,12 @@
 import Joi from 'joi';
 import { v4 as uuid } from 'uuid';
 import * as yup from 'yup';
+import { z } from 'zod';
 
 import { DomainObject } from './DomainObject';
 import { HelpfulJoiValidationError } from './validate/HelpfulJoiValidationError';
 import { HelpfulYupValidationError } from './validate/HelpfulYupValidationError';
+import { HelpfulZodValidationError } from './validate/HelpfulZodValidationError';
 
 describe('DomainObject', () => {
   describe('domain modeling use cases', () => {
@@ -150,6 +152,45 @@ describe('DomainObject', () => {
         } catch (error) {
           if (!(error instanceof Error)) throw error;
           expect(error).toBeInstanceOf(HelpfulYupValidationError);
+          expect(error.message).toMatchSnapshot();
+        }
+      });
+    });
+
+    describe('Zod schema', () => {
+      interface RocketShip {
+        serialNumber: string;
+        fuelQuantity: number;
+        passengers: number;
+      }
+      const schema = z.object({
+        serialNumber: z.string(),
+        fuelQuantity: z.number(),
+        passengers: z.number().max(42),
+      });
+      class RocketShip extends DomainObject<RocketShip> implements RocketShip {
+        public static schema = schema;
+      }
+      it('should not throw error if when valid', () => {
+        const ship = new RocketShip({
+          serialNumber: uuid(),
+          fuelQuantity: 9001,
+          passengers: 21,
+        });
+        expect(ship).toBeInstanceOf(RocketShip); // sanity check
+      });
+      it('should throw a helpful error when does not pass schema', () => {
+        try {
+          // eslint-disable-next-line no-new
+          new RocketShip({
+            serialNumber: '__SOME_UUID__',
+            fuelQuantity: 9001,
+            passengers: 50,
+          });
+          throw new Error('should not reach here');
+        } catch (error) {
+          if (!(error instanceof Error)) throw error;
+          expect(error).toBeInstanceOf(HelpfulZodValidationError);
           expect(error.message).toMatchSnapshot();
         }
       });

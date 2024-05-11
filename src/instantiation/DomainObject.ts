@@ -44,9 +44,9 @@ export class DomainObject<T extends Record<string, any>> {
    *
    * When set, will be used to validate the properties passed into the constructor at runtime (i.e., during instantiation)
    *
-   * Supports [`Joi`](https://github.com/sideway/joi) and [`Yup`](https://github.com/jquense/yup)
+   * Supports [`Zod`](https://github.com/colinhacks/zod), [`Joi`](https://github.com/sideway/joi), and [`Yup`](https://github.com/jquense/yup)
    */
-  public static schema?: SchemaOptions;
+  public static schema?: SchemaOptions<any>; // todo: work around typescript's "static members cant reference class type parameters"
 
   /**
    * DomainObject.nested
