@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.0](https://github.com/ehmpathy/domain-objects/compare/v0.15.0...v0.16.0) (2024-05-11)
+
+
+### Features
+
+* **alias:** support DomainObject.alias declaration ([#37](https://github.com/ehmpathy/domain-objects/issues/37)) ([7348ae2](https://github.com/ehmpathy/domain-objects/commit/7348ae257d392725fd5885d47fc055f4b76cf8fd))
+
 ## [0.15.0](https://github.com/ehmpathy/domain-objects/compare/v0.14.0...v0.15.0) (2024-04-28)
 
 
