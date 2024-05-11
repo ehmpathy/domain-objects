@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.0](https://github.com/ehmpathy/domain-objects/compare/v0.16.0...v0.17.0) (2024-05-11)
+
+
+### Features
+
+* **schema:** support zod schema for runtime validation ([#39](https://github.com/ehmpathy/domain-objects/issues/39)) ([b6c4000](https://github.com/ehmpathy/domain-objects/commit/b6c4000f86e9e5980e183d97170ee528621bce7e))
+
 ## [0.16.0](https://github.com/ehmpathy/domain-objects/compare/v0.15.0...v0.16.0) (2024-05-11)
 
 
