@@ -31,3 +31,27 @@ Props Provided:
   "passengers": 50
 }"
 `;
+
+exports[`DomainObject validation Zod schema should throw a helpful error when does not pass schema 1`] = `
+"Errors were found while validating properties for domain object RocketShip.:
+[
+  {
+    "code": "too_big",
+    "maximum": 42,
+    "type": "number",
+    "inclusive": true,
+    "exact": false,
+    "message": "Number must be less than or equal to 42",
+    "path": [
+      "passengers"
+    ]
+  }
+]
+
+Props Provided:
+{
+  "serialNumber": "__SOME_UUID__",
+  "fuelQuantity": 9001,
+  "passengers": 50
+}"
+`;

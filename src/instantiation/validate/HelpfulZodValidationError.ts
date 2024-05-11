@@ -1,8 +1,8 @@
 // only importing types  > dev dep
-import type { ValidationError } from 'yup';
+import type { ZodError, ZodIssue } from 'zod';
 
-export class HelpfulYupValidationError extends Error {
-  public details: string[];
+export class HelpfulZodValidationError extends Error {
+  public details: ZodIssue[];
 
   public props: any;
 
@@ -13,7 +13,7 @@ export class HelpfulYupValidationError extends Error {
     props,
     domainObject,
   }: {
-    error: ValidationError;
+    error: ZodError;
     props: any;
     domainObject: string;
   }) {

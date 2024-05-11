@@ -1,7 +1,5 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import Joi from 'joi';
-
 // only importing types  > dev dep
+import type { ValidationError } from 'joi';
 
 interface HelpfulJoiValidationErrorDetail {
   message: string;
@@ -20,7 +18,7 @@ export class HelpfulJoiValidationError extends Error {
     props,
     domainObject,
   }: {
-    error: Joi.ValidationError;
+    error: ValidationError;
     props: any;
     domainObject: string;
   }) {
