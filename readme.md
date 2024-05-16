@@ -94,7 +94,7 @@ interface AirQualityMeasuredEvent {
   pm10p0: string; // PM10.0
 }
 class AirQualityMeasuredEvent extends DomainEvent<AirQualityMeasuredEvent> implements AirQualityMeasuredEvent {
-  public static unique = ['locationUuid', 'sensorUuid', 'occurredAt];
+  public static unique = ['locationUuid', 'sensorUuid', 'occurredAt'];
 }
 
 // use it
@@ -113,7 +113,7 @@ const event = new AirQualityMeasuredEvent({
 
 ### runtime validation
 
-> everyone has types until they get punched in the runtime - mike tyson
+> everyone has types until they get punched in the runtime - mike typeson
 
 ```ts
 // define your domain object with a schema this time
@@ -132,7 +132,7 @@ const schema = Joi.object().keys({
   continent: Joi.string().required(),
 });
 class Address extends DomainLiteral<Address> implements Address {
-  public static schema = schema; // supports Joi and Yup
+  public static schema = schema; // supports Zod, Yup, and Joi
 }
 
 // and now when you instantiate objects, the props you instantiate with will be runtime validated
@@ -177,7 +177,7 @@ const areTheSame = serialize(getUniqueIdentifier(northAmerica)) === serialize(ge
 ### change detection
 
 ```ts
-import { serialize } from 'domain-objects';
+import { serialize, omitMetadataValues } from 'domain-objects';
 
 // shiny new spaceship, full of fuel
 const sn5 = new Spaceship({
@@ -186,25 +186,19 @@ const sn5 = new Spaceship({
   passengers: 21,
 });
 
-// which is owned by this spaceport
-const spaceport = new Spaceport({
-  uuid: '__SPACEPORT_UUID__',
-  address: northAmerica,
-  spaceships: [sn5],
-});
+// lets save it to the database
+const sn5Saved = new Spaceship({ ...sn5, id: 821, updatedAt: now() }); // the database will add metadata to it
+
+// lets check that in the process of saving to the database, no unexpected changes were introduced
+const hadChangeDuringSave = serialize(omitMetadataValues(sn5)) !== serialize(omitMetadataValues(sn5Saved)); // note: we omit the metadata values since we dont care that one has db generated values like id specified and the other does not
+expect(hadChangeDuringSave).toEqual(false); // even though an id was added to sn5Saved, the non-metadata attributes have not changed, so we can say there is no change as desired
 
 // we do some business logic, and in the process, the space ship flys around and uses up fuel
 const sn5AfterFlying = new Spaceship({ ...sn5, fuelQuantity: 4500 });
 
-// now we want to check: has the spaceport been updated over this time? We pull the data fron the database, and the database returns this response
-const spaceportAfterFlight = new Spaceport({
-  uuid: '__SPACEPORT_UUID__',
-  address: northAmerica,
-  spaceships: [sn5AfterFlying], // note! the spaceships[0].fuelQuantity has changed
-});
-
-// so, given that spaceport.spaceships[0].fuelQuantity has changed, does that mean that the spaceport has changed?
-const hasChanged = serialize(spaceport) !== serialize(spaceportAfterFlight); // because of domain modeling, we know the answer is `false`! (although the spaceship used fuel, the spaceport itself did not change)
+// lets programmatically detect whether there was a change now
+const hadChangeAfterFlying = serialize(omitMetadataValues(spaceport)) !== serialize(omitMetadataValues(spaceportAfterFlight));
+expect(hadChangeAfterFlying).toEqual(true); // because the fuelQuantity has decreased, the Spaceship has had a change after flying
 ```
 
 # Features
