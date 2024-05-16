@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://github.com/ehmpathy/domain-objects/compare/v0.17.0...v0.18.0) (2024-05-16)
+
+
+### Features
+
+* **literal:** rename DomainValueObject to DomainLiteral for intuition++ ([fb77ff7](https://github.com/ehmpathy/domain-objects/commit/fb77ff7b31ed29ebfbd51e31c2b9576682d4b6da))
+
 ## [0.17.0](https://github.com/ehmpathy/domain-objects/compare/v0.16.0...v0.17.0) (2024-05-11)
 
 
