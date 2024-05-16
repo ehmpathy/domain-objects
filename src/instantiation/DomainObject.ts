@@ -33,11 +33,15 @@ export class DomainObject<T extends Record<string, any>> {
    *
    * When set, declares the alias via which domain objects of this class are known to be referred to.
    *
+   * For example
+   * - PlantPot.alias = 'pot'
+   * - Bird.alias = { singular: 'bird', plural: 'flock' }
+   *
    * Relevance
    * - formalizes that we can expect to see the dobj referred to by this alias
    * - enables code generators to use this colloquial alias in contracts for better devex
    */
-  public static alias?: string;
+  public static alias?: string | { plural?: string; singular?: string };
 
   /**
    * DomainObject.schema
