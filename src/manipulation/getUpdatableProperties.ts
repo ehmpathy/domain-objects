@@ -12,7 +12,7 @@ import { DomainEntityUpdatablePropertiesMustBeDefinedError } from './DomainEntit
  * Uses the definition of a DomainEntity in order to extract the properties that are updatable for the domain object generically
  *
  * note
- * - this should not be called on DomainValueObject's or DomainEvent's, since by definition they can not have updatable properties
+ * - this should not be called on DomainLiterals or DomainEvents, since by definition they can not have updatable properties
  */
 export const getUpdatableProperties = <T extends Record<string, any>>(
   dobj: DomainEntity<T>,

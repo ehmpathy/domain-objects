@@ -2,12 +2,12 @@ import { v4 as uuid } from 'uuid';
 
 import { DomainObjectNotSafeToManipulateError } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainValueObject } from '../instantiation/DomainValueObject';
+import { DomainLiteral } from '../instantiation/DomainLiteral';
 import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 import { getUniqueIdentifier } from './getUniqueIdentifier';
 
 describe('getUniqueIdentifier', () => {
-  describe('value object', () => {
+  describe('literal', () => {
     it('should be able to get unique identifier accurately', () => {
       interface Address {
         street: string;
@@ -16,7 +16,7 @@ describe('getUniqueIdentifier', () => {
         state: string;
         postal: string;
       }
-      class Address extends DomainValueObject<Address> implements Address {}
+      class Address extends DomainLiteral<Address> implements Address {}
       const address = new Address({
         street: '123 Elm Street',
         city: 'Austin',
@@ -41,7 +41,7 @@ describe('getUniqueIdentifier', () => {
         state: string;
         postal: string;
       }
-      class Address extends DomainValueObject<Address> implements Address {}
+      class Address extends DomainLiteral<Address> implements Address {}
       const address = new Address({
         id: 821,
         uuid: '__UUID__',
@@ -68,7 +68,7 @@ describe('getUniqueIdentifier', () => {
         state: string;
         postal: string;
       }
-      class Address extends DomainValueObject<Address> implements Address {
+      class Address extends DomainLiteral<Address> implements Address {
         public static metadata = ['uuid', 'createdAt'];
       }
       const address = new Address({

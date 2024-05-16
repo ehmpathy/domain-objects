@@ -95,7 +95,7 @@ export class DomainObject<T extends Record<string, any>> {
    * - metadata simply adds information _about_ the object, without contributing to _defining_ the object
    *
    * Relevance,
-   * - metadata properties do not contribute to the unique key of a DomainValueObject
+   * - metadata properties do not contribute to the unique key of a DomainLiteral
    * - metadata properties can be easily stripped from an object by using the `omitMetadataValues` method
    *
    * By default,

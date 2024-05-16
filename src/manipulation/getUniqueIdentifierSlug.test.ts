@@ -1,9 +1,9 @@
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainValueObject } from '../instantiation/DomainValueObject';
+import { DomainLiteral } from '../instantiation/DomainLiteral';
 import { getUniqueIdentifierSlug } from './getUniqueIdentifierSlug';
 
 describe('getUniqueIdentifierSlug', () => {
-  it('should look reasonable for a value object', () => {
+  it('should look reasonable for a literal', () => {
     interface Address {
       street: string;
       suite?: string;
@@ -11,7 +11,7 @@ describe('getUniqueIdentifierSlug', () => {
       state: string;
       postal: string;
     }
-    class Address extends DomainValueObject<Address> implements Address {}
+    class Address extends DomainLiteral<Address> implements Address {}
     const address = new Address({
       street: '123 Elm Street',
       city: 'Austin',

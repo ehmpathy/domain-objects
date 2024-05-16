@@ -10,7 +10,7 @@ import { HelpfulZodValidationError } from './validate/HelpfulZodValidationError'
 
 describe('DomainObject', () => {
   describe('domain modeling use cases', () => {
-    it('should be able to represent a value object', () => {
+    it('should be able to represent a literal', () => {
       interface ChatMessage {
         userUuid: string;
         conversationUuid: string;

@@ -1,7 +1,7 @@
-import { DomainValueObject } from './DomainValueObject';
+import { DomainLiteral } from './DomainLiteral';
 
-describe('DomainValueObject', () => {
-  it('should be able to represent a value object', () => {
+describe('DomainLiteral', () => {
+  it('should be able to represent a literal', () => {
     interface Address {
       street: string;
       suite?: string;
@@ -9,7 +9,7 @@ describe('DomainValueObject', () => {
       state: string;
       postal: string;
     }
-    class Address extends DomainValueObject<Address> implements Address {}
+    class Address extends DomainLiteral<Address> implements Address {}
     const address = new Address({
       street: '123 Elm Street',
       city: 'Austin',
@@ -26,7 +26,7 @@ describe('DomainValueObject', () => {
       state: string;
       postal: string;
     }
-    class Address extends DomainValueObject<Address> implements Address {}
+    class Address extends DomainLiteral<Address> implements Address {}
     const address = new Address({
       street: '123 Elm Street',
       city: 'Austin',

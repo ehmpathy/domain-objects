@@ -23,10 +23,10 @@ npm install --save domain-objects
 
 # Usage Examples
 
-### value object
+### literal
 
 ```ts
-import { DomainValueObject } from 'domain-objects';
+import { DomainLiteral } from 'domain-objects';
 
 // define it
 interface Address {
@@ -36,7 +36,7 @@ interface Address {
   state: string;
   postal: string;
 }
-class Address extends DomainValueObject<Address> implements Address {}
+class Address extends DomainLiteral<Address> implements Address {}
 
 // use it
 const austin = new Address({
@@ -131,7 +131,7 @@ const schema = Joi.object().keys({
   planet: Joi.string().required(),
   continent: Joi.string().required(),
 });
-class Address extends DomainValueObject<Address> implements Address {
+class Address extends DomainLiteral<Address> implements Address {
   public static schema = schema; // supports Joi and Yup
 }
 
@@ -213,14 +213,15 @@ const hasChanged = serialize(spaceport) !== serialize(spaceportAfterFlight); // 
 
 Modeling is a fundamental part of domain driven design. Here is how you can represent your model in your code - to aid in building a ubiquitous language.
 
-### `DomainValueObject`
+### `DomainLiteral`
 
-In Domain Driven Design, a Value Object is a type of Domain Object for which:
+In Domain Driven Design, a Literal (a.k.a. Value Object), is a type of Domain Object for which:
 
-- properties are immutable (e.g., its a fact)
-- identity does not matter
-  - i.e., it is uniquely identifiable by its properties
-  - i.e., if you change the value of any of its properties, it is now considered a new value-object
+ - properties are immutable
+   - i.e., it represents some literal value which happens to have a structured object shape
+   - i.e., if you change the value of any of its properties, it is a different literal
+ - identity does not matter
+   - i.e., it is uniquely identifiable by its non-metadata properties
 
 ```ts
 // define it
@@ -231,7 +232,7 @@ interface Address {
   state: string;
   postal: string;
 }
-class Address extends DomainValueObject<Address> implements Address {}
+class Address extends DomainLiteral<Address> implements Address {}
 
 // use it
 const austin = new Address({
@@ -247,8 +248,10 @@ const austin = new Address({
 
 In Domain Driven Design, an Entity is a type of Domain Object for which:
 
-- properties change over time (e.g., it has a life cycle)
+- properties change over time
+  - e.g., it has a lifecycle
 - identity matters
+  - i.e., it represents a distinct existence
   - e.g., two entities could have the same properties, differing only by id, and are still considered different entities
   - e.g., you can update properties on an entity and it is still considered the same entity
 
@@ -263,12 +266,12 @@ interface RocketShip {
 }
 class RocketShip extends DomainEntity<RocketShip> implements RocketShip {
   /**
-   * in domain modeling, entities are not uniquely identifiable by all of their properties like value objects are.
+   * an entity is uniquely identifiable by some subset of their properties
    *
-   * due to this, in order to use the `getUniqueIdentifier` and `serialize` methods on domain entities,
+   * in order to use the `getUniqueIdentifier` and `serialize` methods on domain entities,
    * we must define the properties that the entity is uniquely identifiable by.
    */
-  public static unique = ['serialNumber']; // note: if the entity is not uniquely identifiable by any natural keys, its `uuid` or `id` is a good option; but if you are lucky to have a natural key for the entity, definitely use it
+  public static unique = ['serialNumber'];
 }
 
 // use it
@@ -284,7 +287,7 @@ const ship = new RocketShip({
 
 Runtime validation is a great way to fail fast and prevent unexpected errors.
 
-`domain-objects` supports an easy way to add runtime validation, by defining a [`Joi`](https://github.com/sideway/joi) or [`Yup`](https://github.com/jquense/yup) schema.
+`domain-objects` supports an easy way to add runtime validation, by defining a [`Zod`](https://github.com/colinhacks/zod), [`Yup`](https://github.com/jquense/yup), or [`Joi`](https://github.com/sideway/joi) schema.
 
 When you provide a schema in your type definition, your domain objects will now be run time validated at instantiation.
 
@@ -342,7 +345,7 @@ Props Provided:
 
 Nested hydration is useful when instantiating DomainObjects that are composed of other DomainObjects. For example, in the `RocketShip` example above, `RocketShip` has `Address` as a nested property (i.e., `typeof Spaceship.address === Address`).
 
-When attempting to manipulate DomainObjects with nested DomainObjects, like the Spaceship.address example, it is important that all nested domain objects are instantiated with their class. Otherwise, if `RocketShip.address` is not an instanceof `Address`, then we will not be able to utilize the domain information baked into the static properties of `Address` (e.g., that it is a DomainValueObject).
+When attempting to manipulate DomainObjects with nested DomainObjects, like the Spaceship.address example, it is important that all nested domain objects are instantiated with their class. Otherwise, if `RocketShip.address` is not an instanceof `Address`, then we will not be able to utilize the domain information baked into the static properties of `Address` (e.g., that it is a DomainLiteral).
 
 `domain-objects` makes it easy to instantiate nested DomainObjects, by exposing the `DomainObject.nested` static property.
 
@@ -353,7 +356,7 @@ For example:
 interface PlantPot {
   diameterInInches: number;
 }
-class PlantPot extends DomainValueObject<PlantPot> implements PlantPot {}
+class PlantPot extends DomainLiteral<PlantPot> implements PlantPot {}
 interface PlantOwner {
   name: string;
 }
@@ -388,14 +391,13 @@ plant.owners.forEach((owner) => expect(owner).toBeInstance(PlantOwner));
 
 You may be thinking to yourself, "Didn't i just define what the nested DomainObjects were in the type definition, when defining the interface? Why do i have to define it again?". Agreed! Unfortunately, typescript removes all type information at runtime. Therefore, we have no choice but to repeat this information in another way if we want to use this information at runtime. (See #8 for progress on automating this).
 
-## fn `getUniqueIdentifier(obj: DomainEntity | DomainValueObject)`
+## fn `getUniqueIdentifier(obj: DomainEntity | DomainLiteral)`
 
-Domain modeling gives us the context of what properties uniquely identify a domain object.
+Domain models inform us of what properties uniquely identify a domain object.
 
 i.e.,:
-
-- value objects are uniquely identified by all of their properties (excluding autogenerated `id` and `uuid`)
-- entities are uniquely identified by the explicitly defined subset of properties, documented in the class definition
+- literals are uniquely identified by all of their non-metadata properties
+- entities are uniquely identified by an explicitly subset of their properties, declared via the `.unique` static property
 
 this `getUniqueIdentifier` function leverages this knowledge to return a normal object containing only the properties that uniquely identify the domain object you give it.
 

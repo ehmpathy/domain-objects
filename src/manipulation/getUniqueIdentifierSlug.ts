@@ -1,7 +1,7 @@
 import { sha256 } from 'cross-sha256';
 
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainValueObject } from '../instantiation/DomainValueObject';
+import { DomainLiteral } from '../instantiation/DomainLiteral';
 import { getUniqueIdentifier } from './getUniqueIdentifier';
 
 /**
@@ -12,14 +12,14 @@ import { getUniqueIdentifier } from './getUniqueIdentifier';
  * - file path and uri safe, for broad usage
  *
  * usecases
- * - persisting domain entities to the cache
+ * - persisting domain objects to a cache
  *
  * strategy
  * - define the human readable portion of the slug by concatenating the unique identifier values and omitting non-safe characters (safe = `\w`, `.`, `-`, `_`)
  * - define the identity uniqueness guarantee by using sha256 to guarantee that the total string will no have collisions due to excluding non-safe characters
  */
 export const getUniqueIdentifierSlug = (
-  dobj: DomainEntity<any> | DomainValueObject<any>,
+  dobj: DomainEntity<any> | DomainLiteral<any>,
 ): string => {
   const identifier = getUniqueIdentifier(dobj);
 

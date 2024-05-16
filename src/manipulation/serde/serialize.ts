@@ -3,8 +3,8 @@
 /* eslint-disable no-underscore-dangle */
 import { assertDomainObjectIsSafeToManipulate } from '../../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../../instantiation/DomainEntity';
+import { DomainLiteral } from '../../instantiation/DomainLiteral';
 import { DomainObject } from '../../instantiation/DomainObject';
-import { DomainValueObject } from '../../instantiation/DomainValueObject';
 import { getUniqueIdentifier } from '../getUniqueIdentifier';
 
 interface SerializeOptions {
@@ -121,7 +121,7 @@ const toSerializableObject = (
   if (
     !root &&
     !options.lossless &&
-    (obj instanceof DomainEntity || obj instanceof DomainValueObject)
+    (obj instanceof DomainEntity || obj instanceof DomainLiteral)
   ) {
     objToMakeSerializable = getUniqueIdentifier(obj);
   }

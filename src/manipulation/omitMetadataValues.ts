@@ -42,7 +42,7 @@ export const omitMetadataValues = <T extends DomainObject<Record<string, any>>>(
       'omitMetadataValues called on object that is not an instance of a DomainObject. Are you sure you instantiated the object? (Related: see `DomainObject.nested`)',
     );
 
-  // determine if its an entity or a value object
+  // get the metadata keys
   const Constructor = obj.constructor as any as { new (...args: any): T }; // https://stackoverflow.com/a/61444747/3068233
   const metadataKeys = getMetadataKeys(obj, {
     nameOfFunctionNeededFor: 'omitMetadataValues',

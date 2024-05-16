@@ -1,5 +1,5 @@
 export { DomainObject } from './instantiation/DomainObject';
-export { DomainValueObject } from './instantiation/DomainValueObject';
+export { DomainLiteral } from './instantiation/DomainLiteral';
 export { DomainEntity } from './instantiation/DomainEntity';
 export { DomainEvent } from './instantiation/DomainEvent';
 export { HelpfulJoiValidationError } from './instantiation/validate/HelpfulJoiValidationError';

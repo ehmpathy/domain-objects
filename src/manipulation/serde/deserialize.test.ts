@@ -1,5 +1,5 @@
 import { DomainEntity } from '../../instantiation/DomainEntity';
-import { DomainValueObject } from '../../instantiation/DomainValueObject';
+import { DomainLiteral } from '../../instantiation/DomainLiteral';
 import { deserialize } from './deserialize';
 
 /* eslint-disable no-useless-escape */
@@ -84,7 +84,7 @@ describe('deserialize', () => {
       planet: string;
       continent: string;
     }
-    class Address extends DomainValueObject<Address> implements Address {}
+    class Address extends DomainLiteral<Address> implements Address {}
     interface Spaceport {
       uuid: string;
       address: Address;

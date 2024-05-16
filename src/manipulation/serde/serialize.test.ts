@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { DomainObjectNotSafeToManipulateError } from '../../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainObject } from '../../index';
 import { DomainEntity } from '../../instantiation/DomainEntity';
-import { DomainValueObject } from '../../instantiation/DomainValueObject';
+import { DomainLiteral } from '../../instantiation/DomainLiteral';
 
 /* eslint-disable no-useless-escape */
 import { serialize } from './serialize';
@@ -147,7 +147,7 @@ describe('serialize', () => {
       planet: string;
       continent: string;
     }
-    class Address extends DomainValueObject<Address> implements Address {}
+    class Address extends DomainLiteral<Address> implements Address {}
     interface Spaceport {
       uuid: string;
       address: Address;

@@ -1,5 +1,5 @@
 import { DomainEntity } from '../../instantiation/DomainEntity';
-import { DomainValueObject } from '../../instantiation/DomainValueObject';
+import { DomainLiteral } from '../../instantiation/DomainLiteral';
 import { dedupe } from './dedupe';
 
 describe('dedupe', () => {
@@ -14,7 +14,7 @@ describe('dedupe', () => {
   interface Region {
     name: string;
   }
-  class Region extends DomainValueObject<Region> implements Region {}
+  class Region extends DomainLiteral<Region> implements Region {}
 
   // some entities with a dupe
   const turtleOne = new SeaTurtle({
@@ -30,7 +30,7 @@ describe('dedupe', () => {
     name: 'Shellina C.',
   });
 
-  // some value objects with a dupe
+  // some literals with a dupe
   const regionOne = new Region({
     name: 'Great Barrier Reef',
   });
