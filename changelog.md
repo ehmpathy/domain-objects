@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.19.0](https://github.com/ehmpathy/domain-objects/compare/v0.18.0...v0.19.0) (2024-05-16)
+
+
+### Features
+
+* **alias:** support specification of plural vs singular alias ([55f3bc7](https://github.com/ehmpathy/domain-objects/commit/55f3bc79d944a596839e584c86b8364044b1abc7))
+
 ## [0.18.0](https://github.com/ehmpathy/domain-objects/compare/v0.17.0...v0.18.0) (2024-05-16)
 
 
