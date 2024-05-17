@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.19.1](https://github.com/ehmpathy/domain-objects/compare/v0.19.0...v0.19.1) (2024-05-17)
+
+
+### Bug Fixes
+
+* **dedupe:** add safety with failfast on diff entity version detection ([491d716](https://github.com/ehmpathy/domain-objects/commit/491d7167490f8c3cdd4dd1263a5bfdf62981ef2e))
+* **readme:** update the docs to improve examples ([29963b8](https://github.com/ehmpathy/domain-objects/commit/29963b844a841a4e79117d99678a1dd7500b3303))
+
 ## [0.19.0](https://github.com/ehmpathy/domain-objects/compare/v0.18.0...v0.19.0) (2024-05-16)
 
 
