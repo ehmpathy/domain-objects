@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dedupe should fail fast with a helpful error if there are multiple versions of the same entity, by default 1`] = `
+"UnexpectedCodePath: More than one version of the same entity found in the array. Can not safely dedupe, since we don't know which version should be kept.
+
+{"firstOccurrence":{"saltwaterSecurityNumber":"821","name":"Shelly C."},"nextOccurrence":{"saltwaterSecurityNumber":"821","name":"Shellina C."}}"
+`;
