@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.0](https://github.com/ehmpathy/domain-objects/compare/v0.19.1...v0.20.0) (2024-05-25)
+
+
+### Features
+
+* **ref:** support DomainReferences via class statics ([4f7a284](https://github.com/ehmpathy/domain-objects/commit/4f7a284590fee9eafe8d8e14dba1a858965d7555))
+
 ## [0.19.1](https://github.com/ehmpathy/domain-objects/compare/v0.19.0...v0.19.1) (2024-05-17)
 
 
