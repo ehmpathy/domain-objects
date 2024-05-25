@@ -16,4 +16,15 @@ import { DomainObject } from './DomainObject';
  */
 export abstract class DomainLiteral<
   T extends Record<string, any>,
-> extends DomainObject<T> {}
+> extends DomainObject<T> {
+  /**
+   * `DomainLiteral.primary` defines the surrogate key of the domain.literal, utilized as the primary key in persistance
+   *
+   * for example,
+   * - an `Address { uuid, ... }` is likely going to have a primary key of `uuid`
+   *
+   * ref
+   * - https://en.wikipedia.org/wiki/Surrogate_key
+   */
+  public static primary?: readonly [string]; // todo: ensure that its a keyof T; https://github.com/microsoft/TypeScript/issues/32211
+}

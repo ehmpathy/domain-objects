@@ -18,13 +18,29 @@ export abstract class DomainEvent<
   T extends Record<string, any>,
 > extends DomainObject<T> {
   /**
-   * `DomainEvent.unique` defines all of the properties of the event that the event is naturally unique on.
+   * `DomainEvent.primary` defines the surrogate key of the domain.event, utilized as the primary key in persistance
    *
-   * It should always include a timestamp.
+   * for example,
+   * - a `FileProcessingJob { uuid, filePath, status }` is likely going to have a primary key of `uuid`
+   * - a `GoogleAdsCampaign { resourceName, accountId, name }`, however, has a primary key of `resourceName`
    *
-   * For example,
+   * ref
+   * - https://en.wikipedia.org/wiki/Surrogate_key
+   */
+  public static primary?: readonly [string]; // todo: ensure that its a keyof T; https://github.com/microsoft/TypeScript/issues/32211
+
+  /**
+   * `DomainEvent.unique` defines the natural key of the domain.event, utilized as the unique key in persistance
+   *
+   * note,
+   * - for domain.events, it should always include a timestamp.
+   *
+   * for example,
    * - a `FileOpenedEvent { fileUuid, userUuid, occurredAt }` is likely going to be unique on the all of the keys: the combination of `['fileUuid', 'userUuid', 'occurredAt']` uniquely identifies the event.
    * - an `AirComfortMeasuredEvent { locationUuid, sensorUuid, temperature, humidity, occurredAt }`, on the other hand, is likely only going to be unique on `['locationUuid', 'sensorUuid', 'occurredAt']`, because logically we cant have a measurement from the same `sensor` + `location` at the same `time`
+   *
+   * ref
+   * - https://en.wikipedia.org/wiki/Natural_key
    */
-  public static unique: readonly string[];
+  public static unique: readonly string[]; // todo: ensure that its a keyof T; https://github.com/microsoft/TypeScript/issues/32211
 }

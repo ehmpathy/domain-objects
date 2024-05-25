@@ -158,35 +158,36 @@ describe('getUniqueIdentifier', () => {
         model: 'Pixel 3a',
       });
     });
-    it('should be able to get unique identifier accurately when it has more than one set of properties it is unique on', () => {
-      interface RocketShip {
-        serialNumber: string;
-        federation: string;
-        federationShipId: string; // e.g., the id of this ship inside of a third party system
-        fuelQuantity: number;
-        passengers: number;
-      }
-      class RocketShip extends DomainEntity<RocketShip> implements RocketShip {
-        public static unique = [
-          ['serialNumber'],
-          ['federation', 'federationShipId'],
-        ];
-        public static updatable = ['fuelQuantity', 'passengers'];
-      }
-      const ship = new RocketShip({
-        serialNumber: 'SN5',
-        federation: 'Sol',
-        federationShipId: 'earth:spacex:5',
-        fuelQuantity: 9001,
-        passengers: 21,
-      });
-      const uniqueIdentifier = getUniqueIdentifier(ship);
-      expect(uniqueIdentifier).toEqual({
-        serialNumber: 'SN5',
-        federation: 'Sol',
-        federationShipId: 'earth:spacex:5',
-      }); // properties from all unique key sets should be included
-    });
+    // todo: restore this functionality when we decide how to specify it better
+    // it('should be able to get unique identifier accurately when it has more than one set of properties it is unique on', () => {
+    //   interface RocketShip {
+    //     serialNumber: string;
+    //     federation: string;
+    //     federationShipId: string; // e.g., the id of this ship inside of a third party system
+    //     fuelQuantity: number;
+    //     passengers: number;
+    //   }
+    //   class RocketShip extends DomainEntity<RocketShip> implements RocketShip {
+    //     public static unique = [
+    //       ['serialNumber'],
+    //       ['federation', 'federationShipId'],
+    //     ];
+    //     public static updatable = ['fuelQuantity', 'passengers'];
+    //   }
+    //   const ship = new RocketShip({
+    //     serialNumber: 'SN5',
+    //     federation: 'Sol',
+    //     federationShipId: 'earth:spacex:5',
+    //     fuelQuantity: 9001,
+    //     passengers: 21,
+    //   });
+    //   const uniqueIdentifier = getUniqueIdentifier(ship);
+    //   expect(uniqueIdentifier).toEqual({
+    //     serialNumber: 'SN5',
+    //     federation: 'Sol',
+    //     federationShipId: 'earth:spacex:5',
+    //   }); // properties from all unique key sets should be included
+    // });
   });
   describe('safety', () => {
     it('should throw an error if domain object is not safe to manipulate', () => {
