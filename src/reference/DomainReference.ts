@@ -1,13 +1,18 @@
 import { PickOne } from 'type-fns';
 
-import { DomainKeyPrimary } from './DomainKeyPrimary';
-import { DomainKeyUnique } from './DomainKeyUnique';
-import { Refable } from './DomainReferenceable';
+import { DomainPrimaryKeyShape } from './DomainPrimaryKeyShape';
+import { DomainObjectShape, Refable } from './DomainReferenceable';
+import { DomainUniqueKeyShape } from './DomainUniqueKeyShape';
 
 /**
  * declares a reference to a domain.entity or a domain.event
  */
-export type DomainReference<TDobj extends Refable<any, any, any>> = {
+export type DomainReference<
+  TDobj extends Refable<TShape, TPrimary, TUnique>,
+  TShape extends DomainObjectShape = any, // todo: update DomainObjectShape -> DomainReferenceableInstance to enable extraction of primary and unique keys via types
+  TPrimary extends readonly string[] = any,
+  TUnique extends readonly string[] = any,
+> = {
   /**
    * the name of the domain object this is a reference to, if provided
    *
@@ -16,18 +21,8 @@ export type DomainReference<TDobj extends Refable<any, any, any>> = {
    */
   of?: string;
 } & PickOne<{
-  byPrimary: Required<
-    Pick<
-      InstanceType<TDobj>,
-      // @ts-expect-error // todo: update the DomainEntity.primary key definition to be keyof T; https://github.com/microsoft/TypeScript/issues/32211
-      DomainKeyPrimary<TDobj>[number]
-    >
-  >;
-  byUnique: Pick<
-    InstanceType<TDobj>,
-    // @ts-expect-error // todo: update the DomainEntity.unique key definition to be keyof T; https://github.com/microsoft/TypeScript/issues/32211
-    DomainKeyUnique<TDobj>[number]
-  >;
+  byPrimary: Required<DomainPrimaryKeyShape<TDobj, TShape, TPrimary, TUnique>>;
+  byUnique: DomainUniqueKeyShape<TDobj, TShape, TPrimary, TUnique>;
 }>;
 
 export {

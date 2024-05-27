@@ -19,7 +19,9 @@ export { deserialize } from './manipulation/serde/deserialize';
 export { isPropertyNameAReferenceExplicitly } from './relationships/isPropertyNameAReference/isPropertyNameAReferenceExplicitly';
 export { isPropertyNameAReferenceIntuitively } from './relationships/isPropertyNameAReference/isPropertyNameAReferenceIntuitively';
 
-export { DomainKeyUnique } from './reference/DomainKeyUnique';
-export { DomainKeyPrimary } from './reference/DomainKeyPrimary';
+export { DomainUniqueKeys } from './reference/DomainUniqueKeys';
+export { DomainUniqueKeyShape } from './reference/DomainUniqueKeyShape';
+export { DomainPrimaryKeys } from './reference/DomainPrimaryKeys';
+export { DomainPrimaryKeyShape } from './reference/DomainPrimaryKeyShape';
 export { DomainReference, Ref } from './reference/DomainReference';
 export { getRef, getReferenceTo } from './reference/getReferenceTo';
