@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.0](https://github.com/ehmpathy/domain-objects/compare/v0.20.0...v0.21.0) (2024-05-27)
+
+
+### Features
+
+* **refs:** expose DomainUniqueKeyShape and DomainPrimaryKeyShape ([4239032](https://github.com/ehmpathy/domain-objects/commit/42390325d9a046d7802e9887f06460a9dea43d97))
+
 ## [0.20.0](https://github.com/ehmpathy/domain-objects/compare/v0.19.1...v0.20.0) (2024-05-25)
 
 
