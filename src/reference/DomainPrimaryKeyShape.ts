@@ -9,4 +9,4 @@ export type DomainPrimaryKeyShape<
   TShape extends DomainObjectShape = any,
   TPrimary extends readonly string[] = any,
   TUnique extends readonly string[] = any,
-> = Pick<InstanceType<TDobj>, DomainPrimaryKeys<TDobj>[number]>;
+> = Required<Pick<InstanceType<TDobj>, DomainPrimaryKeys<TDobj>[number]>>;
