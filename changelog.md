@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.3](https://github.com/ehmpathy/domain-objects/compare/v0.21.2...v0.21.3) (2024-06-14)
+
+
+### Bug Fixes
+
+* **refs:** explicitly check for unique keys rather than invert primary keys ([1a2525e](https://github.com/ehmpathy/domain-objects/commit/1a2525e000b82cae6234f4d115a332092eae5306))
+
 ## [0.21.2](https://github.com/ehmpathy/domain-objects/compare/v0.21.1...v0.21.2) (2024-06-14)
 
 
