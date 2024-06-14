@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.2](https://github.com/ehmpathy/domain-objects/compare/v0.21.1...v0.21.2) (2024-06-14)
+
+
+### Bug Fixes
+
+* **refs:** expose typeguard to check isPrimaryKeyRef and isUniqueKeyRef ([a454602](https://github.com/ehmpathy/domain-objects/commit/a454602b538e364c3947a9b1115e70e634fbe2e3))
+
 ## [0.21.1](https://github.com/ehmpathy/domain-objects/compare/v0.21.0...v0.21.1) (2024-06-14)
 
 
