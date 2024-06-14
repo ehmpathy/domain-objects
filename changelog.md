@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.1](https://github.com/ehmpathy/domain-objects/compare/v0.21.0...v0.21.1) (2024-06-14)
+
+
+### Bug Fixes
+
+* **refs:** ensure primary key shape requires the property even if its optional in def ([e045166](https://github.com/ehmpathy/domain-objects/commit/e045166721e8a889caac5904734b02ac5b4743f6))
+
 ## [0.21.0](https://github.com/ehmpathy/domain-objects/compare/v0.20.0...v0.21.0) (2024-05-27)
 
 
