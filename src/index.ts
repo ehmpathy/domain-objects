@@ -25,3 +25,5 @@ export { DomainPrimaryKeys } from './reference/DomainPrimaryKeys';
 export { DomainPrimaryKeyShape } from './reference/DomainPrimaryKeyShape';
 export { DomainReference, Ref } from './reference/DomainReference';
 export { getRef, getReferenceTo } from './reference/getReferenceTo';
+export { isPrimaryKeyRef } from './reference/isPrimaryKeyRef';
+export { isUniqueKeyRef } from './reference/isUniqueKeyRef';
