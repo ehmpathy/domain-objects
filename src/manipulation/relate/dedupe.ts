@@ -5,7 +5,7 @@ import { getUniqueIdentifier } from '../getUniqueIdentifier';
 import { omitMetadataValues } from '../omitMetadataValues';
 import { serialize } from '../serde/serialize';
 
-export const dedupe = <T extends DomainObject<Record<string, any>>>(
+export const dedupe = <T>(
   objs: T[],
   options?: {
     /**
@@ -25,8 +25,16 @@ export const dedupe = <T extends DomainObject<Record<string, any>>>(
     // determine whether this is the first occurrence of this dobj in the array
     const indexOfFirstOccurrence = objs.findIndex(
       (otherObj) =>
-        serialize(getUniqueIdentifier(thisObj)) ===
-        serialize(getUniqueIdentifier(otherObj)),
+        serialize(
+          thisObj instanceof DomainObject
+            ? getUniqueIdentifier(thisObj)
+            : thisObj,
+        ) ===
+        serialize(
+          otherObj instanceof DomainObject
+            ? getUniqueIdentifier(otherObj)
+            : otherObj,
+        ),
     );
     const isFirstOccurrence = indexOfFirstOccurrence === thisIndex;
 
@@ -40,8 +48,16 @@ export const dedupe = <T extends DomainObject<Record<string, any>>>(
     ) {
       const firstOccurrence = objs[indexOfFirstOccurrence];
       const foundDifferentAttributes =
-        serialize(omitMetadataValues(firstOccurrence)) !==
-        serialize(omitMetadataValues(thisObj));
+        serialize(
+          firstOccurrence instanceof DomainObject
+            ? omitMetadataValues(firstOccurrence)
+            : firstOccurrence,
+        ) !==
+        serialize(
+          thisObj instanceof DomainObject
+            ? omitMetadataValues(thisObj)
+            : thisObj,
+        );
       if (foundDifferentAttributes)
         throw new UnexpectedCodePathError(
           `More than one version of the same entity found in the array. Can not safely dedupe, since we don't know which version should be kept.`,

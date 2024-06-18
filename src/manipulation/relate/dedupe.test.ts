@@ -99,4 +99,14 @@ describe('dedupe', () => {
     expect(deduped).toHaveLength(1);
     expect(deduped[0].name).toEqual('Shelly C.');
   });
+  it('should work on literals', () => {
+    const namesUnique = dedupe([
+      'aurora',
+      'shelbert',
+      'donahue',
+      'aurora',
+      'shelbert',
+    ]);
+    expect(namesUnique).toEqual(['aurora', 'shelbert', 'donahue']);
+  });
 });
