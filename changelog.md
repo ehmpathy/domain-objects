@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.4](https://github.com/ehmpathy/domain-objects/compare/v0.21.3...v0.21.4) (2024-06-18)
+
+
+### Bug Fixes
+
+* **dedupe:** support dedupe of literals as well ([5a1f06a](https://github.com/ehmpathy/domain-objects/commit/5a1f06a483fb2e2e53041f159265bfff5cbdcbc2))
+
 ## [0.21.3](https://github.com/ehmpathy/domain-objects/compare/v0.21.2...v0.21.3) (2024-06-14)
 
 
