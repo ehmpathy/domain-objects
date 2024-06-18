@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.5](https://github.com/ehmpathy/domain-objects/compare/v0.21.4...v0.21.5) (2024-06-18)
+
+
+### Bug Fixes
+
+* **dedupe:** improve dedupe operation cost from O(n^2) to O(n) ([87faa66](https://github.com/ehmpathy/domain-objects/commit/87faa663ebefba97432c3bd39b4fd227429c0f82))
+
 ## [0.21.4](https://github.com/ehmpathy/domain-objects/compare/v0.21.3...v0.21.4) (2024-06-18)
 
 
