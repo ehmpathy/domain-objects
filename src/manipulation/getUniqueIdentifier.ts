@@ -1,3 +1,4 @@
+import { UnexpectedCodePathError } from '@ehmpathy/error-fns';
 import pick from 'lodash.pick';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
@@ -5,7 +6,6 @@ import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainEvent } from '../instantiation/DomainEvent';
 import { DomainLiteral } from '../instantiation/DomainLiteral';
 import { DomainObject } from '../instantiation/DomainObject';
-import { UnexpectedCodePathError } from '../utils/errors/UnexpectedCodePathError';
 import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 
 /**

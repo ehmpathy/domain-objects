@@ -77,7 +77,7 @@ describe('dedupe', () => {
     });
     const error = getError(() => dedupe([turtleOne, turtleOneWithDiffName]));
     expect(error.message).toContain(
-      'More than one version of the same entity found in the array',
+      'Two different versions of the same entity were asked to be deduped.',
     );
     expect(error.message).toMatchSnapshot();
   });

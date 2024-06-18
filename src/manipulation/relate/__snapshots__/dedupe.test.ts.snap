@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`dedupe should fail fast with a helpful error if there are multiple versions of the same entity, by default 1`] = `
-"UnexpectedCodePath: More than one version of the same entity found in the array. Can not safely dedupe, since we don't know which version should be kept.
+"BadRequestError: Two different versions of the same entity were asked to be deduped. Options.onMultipleEntityVersions !== 'CHOOSE_FIRST_OCCURRENCE', so we're failing fast here, since we don't know which version should be kept.
 
-{"firstOccurrence":{"saltwaterSecurityNumber":"821","name":"Shelly C."},"nextOccurrence":{"saltwaterSecurityNumber":"821","name":"Shellina C."}}"
+{"thisObj":{"saltwaterSecurityNumber":"821","name":"Shellina C."},"versionCurrSeen":"{\\"_dobj\\":\\"SeaTurtle\\",\\"name\\":\\"Shellina C.\\",\\"saltwaterSecurityNumber\\":\\"821\\"}","versionPrevSeen":"{\\"_dobj\\":\\"SeaTurtle\\",\\"name\\":\\"Shelly C.\\",\\"saltwaterSecurityNumber\\":\\"821\\"}"}"
 `;

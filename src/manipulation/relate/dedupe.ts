@@ -1,10 +1,25 @@
+import { BadRequestError, UnexpectedCodePathError } from '@ehmpathy/error-fns';
+
 import { DomainEntity } from '../../instantiation/DomainEntity';
 import { DomainObject } from '../../instantiation/DomainObject';
-import { UnexpectedCodePathError } from '../../utils/errors/UnexpectedCodePathError';
 import { getUniqueIdentifier } from '../getUniqueIdentifier';
 import { omitMetadataValues } from '../omitMetadataValues';
 import { serialize } from '../serde/serialize';
 
+// define how to get the dedupe identity key for any object
+const toDedupeIdentity = <T>(obj: T) =>
+  serialize(obj instanceof DomainObject ? getUniqueIdentifier(obj) : obj);
+
+const toVersionIdentity = <T>(obj: T) =>
+  obj instanceof DomainEntity ? serialize(omitMetadataValues(obj)) : undefined; // if not an entity, there is no version identity
+
+/**
+ * a method which deduplicates objects by their identity from within an array
+ *
+ * note
+ * - when it operates on dobj instances, it extracts their identity via getUniqueIdentifier
+ * - when it operates on anything else, it simply serializes the object
+ */
 export const dedupe = <T>(
   objs: T[],
   options?: {
@@ -20,54 +35,68 @@ export const dedupe = <T>(
      */
     onMultipleEntityVersions: 'FAIL_FAST' | 'CHOOSE_FIRST_OCCURRENCE';
   },
-): T[] =>
-  objs.filter((thisObj, thisIndex) => {
-    // determine whether this is the first occurrence of this dobj in the array
-    const indexOfFirstOccurrence = objs.findIndex(
-      (otherObj) =>
-        serialize(
-          thisObj instanceof DomainObject
-            ? getUniqueIdentifier(thisObj)
-            : thisObj,
-        ) ===
-        serialize(
-          otherObj instanceof DomainObject
-            ? getUniqueIdentifier(otherObj)
-            : otherObj,
-        ),
-    );
-    const isFirstOccurrence = indexOfFirstOccurrence === thisIndex;
+): T[] => {
+  // track the objects we have seen
+  const objsSeenMetadata: Record<string, { seen: true; version?: string }> = {};
 
-    // if this dobj is the first occurrence, then defo not a dupe
-    if (isFirstOccurrence) return true;
+  // track the ordered, deduped objs array, which we will build
+  const objsDedupedList: T[] = [];
 
-    // if this dobj is not the first occurrence and it is an entity, then sanity check that there are no changes between the updatable attributes
+  // define how to check whether an obj has been seen already
+  const getObjSeenMetadata = (
+    obj: T,
+  ): { seen: true; version?: string } | null =>
+    objsSeenMetadata[toDedupeIdentity(obj)] ?? null;
+
+  // define how to add a new distinct item
+  const addNewDistinctObj = (obj: T): void => {
+    // add to the objs seen lookup table
+    objsSeenMetadata[toDedupeIdentity(obj)] = {
+      seen: true,
+      version: toVersionIdentity(obj),
+    };
+
+    // add to the objs deduped list
+    objsDedupedList.push(obj);
+  };
+
+  // iterate through each object and add it to the deduped list as needed
+  objs.forEach((thisObj) => {
+    // determine if its been seen before
+    const prevSeenMetadata = getObjSeenMetadata(thisObj);
+    const hasBeenPrevSeen = prevSeenMetadata !== null;
+
+    // if it has been seen, is an entity, and the caller didn't ask to CHOOSE_FIRST_OCCURRENCE, then check whether we should fail fast
     if (
+      hasBeenPrevSeen &&
       thisObj instanceof DomainEntity &&
-      options?.onMultipleEntityVersions !== 'CHOOSE_FIRST_OCCURRENCE' // if they didn't explicitly ask to choose first occurrence, then check for versions
+      options?.onMultipleEntityVersions !== 'CHOOSE_FIRST_OCCURRENCE'
     ) {
-      const firstOccurrence = objs[indexOfFirstOccurrence];
-      const foundDifferentAttributes =
-        serialize(
-          firstOccurrence instanceof DomainObject
-            ? omitMetadataValues(firstOccurrence)
-            : firstOccurrence,
-        ) !==
-        serialize(
-          thisObj instanceof DomainObject
-            ? omitMetadataValues(thisObj)
-            : thisObj,
-        );
-      if (foundDifferentAttributes)
+      const versionPrevSeen = prevSeenMetadata.version;
+      if (!versionPrevSeen)
         throw new UnexpectedCodePathError(
-          `More than one version of the same entity found in the array. Can not safely dedupe, since we don't know which version should be kept.`,
+          'should have had prev seen metadata declared for a domain entity',
+          { thisObj },
+        );
+      const versionCurrSeen = toVersionIdentity(thisObj);
+      if (versionCurrSeen !== versionPrevSeen)
+        throw new BadRequestError(
+          `Two different versions of the same entity were asked to be deduped. Options.onMultipleEntityVersions !== 'CHOOSE_FIRST_OCCURRENCE', so we're failing fast here, since we don't know which version should be kept.`,
           {
-            firstOccurrence,
-            nextOccurrence: thisObj,
+            thisObj,
+            versionCurrSeen,
+            versionPrevSeen,
           },
         );
     }
 
-    // otherwise, this is a dupe, and should be removed
-    return false;
+    // if it's been previously seen otherwise, then we can exit here as its a dupe
+    if (hasBeenPrevSeen) return;
+
+    // otherwise, since its not been previously seen, add it as a new distinct obj
+    addNewDistinctObj(thisObj);
   });
+
+  // return all the distinct objs
+  return objsDedupedList;
+};

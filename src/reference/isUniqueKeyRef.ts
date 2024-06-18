@@ -1,6 +1,6 @@
+import { UnexpectedCodePathError } from '@ehmpathy/error-fns';
 import { isPresent } from 'type-fns';
 
-import { UnexpectedCodePathError } from '../utils/errors/UnexpectedCodePathError';
 import { DomainPrimaryKeyShape } from './DomainPrimaryKeyShape';
 import { DomainObjectShape, Refable } from './DomainReferenceable';
 import { DomainUniqueKeyShape } from './DomainUniqueKeyShape';
