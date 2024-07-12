@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.6](https://github.com/ehmpathy/domain-objects/compare/v0.21.5...v0.21.6) (2024-07-12)
+
+
+### Bug Fixes
+
+* **rels:** expose reference intuitive.via and support explicit reference prefix ([351e305](https://github.com/ehmpathy/domain-objects/commit/351e30526c935895f6030169acdb2f1b17d4f493))
+
 ## [0.21.5](https://github.com/ehmpathy/domain-objects/compare/v0.21.4...v0.21.5) (2024-06-18)
 
 
