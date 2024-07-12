@@ -4,17 +4,17 @@ describe('isPropertyNameAReferenceIntuitively', () => {
   const cases: {
     propertyName: string;
     domainObjectName: string;
-    expectedResult: boolean;
+    expectedResult: false | { via: string };
   }[] = [
     {
       propertyName: 'address',
       domainObjectName: 'Address',
-      expectedResult: true,
+      expectedResult: { via: 'Address' },
     },
     {
       propertyName: 'homeAddress',
       domainObjectName: 'Address',
-      expectedResult: true,
+      expectedResult: { via: 'Address' },
     },
     {
       propertyName: 'home',
@@ -24,32 +24,32 @@ describe('isPropertyNameAReferenceIntuitively', () => {
     {
       propertyName: 'engineer',
       domainObjectName: 'Engineer',
-      expectedResult: true,
+      expectedResult: { via: 'Engineer' },
     },
     {
       propertyName: 'engineers',
       domainObjectName: 'Engineer',
-      expectedResult: true,
+      expectedResult: { via: 'Engineer' },
     },
     {
       propertyName: 'engineerUuid',
       domainObjectName: 'Engineer',
-      expectedResult: true,
+      expectedResult: { via: 'Engineer' },
     },
     {
       propertyName: 'leadEngineerUuid',
       domainObjectName: 'Engineer',
-      expectedResult: true,
+      expectedResult: { via: 'Engineer' },
     },
     {
       propertyName: 'engineerUuids',
       domainObjectName: 'Engineer',
-      expectedResult: true,
+      expectedResult: { via: 'Engineer' },
     },
     {
       propertyName: 'assignedEngineerUuids',
       domainObjectName: 'Engineer',
-      expectedResult: true,
+      expectedResult: { via: 'Engineer' },
     },
     {
       propertyName: 'lead',
@@ -69,22 +69,24 @@ describe('isPropertyNameAReferenceIntuitively', () => {
     {
       propertyName: 'leadEngineerUuid',
       domainObjectName: 'LeadEngineer',
-      expectedResult: true,
+      expectedResult: { via: 'LeadEngineer' },
     },
     {
       propertyName: 'headEngineerUuid',
       domainObjectName: 'LeadEngineer',
-      expectedResult: true,
+      expectedResult: { via: 'Engineer' },
     },
     {
       propertyName: 'engineerUuid',
       domainObjectName: 'LeadEngineer',
-      expectedResult: true,
+      expectedResult: { via: 'Engineer' },
     },
   ];
 
   cases.forEach((testCase) => {
-    it(`should return ${testCase.expectedResult} for ${testCase.propertyName}: ${testCase.domainObjectName}`, () => {
+    it(`should return ${JSON.stringify(testCase.expectedResult)} for ${
+      testCase.propertyName
+    }: ${testCase.domainObjectName}`, () => {
       expect(
         isPropertyNameAReferenceIntuitively({
           propertyName: testCase.propertyName,

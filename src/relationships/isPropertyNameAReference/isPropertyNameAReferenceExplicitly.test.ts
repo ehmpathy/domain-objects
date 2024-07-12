@@ -81,6 +81,16 @@ describe('isPropertyNameAReferenceExplicitly', () => {
       domainObjectName: 'LeadEngineer',
       expectedResult: false,
     },
+    {
+      propertyName: 'leadEngineerRef',
+      domainObjectName: 'LeadEngineerRef',
+      expectedResult: true,
+    },
+    {
+      propertyName: 'priceDue',
+      domainObjectName: 'Price',
+      expectedResult: true,
+    },
   ];
 
   cases.forEach((testCase) => {

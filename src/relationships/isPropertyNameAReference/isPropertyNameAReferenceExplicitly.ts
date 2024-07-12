@@ -3,6 +3,11 @@ import { camelCase, pascalCase } from 'change-case';
 /**
  * determines whether property name is an intuitive reference to a domain object
  *
+ * options
+ * - entire match
+ * - prefix match
+ * - suffix match
+ *
  * for example:
  *  - `address: Address` => true
  *  - `homeAddress: Address` => true
@@ -25,7 +30,7 @@ export const isPropertyNameAReferenceExplicitly = ({
   propertyName: string;
   domainObjectName: string;
 }): boolean => {
-  // remove the potential `uuid` or `uuids` suffix of the property name (used in implicit uuid references)
+  // remove the potential `uuid(s)` suffix of the property name (used in implicit references)
   const propertyName = propertyNamePotentiallyWithIrrelevantSuffixes.replace(
     /Uuids?$/,
     '',
@@ -42,6 +47,12 @@ export const isPropertyNameAReferenceExplicitly = ({
     `${pascalCase(domainObjectName)}s?$`,
   ).test(propertyName); // e.g., /Engineers?$/.test('leadEngineer');
   if (namedAfterItAsASuffix) return true;
+
+  // check whether the property is named after it as a prefix
+  const namedAfterItAsAPrefix = new RegExp(
+    `^${camelCase(domainObjectName)}s?`,
+  ).test(propertyName); // e.g., /^Engineers?/.test('engineerLead');
+  if (namedAfterItAsAPrefix) return true;
 
   // otherwise, false
   return false;

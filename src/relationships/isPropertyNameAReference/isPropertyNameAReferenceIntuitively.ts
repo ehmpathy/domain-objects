@@ -4,6 +4,9 @@ import { isPropertyNameAReferenceExplicitly } from './isPropertyNameAReferenceEx
 /**
  * determines whether property name is an intuitive reference to a domain object
  *
+ * note
+ * - shares the qualifier-stripped dobj.name via which the reference became intuitive
+ *
  * for example:
  *  - `address: Address` => true
  *  - `homeAddress: Address` => true
@@ -25,7 +28,7 @@ export const isPropertyNameAReferenceIntuitively = ({
 }: {
   propertyName: string;
   domainObjectName: string;
-}): boolean => {
+}): false | { via: string } => {
   let qualifiersToDrop = 0;
   let iterationLimitExceeded = false;
   while (!iterationLimitExceeded) {
@@ -46,7 +49,7 @@ export const isPropertyNameAReferenceIntuitively = ({
     });
 
     // if its an explicit reference now, then its an intuitive reference
-    if (isExplicitReferenceNow) return true;
+    if (isExplicitReferenceNow) return { via: domainObjectNameMinusQualifiers };
 
     // otherwise, go another layer deeper and try again
     qualifiersToDrop += 1;
