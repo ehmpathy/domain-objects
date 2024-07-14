@@ -5,6 +5,7 @@
 .serverless
 .terraform
 .terraform.lock
+.yalc
 coverage
 dist
 node_modules
