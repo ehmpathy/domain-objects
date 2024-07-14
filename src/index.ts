@@ -20,9 +20,17 @@ export { isPropertyNameAReferenceExplicitly } from './relationships/isPropertyNa
 export { isPropertyNameAReferenceIntuitively } from './relationships/isPropertyNameAReference/isPropertyNameAReferenceIntuitively';
 
 export { DomainUniqueKeys } from './reference/DomainUniqueKeys';
-export { DomainUniqueKeyShape } from './reference/DomainUniqueKeyShape';
+export {
+  DomainUniqueKeyShape,
+  DomainReferenceByUniqueKey,
+  RefByUnique,
+} from './reference/DomainUniqueKeyShape';
 export { DomainPrimaryKeys } from './reference/DomainPrimaryKeys';
-export { DomainPrimaryKeyShape } from './reference/DomainPrimaryKeyShape';
+export {
+  DomainPrimaryKeyShape,
+  DomainReferenceByPrimaryKey,
+  RefByPrimary,
+} from './reference/DomainPrimaryKeyShape';
 export { DomainReference, Ref } from './reference/DomainReference';
 export { getRef, getReferenceTo } from './reference/getReferenceTo';
 export { isPrimaryKeyRef } from './reference/isPrimaryKeyRef';
