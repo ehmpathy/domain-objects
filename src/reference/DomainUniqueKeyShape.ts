@@ -10,3 +10,8 @@ export type DomainUniqueKeyShape<
   TPrimary extends readonly string[] = any,
   TUnique extends readonly string[] = any,
 > = Pick<InstanceType<TDobj>, DomainUniqueKeys<TDobj>[number]>;
+
+export {
+  DomainUniqueKeyShape as DomainReferenceByUniqueKey,
+  DomainUniqueKeyShape as RefByUnique,
+};

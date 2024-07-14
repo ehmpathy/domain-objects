@@ -1,10 +1,9 @@
 import { UnexpectedCodePathError } from '@ehmpathy/error-fns';
 import { isPresent } from 'type-fns';
 
-import { DomainPrimaryKeyShape } from './DomainPrimaryKeyShape';
+import { DomainReference } from './DomainReference';
 import { DomainObjectShape, Refable } from './DomainReferenceable';
 import { DomainUniqueKeyShape } from './DomainUniqueKeyShape';
-import { isPrimaryKeyRef } from './isPrimaryKeyRef';
 
 export const isUniqueKeyRef =
   <
@@ -18,9 +17,12 @@ export const isUniqueKeyRef =
     of: TDobj;
   }) =>
   (
-    ref:
-      | DomainPrimaryKeyShape<TDobj, TShape, TPrimary, TUnique>
-      | DomainUniqueKeyShape<TDobj, TShape, TPrimary, TUnique>,
+    ref: DomainReference<
+      Refable<TShape, any, any>, // refable<TShape, any, any> to ensure even unclassed .getReferenceTo usage can use this
+      TShape,
+      TPrimary,
+      TUnique
+    >,
   ): ref is DomainUniqueKeyShape<TDobj, TShape, TPrimary, TUnique> => {
     // get the primary key attributes
     const uniqueKeys: readonly string[] = of.unique;

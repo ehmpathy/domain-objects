@@ -1,6 +1,7 @@
 import { getUniqueIdentifier } from '../manipulation/getUniqueIdentifier';
 import { DomainReference } from './DomainReference';
 import { DomainObjectShape, Refable } from './DomainReferenceable';
+import { DomainUniqueKeyShape } from './DomainUniqueKeyShape';
 
 /**
  * declares a reference to a domain.entity or domain.event
@@ -18,10 +19,15 @@ export const getReferenceTo = <
 >(
   // dobj: TShape,
   dobj: TShape,
-): DomainReference<TDobj> => {
+): DomainReference<TDobj, TShape, TPrimary, TUnique> => {
   return {
-    of: dobj.constructor.name,
-    byUnique: getUniqueIdentifier(dobj) as any, // always prefer unique identifier, since its the most useable
+    _dobj: dobj.constructor.name,
+    ...(getUniqueIdentifier(dobj) as DomainUniqueKeyShape<
+      TDobj,
+      TShape,
+      TPrimary,
+      TUnique
+    >),
   };
 };
 

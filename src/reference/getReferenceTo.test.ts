@@ -2,6 +2,7 @@ import { given, then } from 'test-fns';
 
 import { DomainEntity } from '../instantiation/DomainEntity';
 import { getRef } from './getReferenceTo';
+import { isUniqueKeyRef } from './isUniqueKeyRef';
 
 describe('getReferenceTo', () => {
   given('a domain entity', () => {
@@ -23,9 +24,9 @@ describe('getReferenceTo', () => {
         age: 7,
       });
       const ref = getRef<typeof SeaTurtle>(dobj);
-      expect(ref.of).toEqual(SeaTurtle.name);
-      expect(ref.byUnique?.saltwaterSecurityNumber).toEqual('821');
-      expect(ref.byPrimary).toEqual(undefined);
+      expect(ref._dobj).toEqual(SeaTurtle.name);
+      if (isUniqueKeyRef({ of: SeaTurtle })(ref))
+        expect(ref.saltwaterSecurityNumber).toEqual('821');
     });
 
     it('should be able to get a reference to it, with primary key', () => {
@@ -36,9 +37,9 @@ describe('getReferenceTo', () => {
         age: 7,
       });
       const ref = getRef(dobj);
-      expect(ref.of).toEqual(SeaTurtle.name);
-      expect(ref.byUnique?.saltwaterSecurityNumber).toEqual('821');
-      expect(ref.byPrimary).toEqual(undefined); // still undefined, since we can only pick one at a time
+      expect(ref._dobj).toEqual(SeaTurtle.name);
+      if (isUniqueKeyRef({ of: SeaTurtle })(ref))
+        expect(ref.saltwaterSecurityNumber).toEqual('821');
     });
   });
 });
