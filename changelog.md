@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.21.7](https://github.com/ehmpathy/domain-objects/compare/v0.21.6...v0.21.7) (2024-07-14)
+
+
+### Bug Fixes
+
+* **refs:** standardize shape of DomainReference to maximize devexp ([a9ff3ab](https://github.com/ehmpathy/domain-objects/commit/a9ff3abed6e9eeb72a00d060fc27a42e7c59c246))
+* **tests:** bump to latest test-fns dep ([79f37bc](https://github.com/ehmpathy/domain-objects/commit/79f37bcae6d9e2ee4941237b2c2f18faee3ffc87))
+
 ## [0.21.6](https://github.com/ehmpathy/domain-objects/compare/v0.21.5...v0.21.6) (2024-07-12)
 
 
