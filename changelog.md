@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.9](https://github.com/ehmpathy/domain-objects/compare/v0.21.8...v0.21.9) (2024-07-14)
+
+
+### Bug Fixes
+
+* **refs:** expose shorthand aliases for ref by unique and ref by primary ([540485e](https://github.com/ehmpathy/domain-objects/commit/540485e9b7c0d84bc8dbc52ec1ccc0c10ebb062d))
+
 ## [0.21.8](https://github.com/ehmpathy/domain-objects/compare/v0.21.7...v0.21.8) (2024-07-14)
 
 
