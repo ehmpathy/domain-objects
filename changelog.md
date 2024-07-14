@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.21.8](https://github.com/ehmpathy/domain-objects/compare/v0.21.7...v0.21.8) (2024-07-14)
+
+
+### Bug Fixes
+
+* **practs:** bump practs to latest best ([c14fbc2](https://github.com/ehmpathy/domain-objects/commit/c14fbc27590ae1f2fcb5b93a8f266338cf63e58b))
+
 ## [0.21.7](https://github.com/ehmpathy/domain-objects/compare/v0.21.6...v0.21.7) (2024-07-14)
 
 
