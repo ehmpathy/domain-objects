@@ -12,3 +12,5 @@ export type DomainUniqueKeys<
   TPrimary extends readonly string[] = any,
   TUnique extends readonly string[] = any,
 > = TDobj['unique'];
+
+export { DomainUniqueKeys as RefKeysUnique };

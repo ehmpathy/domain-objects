@@ -9,3 +9,5 @@ export type DomainPrimaryKeys<
   TPrimary extends readonly string[] = any,
   TUnique extends readonly string[] = any,
 > = TDobj['primary'];
+
+export { DomainPrimaryKeys as RefKeysPrimary };

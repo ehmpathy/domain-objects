@@ -19,13 +19,16 @@ export { deserialize } from './manipulation/serde/deserialize';
 export { isPropertyNameAReferenceExplicitly } from './relationships/isPropertyNameAReference/isPropertyNameAReferenceExplicitly';
 export { isPropertyNameAReferenceIntuitively } from './relationships/isPropertyNameAReference/isPropertyNameAReferenceIntuitively';
 
-export { DomainUniqueKeys } from './reference/DomainUniqueKeys';
+export { DomainUniqueKeys, RefKeysUnique } from './reference/DomainUniqueKeys';
 export {
   DomainUniqueKeyShape,
   DomainReferenceByUniqueKey,
   RefByUnique,
 } from './reference/DomainUniqueKeyShape';
-export { DomainPrimaryKeys } from './reference/DomainPrimaryKeys';
+export {
+  DomainPrimaryKeys,
+  RefKeysPrimary,
+} from './reference/DomainPrimaryKeys';
 export {
   DomainPrimaryKeyShape,
   DomainReferenceByPrimaryKey,
@@ -35,3 +38,10 @@ export { DomainReference, Ref } from './reference/DomainReference';
 export { getRef, getReferenceTo } from './reference/getReferenceTo';
 export { isPrimaryKeyRef } from './reference/isPrimaryKeyRef';
 export { isUniqueKeyRef } from './reference/isUniqueKeyRef';
+export { DomainReferenceable, Refable } from './reference/DomainReferenceable';
+export { unpivotRef } from './reference/pivot/unpivotRef';
+export {
+  DomainPivotKeyShape,
+  DomainReferenceByPivotKey,
+  RefByPivot,
+} from './reference/pivot/DomainPivotKey';
