@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.22.0](https://github.com/ehmpathy/domain-objects/compare/v0.21.9...v0.22.0) (2024-07-26)
+
+
+### Features
+
+* **refs:** expose pivot ref declaration ([e020c18](https://github.com/ehmpathy/domain-objects/commit/e020c18d9f8f67fd50e97432e8e4f269ee286487))
+
 ## [0.21.9](https://github.com/ehmpathy/domain-objects/compare/v0.21.8...v0.21.9) (2024-07-14)
 
 
