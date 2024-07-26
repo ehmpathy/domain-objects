@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.22.1](https://github.com/ehmpathy/domain-objects/compare/v0.22.0...v0.22.1) (2024-07-26)
+
+
+### Bug Fixes
+
+* **audit:** drop lodash dependency ([#56](https://github.com/ehmpathy/domain-objects/issues/56)) ([02ad03b](https://github.com/ehmpathy/domain-objects/commit/02ad03b984423be691bc896381f52fd991466bd0))
+
 ## [0.22.0](https://github.com/ehmpathy/domain-objects/compare/v0.21.9...v0.22.0) (2024-07-26)
 
 
