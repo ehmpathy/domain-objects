@@ -1,5 +1,5 @@
 import { UnexpectedCodePathError } from '@ehmpathy/error-fns';
-import pick from 'lodash.pick';
+import { pick } from 'type-fns';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../instantiation/DomainEntity';
@@ -38,7 +38,7 @@ export const getPrimaryIdentifier = <T extends Record<string, any>>(
         entityName: className,
         nameOfFunctionNeededFor: 'getPrimaryIdentifier',
       });
-    const primary = pick(obj, primaryKeys.flat());
+    const primary = pick(obj, primaryKeys.flat() as never);
     return Object.keys(primary).length ? primary : undefined; // if no primary found in instance -> undefined
   }
 

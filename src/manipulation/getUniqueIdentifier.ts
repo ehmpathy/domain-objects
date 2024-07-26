@@ -1,5 +1,5 @@
 import { UnexpectedCodePathError } from '@ehmpathy/error-fns';
-import pick from 'lodash.pick';
+import { pick } from 'type-fns';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../instantiation/DomainEntity';
@@ -34,7 +34,7 @@ export const getUniqueIdentifier = <T extends Record<string, any>>(
         entityName: className,
         nameOfFunctionNeededFor: 'getUniqueIdentifier',
       });
-    return pick(obj, uniqueKeys.flat());
+    return pick(obj, uniqueKeys.flat() as never);
   }
 
   // handle DomainLiteral
@@ -46,7 +46,7 @@ export const getUniqueIdentifier = <T extends Record<string, any>>(
     const uniqueKeys = Object.keys(obj).filter(
       (key) => !ignoreList.includes(key),
     ); // literals are unique on all keys, other than the metadata ones we ignore
-    return pick(obj, uniqueKeys);
+    return pick(obj, uniqueKeys as never);
   }
 
   // throw error we get here, this is unexpected
