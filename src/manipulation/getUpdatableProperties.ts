@@ -1,5 +1,5 @@
 import { UnexpectedCodePathError } from '@ehmpathy/error-fns';
-import pick from 'lodash.pick';
+import { pick } from 'type-fns';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../instantiation/DomainEntity';
@@ -35,7 +35,7 @@ export const getUpdatableProperties = <T extends Record<string, any>>(
         entityName: className,
         nameOfFunctionNeededFor: 'getUpdatableProperties',
       });
-    return pick(dobj, updatableProps.flat());
+    return pick(dobj, updatableProps.flat() as never);
   }
 
   // throw error we get here, this is unexpected
