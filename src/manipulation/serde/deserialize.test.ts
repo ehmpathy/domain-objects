@@ -1,3 +1,7 @@
+import { startDurationStopwatch } from '@ehmpathy/uni-time';
+import Joi from 'joi';
+import { z } from 'zod';
+
 import { DomainEntity } from '../../instantiation/DomainEntity';
 import { DomainLiteral } from '../../instantiation/DomainLiteral';
 import { deserialize } from './deserialize';
@@ -76,6 +80,18 @@ describe('deserialize', () => {
     class Spaceship extends DomainEntity<Spaceship> implements Spaceship {
       public static unique = ['serialNumber'];
       public static updatable = ['serialNumber'];
+      public static schema = Joi.object().keys({
+        _dobj: Joi.string().optional(),
+        serialNumber: Joi.string().required(),
+        fuelQuantity: Joi.number().required(),
+        passengers: Joi.number().required(),
+      });
+      // public static schema = z.object({ // !: zod is 3x faster than joi
+      //   // _dobj: z.string().optional(),
+      //   serialNumber: z.string(),
+      //   fuelQuantity: z.number(),
+      //   passengers: z.number().max(42),
+      // });
     }
     interface Address {
       id?: number;
@@ -227,6 +243,101 @@ describe('deserialize', () => {
       expect(undone).toEqual(original);
       expect(undone).toBeInstanceOf(Captain);
       expect(undone.agent).toBeInstanceOf(Robot);
+    });
+    describe('speed', () => {
+      it('should be faster if schema is skipped', async () => {
+        // define the choices
+        const shipA = new Spaceship({
+          serialNumber: '__SHIP_A__',
+          fuelQuantity: 7000,
+          passengers: 42,
+        });
+        const shipB = new Spaceship({
+          serialNumber: '__SHIP_B__',
+          fuelQuantity: 9001,
+          passengers: 21,
+        });
+        const spaceport = new Spaceport({
+          uuid: '__SPACEPORT_UUID__',
+          address: new Address({
+            galaxy: 'Milky Way',
+            solarSystem: 'Sun',
+            planet: 'Earth',
+            continent: 'North America',
+          }),
+          spaceships: [shipA, shipB],
+        });
+        const agent = new Robot({
+          serialNumber: '821',
+          name: 'Bender',
+        });
+        const captainA = new Captain({
+          ship: shipA,
+          agent,
+        });
+        const captainB = new Captain({
+          ship: shipB,
+          agent,
+        });
+
+        // define many instances of domain objects
+        const setSingle = [
+          shipA,
+          shipB,
+          shipA,
+          shipB,
+          shipA,
+          shipB,
+          spaceport,
+          agent,
+          captainA,
+          captainB,
+        ];
+        const setMany = Array(100).fill(setSingle).flat(); // 100 copies of set single
+
+        // serialize the dobjs into a document
+        const document = serialize(setMany, { lossless: true });
+        console.log(document);
+
+        // check the deserialize duration with schema
+        const stopwatchWithSchema = startDurationStopwatch(
+          {
+            for: 'deserialize with schema',
+            log: {
+              level: 'info',
+              threshold: { milliseconds: 1 },
+            },
+          },
+          { log: console },
+        );
+        await deserialize(document, {
+          with: [Spaceship, Spaceport, Robot, Captain],
+        });
+        const { duration: durationWithSchema } = stopwatchWithSchema.stop();
+
+        // check the deserialize duration without schema
+        const stopwatchWithoutSchema = startDurationStopwatch(
+          {
+            for: 'deserialize with schema',
+            log: {
+              level: 'info',
+              threshold: { milliseconds: 1 },
+            },
+          },
+          { log: console },
+        );
+        await deserialize(document, {
+          with: [Spaceship, Spaceport, Robot, Captain],
+          skip: {
+            schema: true,
+          },
+        });
+        const { duration: durationWithoutSchema } =
+          stopwatchWithoutSchema.stop();
+        expect(durationWithoutSchema.milliseconds).toBeLessThan(
+          durationWithSchema.milliseconds,
+        );
+      });
     });
   });
 });

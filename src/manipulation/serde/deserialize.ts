@@ -2,6 +2,7 @@
 
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import { DomainObject } from '../..';
+import { DomainObjectInstantiationOptions } from '../../instantiation/DomainObject';
 
 export class DeserializationMissingDomainObjectClassError extends Error {
   constructor({ className }: { className: string }) {
@@ -23,7 +24,9 @@ Please make sure all DomainObjects serialized in the string have their classes d
  */
 export const deserialize = <T extends any>(
   serialized: string,
-  context: { with?: DomainObject<any>[] } = {},
+  context: {
+    with?: DomainObject<any>[];
+  } & DomainObjectInstantiationOptions = {},
 ): T => {
   // parse the string
   const parsed = JSON.parse(serialized);
@@ -39,7 +42,7 @@ export const deserialize = <T extends any>(
  */
 const toHydrated = (
   value: any,
-  context: { with: DomainObject<any>[] },
+  context: { with: DomainObject<any>[] } & DomainObjectInstantiationOptions,
 ): any => {
   // if this value is not an array and is not an object, then it's a literal, and there's no more hydration to be done
   if (!Array.isArray(value) && typeof value !== 'object') return value;
@@ -61,7 +64,7 @@ const toHydrated = (
  */
 const toHydratedObject = (
   obj: Record<string, any>,
-  context: { with: DomainObject<any>[] },
+  context: { with: DomainObject<any>[] } & DomainObjectInstantiationOptions,
 ) => {
   // if this object is a domain object, lookup its constructor and hydrate it
   if (obj._dobj) {
@@ -79,7 +82,7 @@ const toHydratedObject = (
       });
 
     // hydrate the domain object, now that it was given.
-    return new DomainObjectConstructor(obj); // (note: domain objects hydrate their nested domain-object properties themselves, so we can just return the result here :smile:)
+    return new DomainObjectConstructor(obj, { skip: context.skip }); // (note: domain objects hydrate their nested domain-object properties themselves, so we can just return the result here :smile:)
   }
 
   // since this was not a domain object, recursively traverse each key
