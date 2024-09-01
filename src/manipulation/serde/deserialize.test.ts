@@ -297,7 +297,6 @@ describe('deserialize', () => {
 
         // serialize the dobjs into a document
         const document = serialize(setMany, { lossless: true });
-        console.log(document);
 
         // check the deserialize duration with schema
         const stopwatchWithSchema = startDurationStopwatch(
@@ -312,6 +311,7 @@ describe('deserialize', () => {
         );
         await deserialize(document, {
           with: [Spaceship, Spaceport, Robot, Captain],
+          cache: false,
         });
         const { duration: durationWithSchema } = stopwatchWithSchema.stop();
 
@@ -328,6 +328,7 @@ describe('deserialize', () => {
         );
         await deserialize(document, {
           with: [Spaceship, Spaceport, Robot, Captain],
+          cache: false,
           skip: {
             schema: true,
           },
@@ -337,6 +338,94 @@ describe('deserialize', () => {
         expect(durationWithoutSchema.milliseconds).toBeLessThan(
           durationWithSchema.milliseconds,
         );
+      });
+
+      it('should be instant on repeat attempts, due to in memory cache', async () => {
+        // define the choices
+        const shipA = new Spaceship({
+          serialNumber: '__SHIP_A__',
+          fuelQuantity: 7000,
+          passengers: 42,
+        });
+        const shipB = new Spaceship({
+          serialNumber: '__SHIP_B__',
+          fuelQuantity: 9001,
+          passengers: 21,
+        });
+        const spaceport = new Spaceport({
+          uuid: '__SPACEPORT_UUID__',
+          address: new Address({
+            galaxy: 'Milky Way',
+            solarSystem: 'Sun',
+            planet: 'Earth',
+            continent: 'North America',
+          }),
+          spaceships: [shipA, shipB],
+        });
+        const agent = new Robot({
+          serialNumber: '821',
+          name: 'Bender',
+        });
+        const captainA = new Captain({
+          ship: shipA,
+          agent,
+        });
+        const captainB = new Captain({
+          ship: shipB,
+          agent,
+        });
+
+        // define many instances of domain objects
+        const setSingle = [
+          shipA,
+          shipB,
+          shipA,
+          shipB,
+          shipA,
+          shipB,
+          spaceport,
+          agent,
+          captainA,
+          captainB,
+        ];
+        const setMany = Array(300).fill(setSingle).flat(); // 100 copies of set single
+
+        // serialize the dobjs into a document
+        const document = serialize(setMany, { lossless: true });
+
+        // check the deserialize duration with schema
+        const stopwatchFirst = startDurationStopwatch(
+          {
+            for: 'deserialize with schema',
+            log: {
+              level: 'info',
+              threshold: { milliseconds: 1 },
+            },
+          },
+          { log: console },
+        );
+        await deserialize(document, {
+          with: [Spaceship, Spaceport, Robot, Captain],
+        });
+        const { duration: durationFirst } = stopwatchFirst.stop();
+        expect(durationFirst.milliseconds).toBeGreaterThan(20);
+
+        // check the deserialize duration without schema
+        const stopwatchSecond = startDurationStopwatch(
+          {
+            for: 'deserialize with schema',
+            log: {
+              level: 'info',
+              threshold: { milliseconds: 1 },
+            },
+          },
+          { log: console },
+        );
+        await deserialize(document, {
+          with: [Spaceship, Spaceport, Robot, Captain],
+        });
+        const { duration: durationSecond } = stopwatchSecond.stop();
+        expect(durationSecond.milliseconds).toBeLessThan(5); // instant
       });
     });
   });

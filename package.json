@@ -57,11 +57,15 @@
     "@types/yup": "^0.29.6",
     "change-case": "^4.1.2",
     "cross-sha256": "^1.2.0",
-    "type-fns": "^1.13.0"
+    "hash-fns": "^1.0.1",
+    "simple-in-memory-cache": "^0.3.3",
+    "type-fns": "^1.13.0",
+    "with-simple-caching": "^0.12.0"
   },
   "devDependencies": {
     "@commitlint/cli": "17.6.7",
     "@commitlint/config-conventional": "13.1.0",
+    "@ehmpathy/uni-time": "^1.6.0",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@tsconfig/node-lts-strictest": "18.12.1",
     "@types/jest": "29.2.4",
