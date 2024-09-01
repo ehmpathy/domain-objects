@@ -1,6 +1,23 @@
 import { hydrateNestedDomainObjects } from './hydrate/hydrateNestedDomainObjects';
 import { SchemaOptions, validate } from './validate/validate';
 
+export interface DomainObjectInstantiationOptions {
+  /**
+   * allow callers to skip certain aspects of instantiation
+   *
+   * e.g., for performance optimizations in specific usecases
+   */
+  skip?: {
+    /**
+     * allow callers to skip schema validation
+     *
+     * usecase examples
+     * - deserialize: schema validation increases deserialization time dramatically (10-100x) (especially if using Joi, that thing is slow!)
+     */
+    schema?: boolean;
+  };
+}
+
 /**
  * Domain Object
  *
@@ -9,10 +26,10 @@ import { SchemaOptions, validate } from './validate/validate';
  * - assign all properties that are passed into constructor to self, after optional runtime validation
  */
 export class DomainObject<T extends Record<string, any>> {
-  constructor(props: T) {
+  constructor(props: T, options?: DomainObjectInstantiationOptions) {
     // 1. validate with the schema if provided
     const { schema } = this.constructor as typeof DomainObject; // `this.constructor` does not get typed to DomainObject automatically by ts; https://stackoverflow.com/questions/33387318/access-to-static-properties-via-this-constructor-in-typescript
-    if (schema)
+    if (schema && options?.skip?.schema !== true)
       validate({ props, schema, domainObjectName: this.constructor.name });
 
     // 2. hydrate any nested props present; just overwrite the orig props for each "nested" key
