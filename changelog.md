@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.24.0](https://github.com/ehmpathy/domain-objects/compare/v0.23.0...v0.24.0) (2024-09-01)
+
+
+### Features
+
+* **serde:** cache deserialize in memory since deterministic ([ed9787c](https://github.com/ehmpathy/domain-objects/commit/ed9787c35a5831c2cdd76e358356fd78d8160390))
+
 ## [0.23.0](https://github.com/ehmpathy/domain-objects/compare/v0.22.1...v0.23.0) (2024-09-01)
 
 
