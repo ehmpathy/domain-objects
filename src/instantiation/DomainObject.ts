@@ -29,7 +29,7 @@ export class DomainObject<T extends Record<string, any>> {
   constructor(props: T, options?: DomainObjectInstantiationOptions) {
     // 1. validate with the schema if provided
     const { schema } = this.constructor as typeof DomainObject; // `this.constructor` does not get typed to DomainObject automatically by ts; https://stackoverflow.com/questions/33387318/access-to-static-properties-via-this-constructor-in-typescript
-    if (schema && options?.skip?.schema !== true)
+    if (schema && !(options?.skip?.schema === true))
       validate({ props, schema, domainObjectName: this.constructor.name });
 
     // 2. hydrate any nested props present; just overwrite the orig props for each "nested" key

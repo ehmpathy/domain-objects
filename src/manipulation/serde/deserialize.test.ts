@@ -297,7 +297,6 @@ describe('deserialize', () => {
 
         // serialize the dobjs into a document
         const document = serialize(setMany, { lossless: true });
-        console.log(document);
 
         // check the deserialize duration with schema
         const stopwatchWithSchema = startDurationStopwatch(
@@ -318,7 +317,7 @@ describe('deserialize', () => {
         // check the deserialize duration without schema
         const stopwatchWithoutSchema = startDurationStopwatch(
           {
-            for: 'deserialize with schema',
+            for: 'deserialize without schema',
             log: {
               level: 'info',
               threshold: { milliseconds: 1 },

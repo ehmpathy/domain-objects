@@ -8,8 +8,12 @@ on:
         description: required credentials to authenticate with the aws account under which to publish
 
 jobs:
+  install:
+    uses: ./.github/workflows/.install.yml
+
   publish:
     runs-on: ubuntu-20.04
+    needs: [install]
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -21,11 +25,11 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: node-modules cache get
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         id: cache
         with:
           path: ./node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ needs.install.outputs.node-modules-cache-key }}
 
       - name: node-modules cache miss install
         if: steps.cache.outputs.cache-hit != 'true'
