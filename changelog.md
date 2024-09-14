@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.24.1](https://github.com/ehmpathy/domain-objects/compare/v0.24.0...v0.24.1) (2024-09-14)
+
+
+### Bug Fixes
+
+* **metadata:** enable omitmetadata on arrays directly ([290204a](https://github.com/ehmpathy/domain-objects/commit/290204a72903e3383cea3bc235742546adb97cfb))
+
 ## [0.24.0](https://github.com/ehmpathy/domain-objects/compare/v0.23.0...v0.24.0) (2024-09-01)
 
 
