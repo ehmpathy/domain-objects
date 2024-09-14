@@ -1,3 +1,4 @@
+import { UnexpectedCodePathError } from '@ehmpathy/error-fns';
 import { omit } from 'type-fns';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
@@ -36,10 +37,15 @@ const recursivelyOmitMetadataValuesFromObjectValue: any = (thisValue: any) => {
 export const omitMetadataValues = <T extends DomainObject<Record<string, any>>>(
   obj: T,
 ): T => {
+  // handle arrays
+  if (Array.isArray(obj))
+    return recursivelyOmitMetadataValuesFromObjectValue(obj);
+
   // make sure its an instance of DomainObject
   if (!(obj instanceof DomainObject))
-    throw new Error(
+    throw new UnexpectedCodePathError(
       'omitMetadataValues called on object that is not an instance of a DomainObject. Are you sure you instantiated the object? (Related: see `DomainObject.nested`)',
+      { obj },
     );
 
   // get the metadata keys

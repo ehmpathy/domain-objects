@@ -139,6 +139,41 @@ describe('omitMetadataValues', () => {
         effectiveAt: undefined,
       }).toEqual(boosterWithoutMetadataValues);
     });
+    it('should correctly omit metadata values from an array of dobjs', () => {
+      // instantiate the entity
+      const booster = new Booster({
+        id: 821,
+        uuid: '__UUID__',
+        createdAt: '__last_year__',
+        updatedAt: '__today__',
+        effectiveAt: '__yesterday__',
+        name: 'pointy end up',
+        timesLaunched: 21,
+        engineVersion: 'v0.7.1',
+        status: 'preparing',
+      });
+
+      // check none of them are defined after omitting
+      const boosterWithoutMetadataValues = omitMetadataValues([booster]);
+      expect(boosterWithoutMetadataValues[0].id).toBeUndefined();
+      expect(boosterWithoutMetadataValues[0].uuid).toBeUndefined();
+      expect(boosterWithoutMetadataValues[0].createdAt).toBeUndefined();
+      expect(boosterWithoutMetadataValues[0].updatedAt).toBeUndefined();
+      expect(boosterWithoutMetadataValues[0].effectiveAt).toBeUndefined();
+
+      // check that resulting object is still an instance of the literal
+      expect(boosterWithoutMetadataValues[0]).toBeInstanceOf(Booster);
+
+      // check that the rest of the values are still accurate
+      expect({
+        ...booster,
+        id: undefined,
+        uuid: undefined,
+        createdAt: undefined,
+        updatedAt: undefined,
+        effectiveAt: undefined,
+      }).toEqual(boosterWithoutMetadataValues[0]);
+    });
     it('should correctly omit metadata values, even if not all metadata values are defined - e.g., id, nothing else', () => {
       // instantiate the entity
       const booster = new Booster({

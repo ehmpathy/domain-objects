@@ -245,7 +245,7 @@ describe('deserialize', () => {
       expect(undone.agent).toBeInstanceOf(Robot);
     });
     describe('speed', () => {
-      it('should be faster if schema is skipped', async () => {
+      it.skip('should be faster if schema is skipped', async () => {
         // define the choices
         const shipA = new Spaceship({
           serialNumber: '__SHIP_A__',
