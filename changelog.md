@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.24.2](https://github.com/ehmpathy/domain-objects/compare/v0.24.1...v0.24.2) (2024-11-28)
+
+
+### Bug Fixes
+
+* **uni:** ensure deserialization cache hash doesnt block react native ([#62](https://github.com/ehmpathy/domain-objects/issues/62)) ([e6f0637](https://github.com/ehmpathy/domain-objects/commit/e6f06373978cce307edd64a577ffb20336cb5c50))
+
 ## [0.24.1](https://github.com/ehmpathy/domain-objects/compare/v0.24.0...v0.24.1) (2024-09-14)
 
 
