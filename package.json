@@ -59,10 +59,7 @@
     "@types/yup": "^0.29.6",
     "change-case": "^4.1.2",
     "cross-sha256": "^1.2.0",
-    "hash-fns": "^1.0.1",
-    "simple-in-memory-cache": "^0.3.3",
-    "type-fns": "^1.17.0",
-    "with-simple-caching": "^0.12.0"
+    "type-fns": "^1.17.0"
   },
   "devDependencies": {
     "@commitlint/cli": "19.3.0",

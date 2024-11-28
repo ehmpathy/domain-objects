@@ -1,7 +1,3 @@
-import { toHashSha256Sync } from 'hash-fns';
-import { SimpleInMemoryCache, createCache } from 'simple-in-memory-cache';
-import { withSimpleCaching } from 'with-simple-caching';
-
 import { DomainObject } from '../..';
 import { DomainObjectInstantiationOptions } from '../../instantiation/DomainObject';
 
@@ -16,8 +12,6 @@ Please make sure all DomainObjects serialized in the string have their classes d
   }
 }
 
-const cacheDefault = createCache({ seconds: Infinity });
-
 /**
  * Revives the domain objects stored in a string produced by the `serialize` method
  *
@@ -25,39 +19,40 @@ const cacheDefault = createCache({ seconds: Infinity });
  * - persistance
  *   - e.g., deserialize domain objects from a string that was saved to a persistant store (i.e., a string produced by the `serialize` method)
  */
-export const deserialize = withSimpleCaching(
-  <T extends any>(
-    serialized: string,
-    context: {
-      with?: DomainObject<any>[];
-      cache?: SimpleInMemoryCache<T> | false;
-    } & DomainObjectInstantiationOptions = {},
-  ): T => {
-    // parse the string
-    const parsed = JSON.parse(serialized);
+export const deserialize = <T>(
+  serialized: string,
+  context: {
+    with?: DomainObject<any>[];
+    // cache?: SimpleInMemoryCache<T> | false;
+  } & DomainObjectInstantiationOptions = {},
+): T => {
+  // parse the string
+  const parsed = JSON.parse(serialized);
 
-    // recursively traverse the parsed value to hydrate all domain objects
-    return toHydrated(parsed, { with: context.with ?? [] });
-  },
-  {
-    bypass: {
-      get: (args) => args[1]?.cache === false, // if set to false, then skip
-      set: (args) => args[1]?.cache === false, // if set to false, then skip
-    },
-    cache: ({ fromInput }) => fromInput[1]?.cache || cacheDefault, // deserialization is deterministic
-    serialize: {
-      key: ({ forInput }) =>
-        toHashSha256Sync(
-          JSON.stringify({
-            serialized: forInput[0],
-            with: (forInput[1]?.with ?? []).map(
-              (dobj) => (dobj as typeof DomainObject).name,
-            ),
-          }),
-        ),
-    },
-  },
-);
+  // recursively traverse the parsed value to hydrate all domain objects
+  return toHydrated(parsed, { with: context.with ?? [] });
+};
+// todo: restore inmem cache once we have a universal hash lib (currently, fails on web and in react-native)
+//  withSimpleCaching(
+// {
+//   bypass: {
+//     get: (args) => args[1]?.cache === false, // if set to false, then skip
+//     set: (args) => args[1]?.cache === false, // if set to false, then skip
+//   },
+//   cache: ({ fromInput }) => fromInput[1]?.cache || cacheDefault, // deserialization is deterministic
+//   serialize: {
+//     key: ({ forInput }) =>
+//       toHashSha256Sync(
+//         JSON.stringify({
+//           serialized: forInput[0],
+//           with: (forInput[1]?.with ?? []).map(
+//             (dobj) => (dobj as typeof DomainObject).name,
+//           ),
+//         }),
+//       ),
+//   },
+// },
+// );
 
 /**
  * helper method for deserialize
