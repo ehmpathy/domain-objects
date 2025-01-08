@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.24.3](https://github.com/ehmpathy/domain-objects/compare/v0.24.2...v0.24.3) (2025-01-08)
+
+
+### Bug Fixes
+
+* **uni:** check for buffer existence before usage ([#64](https://github.com/ehmpathy/domain-objects/issues/64)) ([25a99b6](https://github.com/ehmpathy/domain-objects/commit/25a99b6d530eb222b0e7bf7327ef05a550bfe8f2))
+
 ## [0.24.2](https://github.com/ehmpathy/domain-objects/compare/v0.24.1...v0.24.2) (2024-11-28)
 
 
