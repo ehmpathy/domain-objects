@@ -57,7 +57,7 @@ export const assertDomainObjectIsSafeToManipulate = <
     const value = obj[concerningKey];
     if (value instanceof DomainObject) return false; // if value is already as a domain object, not concerning
     if (value instanceof Date) return false; // if its a date, not concerning
-    if (value instanceof Buffer) return false; // if its a buffer, not concerning
+    if ('Buffer' in globalThis && value instanceof Buffer) return false; // if its a buffer, not concerning
     return true; // if it wasn't filtered out by now, its still concerning
   });
 
