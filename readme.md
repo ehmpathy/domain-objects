@@ -408,3 +408,72 @@ Domain modeling gives additional information that we can use for `change detecti
 - remove non-unique properties from nested domain objects
 
 due to this deterministic serialization, we are able to use this fn for [`change detection`](#change-detection) and [`identity comparisons`](#identity-comparison). See the [examples](#usage-examples) section above for an example of each.
+
+
+## `DomainObject.build`
+
+Add getters to your domain object instances, easily.
+
+By default, .build will wrap your dobj instances `withImmute`, to give you immute operations such as `.clone(andSet?: Partial<T>)`
+
+For example,
+```ts
+const ship = RocketShip.build({
+  serialNumber: 'SN1',
+  fuelQuantity: 9001,
+  passengers: 3,
+});
+const shipTwin = ship.clone()
+const shipUsed = ship.clone({ fuelQuantity: 821 })
+```
+
+Note, you can override your DomainObject's .build procedure to add your own getters
+
+For example,
+```ts
+
+```
+
+This gives you a simple way to enrich your objects with domain-specific logic, while still preserving immutability and ergonomics.
+
+## `withImmute`
+
+
+Wraps any domain object to make it safer to use via immutable operations.
+
+Immutability helps avoid bugs caused by shared object references - where multiple procedures unintentionally share the same instance of data in memory. This is especially common concern in systems which leverage parallelism.
+
+`withImmute` adds immute operators to your dobj, such as
+- `.clone(update?: Partial<T>)`
+
+Added by default via `.build()`. Available for adhoc usage too:
+
+```ts
+const plant = withImmute(new Plant({ ... }));
+const twin = plant.clone()
+```
+
+## `withImmute.clone(update?: Partial<T>)`
+
+Creates a new instance of the domain object with updated values — without modifying the original.
+
+This is helpful when working in a system that depends on immutability, such as functional logic, undo/redo flows, or parallel processing, where unintended mutations can introduce bugs.
+
+The `.clone()` method uses deep cloning and deep merging:
+- Every nested value is safely copied.
+- Only the fields you provide in the `update` are changed.
+- Original object remains untouched.
+
+Example:
+
+```ts
+const plant = Plant.build({
+  plantedIn: new PlantPot({ diameterInInches: 5 }),
+  lastWatered: 'Monday',
+});
+
+const updated = plant.clone({ lastWatered: 'Tuesday' });
+
+expect(updated.lastWatered).toEqual('Tuesday');
+expect(plant.lastWatered).toEqual('Monday'); // original is unchanged
+```

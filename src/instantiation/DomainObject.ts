@@ -1,3 +1,5 @@
+import { withImmute, WithImmute } from '../manipulation/immute/withImmute';
+import { DomainObjectShape } from '../reference/DomainReferenceable';
 import { hydrateNestedDomainObjects } from './hydrate/hydrateNestedDomainObjects';
 import { SchemaOptions, validate } from './validate/validate';
 
@@ -25,7 +27,7 @@ export interface DomainObjectInstantiationOptions {
  * - optionally validate the properties that are passed into the constructor against the schema at runtime, if schema is supplied
  * - assign all properties that are passed into constructor to self, after optional runtime validation
  */
-export class DomainObject<T extends Record<string, any>> {
+export class DomainObject<T extends DomainObjectShape> {
   constructor(props: T, options?: DomainObjectInstantiationOptions) {
     // 1. validate with the schema if provided
     const { schema } = this.constructor as typeof DomainObject; // `this.constructor` does not get typed to DomainObject automatically by ts; https://stackoverflow.com/questions/33387318/access-to-static-properties-via-this-constructor-in-typescript
@@ -124,4 +126,24 @@ export class DomainObject<T extends Record<string, any>> {
    * - `uuid` is also considered a metadata key, if it is not included in the unique key of the DomainEntity or DomainEvent
    */
   public static metadata: readonly string[];
+
+  /**
+   * .what = an interface via which to construct instances w/ immute operations
+   * .why =
+   *   - immute operations such as .clone produce more maintainable code by preventing unexpected mutations
+   *   - these immute operations provide a safe pit of success for common operations
+   * .note =
+   *   - you can add withImmute to any dobj yourself, even if it wasn't built via this .build procedure
+   *   - you can override the .build to add your own domain's getters, too
+   */
+  static build<
+    TProps extends DomainObjectShape,
+    TInstance extends DomainObjectShape,
+  >(
+    this: new (props: TProps) => TInstance,
+    props: TProps,
+  ): WithImmute<TInstance> {
+    const instance = new this(props);
+    return withImmute(instance);
+  }
 }

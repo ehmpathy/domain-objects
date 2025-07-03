@@ -300,4 +300,31 @@ describe('DomainObject', () => {
       });
     });
   });
+
+  describe('.build', () => {
+    describe('.clone', () => {
+      it('should be possible to clone an instance ergonomically', () => {
+        interface RocketShip {
+          serialNumber: string;
+          fuelQuantity: number;
+          passengers: number;
+        }
+        class RocketShip
+          extends DomainObject<RocketShip>
+          implements RocketShip {}
+        const ship = RocketShip.build({
+          serialNumber: uuid(),
+          fuelQuantity: 9001,
+          passengers: 21,
+        });
+        expect(ship).toBeInstanceOf(RocketShip); // sanity check
+
+        // clone it
+        const shipB = ship.clone();
+        expect(shipB.fuelQuantity).toEqual(9001);
+        const shipC = ship.clone({ fuelQuantity: 821 });
+        expect(shipC.fuelQuantity).toEqual(821);
+      });
+    });
+  });
 });
