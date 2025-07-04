@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.1](https://github.com/ehmpathy/domain-objects/compare/v0.25.0...v0.25.1) (2025-07-04)
+
+
+### Bug Fixes
+
+* **pkg:** expose withImmute and clone via pkg ([2238b34](https://github.com/ehmpathy/domain-objects/commit/2238b343c882a0ab0ed53647503e6d32809e1c53))
+
 ## [0.25.0](https://github.com/ehmpathy/domain-objects/compare/v0.24.3...v0.25.0) (2025-07-04)
 
 
