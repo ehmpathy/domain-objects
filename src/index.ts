@@ -45,3 +45,6 @@ export {
   DomainReferenceByPivotKey,
   RefByPivot,
 } from './reference/pivot/DomainPivotKey';
+
+export { withImmute } from './manipulation/immute/withImmute';
+export { clone } from './manipulation/clone/clone';
