@@ -7,11 +7,11 @@
     "noUnusedParameters": false,
     "exactOptionalPropertyTypes": false,
     "noImplicitOverride": false,
-    "noUncheckedIndexedAccess": false, // dep cross-sha256 fails this; // TODO: fix that dep
+    "noUncheckedIndexedAccess": false,
     "resolveJsonModule": true,
     "sourceMap": true,
     "outDir": "dist",
-    "target": "es6"
+    "target": "es2020"
   },
   "extends": "@tsconfig/node-lts-strictest/tsconfig.json",
   "include": [
