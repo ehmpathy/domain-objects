@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.25.0](https://github.com/ehmpathy/domain-objects/compare/v0.24.3...v0.25.0) (2025-07-04)
+
+
+### Features
+
+* **clone:** dobj.build and .clone for immute support ([a5aabaf](https://github.com/ehmpathy/domain-objects/commit/a5aabaf57717109da86edc7f34412010d004840b))
+
+
+### Bug Fixes
+
+* **practs:** bump to latest best ([f8dccbf](https://github.com/ehmpathy/domain-objects/commit/f8dccbfb2a2ac2f331929820c0862416b3c2a072))
+
 ## [0.24.3](https://github.com/ehmpathy/domain-objects/compare/v0.24.2...v0.24.3) (2025-01-08)
 
 
