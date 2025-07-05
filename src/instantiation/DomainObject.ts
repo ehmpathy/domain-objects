@@ -136,12 +136,9 @@ export class DomainObject<T extends DomainObjectShape> {
    *   - you can add withImmute to any dobj yourself, even if it wasn't built via this .build procedure
    *   - you can override the .build to add your own domain's getters, too
    */
-  static build<
-    TProps extends DomainObjectShape,
-    TInstance extends DomainObjectShape,
-  >(
-    this: new (props: TProps) => TInstance,
-    props: TProps,
+  static build<TInstance extends DomainObjectShape>(
+    this: new (props: TInstance) => TInstance,
+    props: ConstructorParameters<typeof this>[0],
   ): WithImmute<TInstance> {
     const instance = new this(props);
     return withImmute(instance);

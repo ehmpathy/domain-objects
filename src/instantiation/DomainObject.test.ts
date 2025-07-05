@@ -302,6 +302,54 @@ describe('DomainObject', () => {
   });
 
   describe('.build', () => {
+    it('should reject props with extra keys', () => {
+      interface RocketShip {
+        serialNumber: string;
+        fuelQuantity: number;
+        passengers: number;
+      }
+      class RocketShip extends DomainObject<RocketShip> implements RocketShip {}
+
+      RocketShip.build({
+        serialNumber: uuid(),
+        fuelQuantity: 1000,
+        passengers: 5,
+        // @ts-expect-error — extra key not defined in RocketShip
+        unauthorizedKey: true,
+      });
+    });
+
+    it('should reject props with missing required keys', () => {
+      interface RocketShip {
+        serialNumber: string;
+        fuelQuantity: number;
+        passengers: number;
+      }
+      class RocketShip extends DomainObject<RocketShip> implements RocketShip {}
+
+      // @ts-expect-error — missing required field `serialNumber`
+      RocketShip.build({
+        fuelQuantity: 1000,
+        passengers: 5,
+      });
+    });
+
+    it('should reject props with wrong types', () => {
+      interface RocketShip {
+        serialNumber: string;
+        fuelQuantity: number;
+        passengers: number;
+      }
+      class RocketShip extends DomainObject<RocketShip> implements RocketShip {}
+
+      RocketShip.build({
+        serialNumber: uuid(),
+        // @ts-expect-error — fuelQuantity should be a number
+        fuelQuantity: 'a lot',
+        passengers: 3,
+      });
+    });
+
     describe('.clone', () => {
       it('should be possible to clone an instance ergonomically', () => {
         interface RocketShip {
@@ -324,6 +372,46 @@ describe('DomainObject', () => {
         expect(shipB.fuelQuantity).toEqual(9001);
         const shipC = ship.clone({ fuelQuantity: 821 });
         expect(shipC.fuelQuantity).toEqual(821);
+      });
+
+      it('should reject updates with extra keys', () => {
+        interface RocketShip {
+          serialNumber: string;
+          fuelQuantity: number;
+          passengers: number;
+        }
+        class RocketShip
+          extends DomainObject<RocketShip>
+          implements RocketShip {}
+
+        const ship = RocketShip.build({
+          serialNumber: uuid(),
+          fuelQuantity: 1000,
+          passengers: 3,
+        });
+
+        // @ts-expect-error — unauthorizedKey is not valid
+        ship.clone({ unauthorizedKey: true });
+      });
+
+      it('should reject updates with wrong value types', () => {
+        interface RocketShip {
+          serialNumber: string;
+          fuelQuantity: number;
+          passengers: number;
+        }
+        class RocketShip
+          extends DomainObject<RocketShip>
+          implements RocketShip {}
+
+        const ship = RocketShip.build({
+          serialNumber: uuid(),
+          fuelQuantity: 1000,
+          passengers: 3,
+        });
+
+        // @ts-expect-error — passengers should be a number
+        ship.clone({ passengers: 'three' });
       });
     });
   });
