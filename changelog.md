@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.2](https://github.com/ehmpathy/domain-objects/compare/v0.25.1...v0.25.2) (2025-07-05)
+
+
+### Bug Fixes
+
+* **.build:** narrow .build props to exact shape ([abc3947](https://github.com/ehmpathy/domain-objects/commit/abc3947c7782f56a4e6cf2d32ce14a3c407c01e9))
+
 ## [0.25.1](https://github.com/ehmpathy/domain-objects/compare/v0.25.0...v0.25.1) (2025-07-04)
 
 
