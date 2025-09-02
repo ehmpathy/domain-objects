@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.4](https://github.com/ehmpathy/domain-objects/compare/v0.25.3...v0.25.4) (2025-09-02)
+
+
+### Bug Fixes
+
+* **readme:** describe reference type utils ([#71](https://github.com/ehmpathy/domain-objects/issues/71)) ([68f2b36](https://github.com/ehmpathy/domain-objects/commit/68f2b362fb7f50d2f7c582eadd78787ddeae3aa0))
+
 ## [0.25.3](https://github.com/ehmpathy/domain-objects/compare/v0.25.2...v0.25.3) (2025-09-02)
 
 
