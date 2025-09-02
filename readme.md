@@ -203,9 +203,9 @@ expect(hadChangeAfterFlying).toEqual(true); // because the fuelQuantity has decr
 
 # Features
 
-## Modeling
+## Declaration
 
-Modeling is a fundamental part of domain driven design. Here is how you can represent your model in your code - to aid in building a ubiquitous language.
+Model declaration is a fundamental part of domain driven design. Here is how you can declare your model in your code - to aid in building a ubiquitous language.
 
 ### `DomainLiteral`
 
@@ -276,6 +276,112 @@ const ship = new RocketShip({
   homeAddress: new Address({ ... }),
 });
 ```
+
+## References (`Ref`, `RefByUnique`, `RefByPrimary`)
+
+In work with entities and events, you often need to refer to them by their **primary key** (e.g., `uuid`) or by their **unique keys** (e.g., a compound unique such as `{ source, exid }`). `domain-objects` provides utility types to make this type-safe.
+
+### `RefByPrimary<typeof DomainObject>`
+
+RefByPrimary extracts the shape of the primary key for a given domain object.
+
+```ts
+import { DomainEntity, RefByPrimary } from 'domain-objects';
+
+interface SeaTurtle {
+  uuid?: string;
+  seawaterSecurityNumber: string;
+  name: string;
+}
+class SeaTurtle extends DomainEntity<SeaTurtle> implements SeaTurtle {
+  public static primary = ['uuid'] as const;
+  public static unique = ['seawaterSecurityNumber'] as const;
+}
+
+// ✅ valid
+const primaryRef: RefByPrimary<typeof SeaTurtle> = { uuid: 'beefbeef...' };
+
+// ❌ invalid - must be a string
+const wrongType: RefByPrimary<typeof SeaTurtle> = { uuid: 8335 };
+
+// ❌ invalid - wrong key
+const wrongKey: RefByPrimary<typeof SeaTurtle> = { guid: 'beefbeef...' };
+
+// ❌ invalid - missing primary key
+const missing: RefByPrimary<typeof SeaTurtle> = {};
+```
+
+### `RefByUnique<typeof DomainObject>`
+
+RefByUnique extracts the shape of the unique key(s) for a given domain object.
+
+```ts
+import { DomainEntity, RefByUnique } from 'domain-objects';
+
+interface SeaTurtle {
+  uuid?: string;
+  seawaterSecurityNumber: string;
+  name: string;
+}
+class SeaTurtle extends DomainEntity<SeaTurtle> implements SeaTurtle {
+  public static primary = ['uuid'] as const;
+  public static unique = ['seawaterSecurityNumber'] as const;
+}
+
+// ✅ valid
+const uniqueRef: RefByUnique<typeof SeaTurtle> = { seawaterSecurityNumber: 'ABC-999' };
+
+// ❌ invalid - wrong type
+const wrongType: RefByUnique<typeof SeaTurtle> = { seawaterSecurityNumber: 999 };
+
+// ❌ invalid - wrong key
+const wrongKey: RefByUnique<typeof SeaTurtle> = { saltwaterSecurityNumber: 'ABC-999' };
+
+// ❌ invalid - empty object
+const empty: RefByUnique<typeof SeaTurtle> = {};
+```
+
+### `Ref<typeof DomainObject>`
+
+Ref is a union type that allows referring to a domain object by either primary key or unique keys.
+
+```ts
+import { DomainEntity, Ref } from 'domain-objects';
+
+interface EarthWorm {
+  uuid?: string;
+  soilSecurityNumber: string;
+  wormSegmentNumber: string;
+  name: string;
+}
+class EarthWorm extends DomainEntity<EarthWorm> implements EarthWorm {
+  public static primary = ['uuid'] as const;
+  public static unique = ['soilSecurityNumber', 'wormSegmentNumber'] as const;
+}
+
+// ✅ primary
+const byPrimary: Ref<typeof EarthWorm> = { uuid: 'beefbeef...' };
+
+// ✅ unique
+const byUnique: Ref<typeof EarthWorm> = {
+  soilSecurityNumber: 'SOIL-001',
+  wormSegmentNumber: 'SEG-42',
+};
+
+// ❌ invalid - missed part of unique key
+const incompleteUnique: Ref<typeof EarthWorm> = { soilSecurityNumber: 'SOIL-001' };
+
+// ❌ invalid - not related to either key
+const wrongKey: Ref<typeof EarthWorm> = { guid: 'beefbeef...' };
+
+// ❌ invalid - empty object
+const empty: Ref<typeof EarthWorm> = {};
+```
+
+👉 Use `RefByPrimary` for primary-only references,
+👉 `RefByUnique` for unique-only references,
+👉 `Ref` when you want to allow either.
+
 
 ## Run Time Validation
 
