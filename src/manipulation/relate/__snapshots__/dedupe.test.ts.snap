@@ -3,5 +3,12 @@
 exports[`dedupe should fail fast with a helpful error if there are multiple versions of the same entity, by default 1`] = `
 "BadRequestError: Two different versions of the same entity were asked to be deduped. Options.onMultipleEntityVersions !== 'CHOOSE_FIRST_OCCURRENCE', so we're failing fast here, since we don't know which version should be kept.
 
-{"thisObj":{"saltwaterSecurityNumber":"821","name":"Shellina C."},"versionCurrSeen":"{\\"_dobj\\":\\"SeaTurtle\\",\\"name\\":\\"Shellina C.\\",\\"saltwaterSecurityNumber\\":\\"821\\"}","versionPrevSeen":"{\\"_dobj\\":\\"SeaTurtle\\",\\"name\\":\\"Shelly C.\\",\\"saltwaterSecurityNumber\\":\\"821\\"}"}"
+{
+  "thisObj": {
+    "saltwaterSecurityNumber": "821",
+    "name": "Shellina C."
+  },
+  "versionCurrSeen": "{\\"_dobj\\":\\"SeaTurtle\\",\\"name\\":\\"Shellina C.\\",\\"saltwaterSecurityNumber\\":\\"821\\"}",
+  "versionPrevSeen": "{\\"_dobj\\":\\"SeaTurtle\\",\\"name\\":\\"Shelly C.\\",\\"saltwaterSecurityNumber\\":\\"821\\"}"
+}"
 `;

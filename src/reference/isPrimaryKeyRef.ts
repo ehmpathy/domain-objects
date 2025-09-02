@@ -1,4 +1,4 @@
-import { UnexpectedCodePathError } from '@ehmpathy/error-fns';
+import { UnexpectedCodePathError } from 'helpful-errors';
 import { isPresent } from 'type-fns';
 
 import { DomainPrimaryKeyShape } from './DomainPrimaryKeyShape';

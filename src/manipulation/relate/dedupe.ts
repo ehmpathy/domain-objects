@@ -1,4 +1,4 @@
-import { BadRequestError, UnexpectedCodePathError } from '@ehmpathy/error-fns';
+import { BadRequestError, UnexpectedCodePathError } from 'helpful-errors';
 
 import { DomainEntity } from '../../instantiation/DomainEntity';
 import { DomainObject } from '../../instantiation/DomainObject';

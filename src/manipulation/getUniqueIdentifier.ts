@@ -1,4 +1,4 @@
-import { UnexpectedCodePathError } from '@ehmpathy/error-fns';
+import { UnexpectedCodePathError } from 'helpful-errors';
 import { pick } from 'type-fns';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
