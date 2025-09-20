@@ -46,8 +46,8 @@ export const hydrateNestedDomainObjects = ({
       );
     if (!eachIsDomainObjectBased)
       throw new NestedDomainObjectHydrationError(
-        `each value of each ${domainObjectName}.nested key must be a single typeof DomainObject or an array of options of typeof DomainObject`,
-        { DeclaredNestedDomainObjectClassOptions },
+        `each value of each ${domainObjectName}.nested.${key} must be a single typeof DomainObject or an array of options of typeof DomainObject`,
+        { dobj: domainObjectName, key, DeclaredNestedDomainObjectClassOptions },
       );
 
     // check that the implemented value for this nested prop is an object - otherwise, this field must be nullable
