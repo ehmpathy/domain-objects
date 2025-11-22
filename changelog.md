@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.5](https://github.com/ehmpathy/domain-objects/compare/v0.25.4...v0.25.5) (2025-11-22)
+
+
+### Bug Fixes
+
+* **audit:** apply npm audit fix ([177f811](https://github.com/ehmpathy/domain-objects/commit/177f8118fc6d68f380e53e3cdd4798e4f2510898))
+
 ## [0.25.4](https://github.com/ehmpathy/domain-objects/compare/v0.25.3...v0.25.4) (2025-11-22)
 
 
