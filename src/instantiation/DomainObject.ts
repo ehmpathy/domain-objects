@@ -129,9 +129,11 @@ export class DomainObject<T extends DomainObjectShape> {
 
   /**
    * .what = an interface via which to construct instances w/ immute operations
+   *
    * .why =
    *   - immute operations such as .clone produce more maintainable code by preventing unexpected mutations
    *   - these immute operations provide a safe pit of success for common operations
+   *
    * .note =
    *   - you can add withImmute to any dobj yourself, even if it wasn't built via this .build procedure
    *   - you can override the .build to add your own domain's getters, too
@@ -143,4 +145,9 @@ export class DomainObject<T extends DomainObjectShape> {
     const instance = new this(props);
     return withImmute(instance);
   }
+
+  /**
+   * .as = alias for .build
+   */
+  static as = this.build;
 }
