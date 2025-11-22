@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.25.4](https://github.com/ehmpathy/domain-objects/compare/v0.25.3...v0.25.4) (2025-11-22)
+
+
+### Bug Fixes
+
+* **dobj:** propose alias .as to .build, for readability++ ([#73](https://github.com/ehmpathy/domain-objects/issues/73)) ([e61ffa0](https://github.com/ehmpathy/domain-objects/commit/e61ffa06ff5a0d8f3632af0cb5cb2b8669f526dc))
+* **obs:** make it easier to detect invalid nested dobjs ([cf37f10](https://github.com/ehmpathy/domain-objects/commit/cf37f100c04c582b960f5b6b584cf00a8f13512f))
+* **readme:** describe reference type utils ([#71](https://github.com/ehmpathy/domain-objects/issues/71)) ([68f2b36](https://github.com/ehmpathy/domain-objects/commit/68f2b362fb7f50d2f7c582eadd78787ddeae3aa0))
+
 ## [0.25.3](https://github.com/ehmpathy/domain-objects/compare/v0.25.2...v0.25.3) (2025-09-02)
 
 
