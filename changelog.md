@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.6](https://github.com/ehmpathy/domain-objects/compare/v0.25.5...v0.25.6) (2025-11-23)
+
+
+### Bug Fixes
+
+* **tests:** add explicit test coverage on .clone constructor preservation ([a5158ad](https://github.com/ehmpathy/domain-objects/commit/a5158ad8405a119a89bf277a901b4318282e87f7))
+
 ## [0.25.5](https://github.com/ehmpathy/domain-objects/compare/v0.25.4...v0.25.5) (2025-11-22)
 
 
