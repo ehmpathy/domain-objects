@@ -35,9 +35,10 @@ export {
   RefByPrimary,
 } from './reference/DomainPrimaryKeyShape';
 export { DomainReference, Ref } from './reference/DomainReference';
-export { getRef, getReferenceTo } from './reference/getReferenceTo';
-export { isPrimaryKeyRef } from './reference/isPrimaryKeyRef';
-export { isUniqueKeyRef } from './reference/isUniqueKeyRef';
+export { isPrimaryKeyRef, isRefByPrimary } from './reference/isPrimaryKeyRef';
+export { isUniqueKeyRef, isRefByUnique } from './reference/isUniqueKeyRef';
+export { refByPrimary } from './reference/refByPrimary';
+export { refByUnique } from './reference/refByUnique';
 export { DomainReferenceable, Refable } from './reference/DomainReferenceable';
 export { unpivotRef } from './reference/pivot/unpivotRef';
 export {

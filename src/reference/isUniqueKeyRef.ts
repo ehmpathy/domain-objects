@@ -39,3 +39,5 @@ export const isUniqueKeyRef =
     if (hasMissingKeys) return false;
     return true;
   };
+
+export const isRefByUnique = isUniqueKeyRef; // alias

@@ -432,6 +432,7 @@ describe('DomainObject', () => {
 
         const cloned = ship.clone();
 
+        // This was returning 'Object' before the fix in withImmute.ts
         expect(cloned.constructor.name).toBe('RocketShip');
         expect(cloned instanceof RocketShip).toBe(true);
         expect(cloned).toBeInstanceOf(RocketShip);

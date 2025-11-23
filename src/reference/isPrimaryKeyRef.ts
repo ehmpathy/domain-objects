@@ -39,3 +39,5 @@ export const isPrimaryKeyRef =
     if (hasMissingKeys) return false;
     return true;
   };
+
+export const isRefByPrimary = isPrimaryKeyRef; // alias
