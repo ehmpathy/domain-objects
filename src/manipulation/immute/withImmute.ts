@@ -1,3 +1,5 @@
+import { clone } from '../clone/clone';
+
 /**
  * .what = wrappers which add immutability mechs on dobj instances
  */
@@ -13,7 +15,7 @@ export function withClone<T extends Record<string, any>>(
     enumerable: false,
     configurable: false,
     writable: false,
-    value: (updates: Partial<T>) => withImmute({ ...obj, ...updates }),
+    value: (updates: Partial<T>) => withImmute(clone(obj, updates)),
   });
 
   return obj as WithImmute<T>;

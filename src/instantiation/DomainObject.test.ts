@@ -413,6 +413,63 @@ describe('DomainObject', () => {
         // @ts-expect-error — passengers should be a number
         ship.clone({ passengers: 'three' });
       });
+
+      it('should preserve constructor.name and instanceof for simple domain objects', () => {
+        interface RocketShip {
+          serialNumber: string;
+          fuelQuantity: number;
+          passengers: number;
+        }
+        class RocketShip
+          extends DomainObject<RocketShip>
+          implements RocketShip {}
+
+        const ship = RocketShip.build({
+          serialNumber: uuid(),
+          fuelQuantity: 9001,
+          passengers: 21,
+        });
+
+        const cloned = ship.clone();
+
+        expect(cloned.constructor.name).toBe('RocketShip');
+        expect(cloned instanceof RocketShip).toBe(true);
+        expect(cloned).toBeInstanceOf(RocketShip);
+      });
+
+      it('should preserve constructor.name and instanceof for nested domain objects', () => {
+        // define the plant pot
+        interface PlantPot {
+          diameterInInches: number;
+        }
+        class PlantPot extends DomainObject<PlantPot> implements PlantPot {}
+
+        // define the plant
+        interface Plant {
+          pot: PlantPot;
+          lastWatered: string;
+        }
+        class Plant extends DomainObject<Plant> implements Plant {
+          public static nested = { pot: PlantPot };
+        }
+
+        const plant = Plant.build({
+          pot: { diameterInInches: 7 },
+          lastWatered: 'monday',
+        });
+
+        const cloned = plant.clone({ lastWatered: 'tuesday' });
+
+        // verify root object constructor is preserved
+        expect(cloned.constructor.name).toBe('Plant');
+        expect(cloned instanceof Plant).toBe(true);
+        expect(cloned).toBeInstanceOf(Plant);
+
+        // verify nested object constructor is preserved
+        expect(cloned.pot.constructor.name).toBe('PlantPot');
+        expect(cloned.pot instanceof PlantPot).toBe(true);
+        expect(cloned.pot).toBeInstanceOf(PlantPot);
+      });
     });
   });
 });

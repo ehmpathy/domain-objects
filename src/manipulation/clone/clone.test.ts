@@ -261,5 +261,16 @@ describe('clone', () => {
         },
       );
     });
+
+    given('plain objects without constructors', () => {
+      const plainObj = { name: 'test', value: 123 };
+
+      then('clone should return a plain object with Object constructor', () => {
+        const result = clone(plainObj as any);
+        expect(result.constructor.name).toBe('Object');
+        expect(result instanceof Object).toBe(true);
+        expect(result).toEqual(plainObj);
+      });
+    });
   });
 });
