@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.26.0](https://github.com/ehmpathy/domain-objects/compare/v0.25.7...v0.26.0) (2025-11-23)
+
+
+### Features
+
+* **ref:** refByUnique and refByPrimary ([60434ef](https://github.com/ehmpathy/domain-objects/commit/60434ef221121cf06929dc003d0759accf0dba61))
+
 ## [0.25.7](https://github.com/ehmpathy/domain-objects/compare/v0.25.6...v0.25.7) (2025-11-23)
 
 
