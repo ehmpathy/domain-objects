@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.26.1](https://github.com/ehmpathy/domain-objects/compare/v0.26.0...v0.26.1) (2025-11-23)
+
+
+### Bug Fixes
+
+* **unique:** recursively extract unique refs ([70e7f9e](https://github.com/ehmpathy/domain-objects/commit/70e7f9e72c0088f78358e68ec33f7bc680fb4e45))
+* **unique:** update getUniqueIdentifier to leverage refByUnique ([6c372e5](https://github.com/ehmpathy/domain-objects/commit/6c372e515e54d8f953d87b8e9c524e1980313881))
+
 ## [0.26.0](https://github.com/ehmpathy/domain-objects/compare/v0.25.7...v0.26.0) (2025-11-23)
 
 
