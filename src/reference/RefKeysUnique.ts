@@ -1,4 +1,4 @@
-import { DomainObjectShape, Refable } from './DomainReferenceable';
+import { DomainObjectShape, Refable } from './Refable';
 
 /**
  * a generic which extracts the unique keys of a domain object
@@ -6,11 +6,9 @@ import { DomainObjectShape, Refable } from './DomainReferenceable';
  * note
  * - domain.literals are unique on their full identity and so have no unique key, only their full definition
  */
-export type DomainUniqueKeys<
+export type RefKeysUnique<
   TDobj extends Refable<TShape, TPrimary, TUnique>,
   TShape extends DomainObjectShape = any, // todo: update DomainObjectShape -> DomainReferenceableInstance to enable extraction of primary and unique keys via types
   TPrimary extends readonly string[] = any,
   TUnique extends readonly string[] = any,
 > = TDobj['unique'];
-
-export { DomainUniqueKeys as RefKeysUnique };

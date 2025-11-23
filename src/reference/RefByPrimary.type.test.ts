@@ -1,7 +1,7 @@
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainPrimaryKeyShape } from './DomainPrimaryKeyShape';
+import { RefByPrimary } from './RefByPrimary.type';
 
-describe('DomainPrimaryKeyShape', () => {
+describe('RefByPrimary', () => {
   it('should accurately extract the primary key shape of an entity', () => {
     interface SeaTurtle {
       uuid?: string;
@@ -14,24 +14,24 @@ describe('DomainPrimaryKeyShape', () => {
     }
 
     // should be correct
-    const uniqueKeysRight: DomainPrimaryKeyShape<typeof SeaTurtle> = {
+    const uniqueKeysRight: RefByPrimary<typeof SeaTurtle> = {
       uuid: '821',
     };
 
     // should be invalid
-    const uniqueKeysWrongName: DomainPrimaryKeyShape<typeof SeaTurtle> = {
+    const uniqueKeysWrongName: RefByPrimary<typeof SeaTurtle> = {
       // @ts-expect-error - Type 'number' is not assignable to type 'string'.ts(2322)
       uuid: 921,
     };
 
     // should be invalid
-    const uniqueKeysWrongKey: DomainPrimaryKeyShape<typeof SeaTurtle> = {
+    const uniqueKeysWrongKey: RefByPrimary<typeof SeaTurtle> = {
       // @ts-expect-error - 'guid' does not exist in type 'DomainUniqueKeyShape<typeof SeaTurtle>'. Did you mean to write 'uuid'? ts(2322)
       guid: '821',
     };
 
     // should be invalid
     // @ts-expect-error - Property 'uuid' is missing in type '{}' but required in type 'Required<Pick<SeaTurtle, "uuid">>'.ts(2741)
-    const uniqueKeysOptionalStill: DomainPrimaryKeyShape<typeof SeaTurtle> = {};
+    const uniqueKeysOptionalStill: RefByPrimary<typeof SeaTurtle> = {};
   });
 });

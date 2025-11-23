@@ -1,7 +1,7 @@
 import { UnexpectedCodePathError } from 'helpful-errors';
 
-import { DomainPrimaryKeyShape } from './DomainPrimaryKeyShape';
-import { DomainObjectShape, Refable } from './DomainReferenceable';
+import { RefByPrimary } from './RefByPrimary.type';
+import { DomainObjectShape, Refable } from './Refable';
 
 /**
  * creates a reference to a domain object by its primary key
@@ -27,7 +27,7 @@ export const refByPrimary = <
   TUnique extends readonly string[] = any,
 >(
   instance: InstanceType<TDobj>,
-): DomainPrimaryKeyShape<TDobj, TShape, TPrimary, TUnique> => {
+): RefByPrimary<TDobj, TShape, TPrimary, TUnique> => {
   // get the domain object constructor
   const DomainObjectConstructor = (instance as any).constructor;
   const primaryKeys: readonly string[] = DomainObjectConstructor?.primary;
@@ -43,5 +43,5 @@ export const refByPrimary = <
     ref[key] = (instance as any)[key];
   }
 
-  return ref as DomainPrimaryKeyShape<TDobj, TShape, TPrimary, TUnique>;
+  return ref as RefByPrimary<TDobj, TShape, TPrimary, TUnique>;
 };

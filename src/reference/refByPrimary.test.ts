@@ -1,5 +1,5 @@
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainPrimaryKeyShape } from './DomainPrimaryKeyShape';
+import { RefByPrimary } from './RefByPrimary.type';
 import { refByPrimary } from './refByPrimary';
 
 describe('refByPrimary', () => {
@@ -32,7 +32,7 @@ describe('refByPrimary', () => {
     const ref = refByPrimary<typeof SeaTurtle>(turtle);
 
     // should be assignable to the primary key shape
-    const pk: DomainPrimaryKeyShape<typeof SeaTurtle> = ref; // eslint-disable-line @typescript-eslint/no-unused-vars
+    const pk: RefByPrimary<typeof SeaTurtle> = ref; // eslint-disable-line @typescript-eslint/no-unused-vars
 
     // should be able to access the primary key property
     const uuid: string = ref.uuid; // eslint-disable-line @typescript-eslint/no-unused-vars

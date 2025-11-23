@@ -19,33 +19,16 @@ export { deserialize } from './manipulation/serde/deserialize';
 export { isPropertyNameAReferenceExplicitly } from './relationships/isPropertyNameAReference/isPropertyNameAReferenceExplicitly';
 export { isPropertyNameAReferenceIntuitively } from './relationships/isPropertyNameAReference/isPropertyNameAReferenceIntuitively';
 
-export { DomainUniqueKeys, RefKeysUnique } from './reference/DomainUniqueKeys';
-export {
-  DomainUniqueKeyShape,
-  DomainReferenceByUniqueKey,
-  RefByUnique,
-} from './reference/DomainUniqueKeyShape';
-export {
-  DomainPrimaryKeys,
-  RefKeysPrimary,
-} from './reference/DomainPrimaryKeys';
-export {
-  DomainPrimaryKeyShape,
-  DomainReferenceByPrimaryKey,
-  RefByPrimary,
-} from './reference/DomainPrimaryKeyShape';
-export { DomainReference, Ref } from './reference/DomainReference';
-export { isPrimaryKeyRef, isRefByPrimary } from './reference/isPrimaryKeyRef';
-export { isUniqueKeyRef, isRefByUnique } from './reference/isUniqueKeyRef';
+export { RefKeysUnique } from './reference/RefKeysUnique';
+export { RefByUnique } from './reference/RefByUnique.type';
+export { RefKeysPrimary } from './reference/RefKeysPrimary';
+export { RefByPrimary } from './reference/RefByPrimary.type';
+export { Ref } from './reference/Ref.type';
+export { isRefByPrimary } from './reference/isRefByPrimary';
+export { isRefByUnique } from './reference/isRefByUnique';
 export { refByPrimary } from './reference/refByPrimary';
 export { refByUnique } from './reference/refByUnique';
-export { DomainReferenceable, Refable } from './reference/DomainReferenceable';
-export { unpivotRef } from './reference/pivot/unpivotRef';
-export {
-  DomainPivotKeyShape,
-  DomainReferenceByPivotKey,
-  RefByPivot,
-} from './reference/pivot/DomainPivotKey';
+export { Refable } from './reference/Refable';
 
 export { withImmute } from './manipulation/immute/withImmute';
 export { clone } from './manipulation/clone/clone';

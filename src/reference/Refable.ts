@@ -3,7 +3,7 @@ import { DomainEvent } from '../instantiation/DomainEvent';
 
 export type DomainObjectShape = Record<string, any>;
 
-export interface DomainReferenceable<
+export interface Refable<
   TShape extends DomainObjectShape,
   TPrimary extends readonly string[],
   TUnique extends readonly string[],
@@ -13,8 +13,3 @@ export interface DomainReferenceable<
   primary: TPrimary;
   unique: TUnique;
 }
-
-export {
-  // expose an alias for easier grokability
-  DomainReferenceable as Refable,
-};

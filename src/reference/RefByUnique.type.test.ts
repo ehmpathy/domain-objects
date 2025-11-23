@@ -1,6 +1,6 @@
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainUniqueKeyShape } from './DomainUniqueKeyShape';
-import { DomainUniqueKeys } from './DomainUniqueKeys';
+import { RefByUnique } from './RefByUnique.type';
+import { RefKeysUnique } from './RefKeysUnique';
 
 describe('DomainUniqueShape', () => {
   it('should accurately extract the unique key shape of an entity', () => {
@@ -13,19 +13,19 @@ describe('DomainUniqueShape', () => {
     }
 
     // should be correct
-    const uniqueKeysRight: DomainUniqueKeyShape<typeof SeaTurtle> = {
+    const uniqueKeysRight: RefByUnique<typeof SeaTurtle> = {
       seawaterSecurityNumber: '821',
     };
 
     // should be invalid
-    const uniqueKeysWrongName: DomainUniqueKeyShape<typeof SeaTurtle> = {
+    const uniqueKeysWrongName: RefByUnique<typeof SeaTurtle> = {
       // @ts-expect-error - Type 'number' is not assignable to type 'string'.ts(2322)
       seawaterSecurityNumber: 921,
     };
 
     // should be invalid
-    const uniqueKeysWrongKey: DomainUniqueKeyShape<typeof SeaTurtle> = {
-      // @ts-expect-error - 'saltwaterSecurityNumber' does not exist in type 'DomainUniqueKeyShape<typeof SeaTurtle>'. Did you mean to write 'seawaterSecurityNumber'? ts(2322)
+    const uniqueKeysWrongKey: RefByUnique<typeof SeaTurtle> = {
+      // @ts-expect-error - 'saltwaterSecurityNumber' does not exist in type 'RefByUnique<typeof SeaTurtle>'. Did you mean to write 'seawaterSecurityNumber'? ts(2322)
       saltwaterSecurityNumber: '821',
     };
   });

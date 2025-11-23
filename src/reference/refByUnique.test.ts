@@ -1,5 +1,5 @@
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainUniqueKeyShape } from './DomainUniqueKeyShape';
+import { RefByUnique } from './RefByUnique.type';
 import { refByUnique } from './refByUnique';
 
 describe('refByUnique', () => {
@@ -32,7 +32,7 @@ describe('refByUnique', () => {
     const ref = refByUnique<typeof SeaTurtle>(turtle);
 
     // should be assignable to the unique key shape
-    const uk: DomainUniqueKeyShape<typeof SeaTurtle> = ref; // eslint-disable-line @typescript-eslint/no-unused-vars
+    const uk: RefByUnique<typeof SeaTurtle> = ref; // eslint-disable-line @typescript-eslint/no-unused-vars
 
     // should be able to access the unique key property
     const seawaterSecurityNumber: string = ref.seawaterSecurityNumber; // eslint-disable-line @typescript-eslint/no-unused-vars

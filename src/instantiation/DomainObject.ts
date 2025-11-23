@@ -1,5 +1,5 @@
 import { withImmute, WithImmute } from '../manipulation/immute/withImmute';
-import { DomainObjectShape } from '../reference/DomainReferenceable';
+import { DomainObjectShape } from '../reference/Refable';
 import { hydrateNestedDomainObjects } from './hydrate/hydrateNestedDomainObjects';
 import { SchemaOptions, validate } from './validate/validate';
 

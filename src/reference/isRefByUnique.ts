@@ -1,11 +1,11 @@
 import { UnexpectedCodePathError } from 'helpful-errors';
 import { isPresent } from 'type-fns';
 
-import { DomainPrimaryKeyShape } from './DomainPrimaryKeyShape';
-import { DomainReference } from './DomainReference';
-import { DomainObjectShape, Refable } from './DomainReferenceable';
+import { Ref } from './Ref.type';
+import { RefByUnique } from './RefByUnique.type';
+import { DomainObjectShape, Refable } from './Refable';
 
-export const isPrimaryKeyRef =
+export const isRefByUnique =
   <
     TDobj extends Refable<TShape, TPrimary, TUnique>,
     TShape extends DomainObjectShape = any,
@@ -17,27 +17,25 @@ export const isPrimaryKeyRef =
     of: TDobj;
   }) =>
   (
-    ref: DomainReference<
+    ref: Ref<
       Refable<TShape, any, any>, // refable<TShape, any, any> to ensure even unclassed .getReferenceTo usage can use this
       TShape,
       TPrimary,
       TUnique
     >,
-  ): ref is DomainPrimaryKeyShape<TDobj, TShape, TPrimary, TUnique> => {
-    // get the primary key attributes
-    const primaryKeys: readonly string[] = of.primary;
-    if (!primaryKeys)
+  ): ref is RefByUnique<TDobj, TShape, TPrimary, TUnique> => {
+    // get the unique key attributes
+    const uniqueKeys: readonly string[] = of.unique;
+    if (!uniqueKeys)
       throw new UnexpectedCodePathError(
-        'can not check isPrimaryKeyRef on a dobj which does not declare its .primary keys',
-        { dobj: of.name, primaryKeys },
+        'can not check isRefByUnique on a dobj which does not declare its .unique keys',
+        { dobj: of.name, uniqueKeys },
       );
 
     // check that each key is defined
-    const hasMissingKeys = primaryKeys.some(
+    const hasMissingKeys = uniqueKeys.some(
       (key) => !isPresent((ref as any)[key]),
     );
     if (hasMissingKeys) return false;
     return true;
   };
-
-export const isRefByPrimary = isPrimaryKeyRef; // alias

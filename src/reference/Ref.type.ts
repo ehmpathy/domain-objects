@@ -1,11 +1,11 @@
-import { DomainPrimaryKeyShape } from './DomainPrimaryKeyShape';
-import { DomainObjectShape, Refable } from './DomainReferenceable';
-import { DomainUniqueKeyShape } from './DomainUniqueKeyShape';
+import { RefByPrimary } from './RefByPrimary.type';
+import { RefByUnique } from './RefByUnique.type';
+import { DomainObjectShape, Refable } from './Refable';
 
 /**
  * declares a reference to a domain.entity or a domain.event
  */
-export type DomainReference<
+export type Ref<
   TDobj extends Refable<TShape, TPrimary, TUnique>,
   TShape extends DomainObjectShape = any, // todo: update DomainObjectShape -> DomainReferenceableInstance to enable extraction of primary and unique keys via types
   TPrimary extends readonly string[] = any,
@@ -28,15 +28,10 @@ export type DomainReference<
        */
       // _ref?: 'primary' | 'unique'; // todo: think through how we can enforce its presence... e.g., via a getter?
     } & (
-      | (Required<DomainPrimaryKeyShape<TDobj, TShape, TPrimary, TUnique>> & {
+      | (Required<RefByPrimary<TDobj, TShape, TPrimary, TUnique>> & {
           // _ref?: 'primary'; // todo: think through how we can enforce its presence... e.g., via a getter?
         })
-      | (DomainUniqueKeyShape<TDobj, TShape, TPrimary, TUnique> & {
+      | (RefByUnique<TDobj, TShape, TPrimary, TUnique> & {
           // _ref?: 'unique'; // todo: think through how we can enforce its presence... e.g., via a getter?
         })
     );
-
-export {
-  // expose an alias for easier grokability
-  DomainReference as Ref,
-};

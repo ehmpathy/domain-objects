@@ -1,7 +1,7 @@
 import { UnexpectedCodePathError } from 'helpful-errors';
 
-import { DomainObjectShape, Refable } from './DomainReferenceable';
-import { DomainUniqueKeyShape } from './DomainUniqueKeyShape';
+import { RefByUnique } from './RefByUnique.type';
+import { DomainObjectShape, Refable } from './Refable';
 
 /**
  * creates a reference to a domain object by its unique key
@@ -38,7 +38,7 @@ export const refByUnique = <
   TUnique extends readonly string[] = any,
 >(
   instance: InstanceType<TDobj>,
-): DomainUniqueKeyShape<TDobj, TShape, TPrimary, TUnique> => {
+): RefByUnique<TDobj, TShape, TPrimary, TUnique> => {
   // get the domain object constructor
   const DomainObjectConstructor = (instance as any).constructor;
   const uniqueKeys: readonly string[] = DomainObjectConstructor?.unique;
@@ -61,5 +61,5 @@ export const refByUnique = <
     }
   }
 
-  return ref as DomainUniqueKeyShape<TDobj, TShape, TPrimary, TUnique>;
+  return ref as RefByUnique<TDobj, TShape, TPrimary, TUnique>;
 };

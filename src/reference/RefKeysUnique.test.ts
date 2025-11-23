@@ -1,7 +1,7 @@
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainUniqueKeys } from './DomainUniqueKeys';
+import { RefKeysUnique } from './RefKeysUnique';
 
-describe('DomainUniqueKeys', () => {
+describe('RefKeysUnique', () => {
   it('should accurately extract the unique keys of an entity', () => {
     interface SeaTurtle {
       seawaterSecurityNumber: string;
@@ -12,12 +12,12 @@ describe('DomainUniqueKeys', () => {
     }
 
     // should be correct
-    const uniqueKeysRight: DomainUniqueKeys<typeof SeaTurtle> = [
+    const uniqueKeysRight: RefKeysUnique<typeof SeaTurtle> = [
       'seawaterSecurityNumber',
     ];
 
     // should be invalid
-    const uniqueKeysWrong: DomainUniqueKeys<typeof SeaTurtle> = [
+    const uniqueKeysWrong: RefKeysUnique<typeof SeaTurtle> = [
       // @ts-expect-error - saltwater != seawater
       'saltwaterSecurityNumber',
     ];
