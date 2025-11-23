@@ -164,4 +164,62 @@ describe('assertDomainObjectIsSafeToManipulate', () => {
       expect(error.message).toMatchSnapshot(); // should look nice - visually
     }
   });
+
+  describe('onKeys option', () => {
+    it('should only validate specified keys when onKeys is provided', () => {
+      // define a domain entity with unique keys
+      interface User {
+        uuid: string;
+        email: string;
+        metadata: { preferences: any }; // this is NOT defined as nested, but is NOT a unique key
+      }
+      class User extends DomainObject<User> implements User {
+        public static unique = ['email'];
+      }
+
+      // instantiate with metadata that would normally fail validation
+      const user = new User({
+        uuid: uuid(),
+        email: 'test@example.com',
+        metadata: { preferences: { theme: 'dark' } }, // not defined as nested, but not in unique keys
+      });
+
+      // should NOT throw when only checking email (because metadata is not checked)
+      expect(() =>
+        assertDomainObjectIsSafeToManipulate(user, { onKeys: ['email'] }),
+      ).not.toThrow();
+
+      // should throw when checking all keys (default)
+      expect(() => assertDomainObjectIsSafeToManipulate(user)).toThrow();
+    });
+
+    it('should still validate nested objects in specified keys', () => {
+      // define nested object
+      interface Department {
+        name: string;
+      }
+
+      // define a domain entity with nested object in unique keys
+      interface User {
+        department: Department; // this IS a unique key but NOT defined as nested
+        email: string;
+      }
+      class User extends DomainObject<User> implements User {
+        public static unique = ['department'];
+      }
+
+      // instantiate with department that's not properly nested
+      const user = new User({
+        department: { name: 'Engineering' }, // not defined as nested, and IS in unique keys
+        email: 'test@example.com',
+      });
+
+      // should throw when checking department (because department IS specified and not safe)
+      expect(() =>
+        assertDomainObjectIsSafeToManipulate(user, {
+          onKeys: ['department'],
+        }),
+      ).toThrow();
+    });
+  });
 });

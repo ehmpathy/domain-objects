@@ -6,6 +6,7 @@ import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainEvent } from '../instantiation/DomainEvent';
 import { DomainLiteral } from '../instantiation/DomainLiteral';
 import { DomainObject } from '../instantiation/DomainObject';
+import { refByUnique } from '../reference/refByUnique';
 import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 
 /**
@@ -22,9 +23,6 @@ export const getUniqueIdentifier = <T extends Record<string, any>>(
       'getUniqueIdentifier called on object that is not an instance of a DomainObject. Are you sure you instantiated the object? (Related: see `DomainObject.nested`)',
     );
 
-  // make sure that its safe to manipulate
-  assertDomainObjectIsSafeToManipulate(obj);
-
   // handle DomainEntity
   if (obj instanceof DomainEntity || obj instanceof DomainEvent) {
     const className = (obj.constructor as typeof DomainEntity).name;
@@ -35,20 +33,13 @@ export const getUniqueIdentifier = <T extends Record<string, any>>(
         nameOfFunctionNeededFor: 'getUniqueIdentifier',
       });
 
-    // extract the unique keys and recursively process nested domain objects
-    const identifier: Record<string, any> = {};
-    for (const key of uniqueKeys.flat()) {
-      const value = (obj as any)[key];
+    // make sure that the unique keys are safe to manipulate
+    assertDomainObjectIsSafeToManipulate(obj, {
+      onKeys: uniqueKeys.flat(),
+    });
 
-      // if the value is a nested domain object, recursively extract its unique identifier
-      if (value && typeof value === 'object' && value instanceof DomainObject) {
-        identifier[key] = getUniqueIdentifier(value);
-      } else {
-        identifier[key] = value;
-      }
-    }
-
-    return identifier as Partial<T>;
+    // use refByUnique to extract the unique identifier
+    return refByUnique(obj as any) as Partial<T>;
   }
 
   // handle DomainLiteral

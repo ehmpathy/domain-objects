@@ -30,14 +30,22 @@ For example:
  * For internal use only. DomainObjects must have all nested domain objects defined in their `DomainObject.nested` definition. Otherwise, we could be dealing with a domain object that is not instantiated, and thus we will not appropriately serialize it.
  *
  * Therefore, if any DomainObject has nested objects that are not instantiated as DomainObjects, there is a risk that the nested object is really a nested, uninstantiated DomainObject - which would cause bugs if uncaught.
+ *
+ * @param obj - The domain object to validate
+ * @param options - Optional configuration
+ * @param options.onKeys - When provided, only validates the specified keys; otherwise validates all keys
  */
 export const assertDomainObjectIsSafeToManipulate = <
   T extends Record<string, any>,
 >(
   obj: DomainObject<T> & Record<string, any>,
+  options?: { onKeys?: string[] },
 ): void => {
-  // grab all the keys that have objects defined for their values
-  const nestedObjectKeys = Object.keys(obj).filter(
+  // determine which keys to check based on options
+  const keysToCheck = options?.onKeys ?? Object.keys(obj);
+
+  // grab the keys that have objects defined for their values
+  const nestedObjectKeys = keysToCheck.filter(
     (key) => typeof obj[key] === 'object' && obj[key] !== null,
   );
 
