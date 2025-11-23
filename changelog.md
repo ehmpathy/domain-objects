@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.25.7](https://github.com/ehmpathy/domain-objects/compare/v0.25.6...v0.25.7) (2025-11-23)
+
+
+### Bug Fixes
+
+* **clone:** preserve constructor inheritance on .clone ([98e765a](https://github.com/ehmpathy/domain-objects/commit/98e765a9de078dc160125fbc99d945b287a58edc))
+
 ## [0.25.6](https://github.com/ehmpathy/domain-objects/compare/v0.25.5...v0.25.6) (2025-11-23)
 
 

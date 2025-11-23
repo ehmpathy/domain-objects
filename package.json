@@ -2,7 +2,7 @@
   "name": "domain-objects",
   "author": "ehmpathy",
   "description": "A simple, convenient way to represent domain objects, leverage domain knowledge, and add runtime validation in your code base.",
-  "version": "0.25.6",
+  "version": "0.25.7",
   "repository": "ehmpathy/domain-objects",
   "homepage": "https://github.com/ehmpathy/domain-objects",
   "keywords": [
