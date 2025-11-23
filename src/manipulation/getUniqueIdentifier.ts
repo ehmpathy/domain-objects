@@ -34,7 +34,21 @@ export const getUniqueIdentifier = <T extends Record<string, any>>(
         entityName: className,
         nameOfFunctionNeededFor: 'getUniqueIdentifier',
       });
-    return pick(obj, uniqueKeys.flat() as never);
+
+    // extract the unique keys and recursively process nested domain objects
+    const identifier: Record<string, any> = {};
+    for (const key of uniqueKeys.flat()) {
+      const value = (obj as any)[key];
+
+      // if the value is a nested domain object, recursively extract its unique identifier
+      if (value && typeof value === 'object' && value instanceof DomainObject) {
+        identifier[key] = getUniqueIdentifier(value);
+      } else {
+        identifier[key] = value;
+      }
+    }
+
+    return identifier as Partial<T>;
   }
 
   // handle DomainLiteral

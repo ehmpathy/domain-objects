@@ -87,6 +87,106 @@ describe('getUniqueIdentifier', () => {
         postal: '78704',
       });
     });
+
+    describe('nested domain objects', () => {
+      it('should recursively extract unique identifiers from nested domain objects', () => {
+        interface Coordinates {
+          latitude: number;
+          longitude: number;
+        }
+        class Coordinates
+          extends DomainLiteral<Coordinates>
+          implements Coordinates {}
+
+        interface Location {
+          coordinates: Coordinates;
+          elevation: number;
+        }
+        class Location extends DomainLiteral<Location> implements Location {}
+
+        const coordinates = new Coordinates({
+          latitude: 37.7749,
+          longitude: -122.4194,
+        });
+
+        const location = new Location({
+          coordinates,
+          elevation: 52,
+        });
+
+        const uniqueIdentifier = getUniqueIdentifier(location);
+
+        // should recursively extract nested literal unique identifiers
+        expect(uniqueIdentifier).toEqual({
+          coordinates: {
+            latitude: 37.7749,
+            longitude: -122.4194,
+          },
+          elevation: 52,
+        });
+      });
+
+      it('should handle deeply nested domain objects', () => {
+        interface Temperature {
+          celsius: number;
+          unit: 'C';
+        }
+        class Temperature
+          extends DomainLiteral<Temperature>
+          implements Temperature {}
+
+        interface WeatherConditions {
+          temperature: Temperature;
+          humidity: number;
+          pressure: number;
+        }
+        class WeatherConditions
+          extends DomainLiteral<WeatherConditions>
+          implements WeatherConditions {}
+
+        interface Observation {
+          conditions: WeatherConditions;
+          windSpeed: number;
+          visibility: number;
+        }
+        class Observation
+          extends DomainLiteral<Observation>
+          implements Observation {}
+
+        const temperature = new Temperature({
+          celsius: 22,
+          unit: 'C',
+        });
+
+        const conditions = new WeatherConditions({
+          temperature,
+          humidity: 65,
+          pressure: 1013,
+        });
+
+        const observation = new Observation({
+          conditions,
+          windSpeed: 15,
+          visibility: 10,
+        });
+
+        const uniqueIdentifier = getUniqueIdentifier(observation);
+
+        // should recursively extract all nested references
+        expect(uniqueIdentifier).toEqual({
+          conditions: {
+            temperature: {
+              celsius: 22,
+              unit: 'C',
+            },
+            humidity: 65,
+            pressure: 1013,
+          },
+          windSpeed: 15,
+          visibility: 10,
+        });
+      });
+    });
   });
   describe('entity', () => {
     it('should be able to get unique identifier accurately', () => {
@@ -188,7 +288,111 @@ describe('getUniqueIdentifier', () => {
     //     federationShipId: 'earth:spacex:5',
     //   }); // properties from all unique key sets should be included
     // });
+    describe('nested domain objects', () => {
+      it('should recursively extract unique identifiers from nested domain objects', () => {
+        interface SeaTurtle {
+          uuid?: string;
+          seawaterSecurityNumber: string;
+          name: string;
+        }
+        class SeaTurtle extends DomainEntity<SeaTurtle> implements SeaTurtle {
+          public static primary = ['uuid'] as const;
+          public static unique = ['seawaterSecurityNumber'] as const;
+          public static updatable = ['name'] as const;
+        }
+
+        interface SeaTurtleShell {
+          turtle: SeaTurtle;
+          algea: 'ALOT' | 'ALIL';
+        }
+        class SeaTurtleShell
+          extends DomainEntity<SeaTurtleShell>
+          implements SeaTurtleShell
+        {
+          public static unique = ['turtle'] as const;
+          public static updatable = ['algea'] as const;
+        }
+
+        const turtle = new SeaTurtle({
+          uuid: '1',
+          seawaterSecurityNumber: '821',
+          name: 'Crush',
+        });
+
+        const shell = new SeaTurtleShell({
+          turtle,
+          algea: 'ALIL',
+        });
+
+        const uniqueIdentifier = getUniqueIdentifier(shell);
+
+        // should extract the nested turtle reference
+        expect(uniqueIdentifier).toEqual({
+          turtle: { seawaterSecurityNumber: '821' },
+        });
+      });
+
+      it('should handle deeply nested domain objects', () => {
+        interface Ocean {
+          exid: string;
+          temperature: number;
+        }
+        class Ocean extends DomainEntity<Ocean> implements Ocean {
+          public static unique = ['exid'] as const;
+          public static updatable = ['temperature'] as const;
+        }
+
+        interface Reef {
+          ocean: Ocean;
+          slug: string;
+          depth: number;
+        }
+        class Reef extends DomainEntity<Reef> implements Reef {
+          public static unique = ['ocean', 'slug'] as const;
+          public static updatable = ['depth'] as const;
+        }
+
+        interface Coral {
+          reef: Reef;
+          slug: string;
+          polyps: number;
+        }
+        class Coral extends DomainEntity<Coral> implements Coral {
+          public static unique = ['reef', 'slug'] as const;
+          public static updatable = ['polyps'] as const;
+        }
+
+        const ocean = new Ocean({
+          exid: 'pacific-ocean',
+          temperature: 72,
+        });
+
+        const reef = new Reef({
+          ocean,
+          slug: 'great-barrier-reef',
+          depth: 100,
+        });
+
+        const coral = new Coral({
+          reef,
+          slug: 'staghorn-coral',
+          polyps: 5000,
+        });
+
+        const uniqueIdentifier = getUniqueIdentifier(coral);
+
+        // should recursively extract all nested references
+        expect(uniqueIdentifier).toEqual({
+          reef: {
+            ocean: { exid: 'pacific-ocean' },
+            slug: 'great-barrier-reef',
+          },
+          slug: 'staghorn-coral',
+        });
+      });
+    });
   });
+
   describe('safety', () => {
     it('should throw an error if domain object is not safe to manipulate', () => {
       interface PlaneManufacturer {

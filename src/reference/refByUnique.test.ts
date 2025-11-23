@@ -56,4 +56,38 @@ describe('refByUnique', () => {
       refByUnique(fish as any);
     }).toThrow('can not create refByUnique on a dobj which does not declare');
   });
+
+  it('should recursively extract unique references from nested domain objects', () => {
+    interface SeaTurtleShell {
+      turtle: SeaTurtle;
+      algea: 'ALOT' | 'ALIL';
+    }
+    class SeaTurtleShell
+      extends DomainEntity<SeaTurtleShell>
+      implements SeaTurtleShell
+    {
+      public static unique = ['turtle'] as const;
+    }
+
+    const turtle = new SeaTurtle({
+      uuid: '1',
+      seawaterSecurityNumber: '821',
+      name: 'Crush',
+    });
+
+    const shell = new SeaTurtleShell({
+      turtle,
+      algea: 'ALIL',
+    });
+
+    const ref = refByUnique<typeof SeaTurtleShell>(shell);
+
+    // should extract the nested turtle reference
+    expect(ref).toEqual({
+      turtle: { seawaterSecurityNumber: '821' },
+    });
+
+    // should not include the algea property
+    expect(ref).not.toHaveProperty('algea');
+  });
 });
