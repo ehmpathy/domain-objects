@@ -109,6 +109,16 @@ describe('clone', () => {
             expect(result.diameterInInches).toBe(7);
           },
         );
+
+        then(
+          'clone should preserve the original constructor and remain an instance of the same class',
+          () => {
+            const result = clone(original, {});
+            expect(result.constructor.name).toBe('PlantPot');
+            expect(result).toBeInstanceOf(PlantPot);
+            expect(result instanceof PlantPot).toBe(true);
+          },
+        );
       });
 
       given('a dobj instance with nested domain object', () => {
@@ -133,6 +143,17 @@ describe('clone', () => {
           expect(plant.lastWatered).toBe('monday');
           expect(result.lastWatered).toBe('friday');
         });
+
+        then(
+          'clone should preserve constructor.name and instanceof for both root and nested objects',
+          () => {
+            const result = clone(plant, {});
+            expect(result.constructor.name).toBe('Plant');
+            expect(result instanceof Plant).toBe(true);
+            expect(result.plantedIn.constructor.name).toBe('PlantPot');
+            expect(result.plantedIn instanceof PlantPot).toBe(true);
+          },
+        );
       });
     });
   });
@@ -229,6 +250,16 @@ describe('clone', () => {
         expect(cloned).not.toBe(plant);
         expect(cloned.plantedIn).not.toBe(plant.plantedIn);
       });
+
+      then(
+        'clone should preserve constructor.name and instanceof for both root and nested objects',
+        () => {
+          expect(cloned.constructor.name).toBe('Plant');
+          expect(cloned instanceof Plant).toBe(true);
+          expect(cloned.plantedIn.constructor.name).toBe('PlantPot');
+          expect(cloned.plantedIn instanceof PlantPot).toBe(true);
+        },
+      );
     });
   });
 });
