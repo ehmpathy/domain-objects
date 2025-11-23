@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.27.0](https://github.com/ehmpathy/domain-objects/compare/v0.26.1...v0.27.0) (2025-11-23)
+
+
+### Features
+
+* **refs:** standardize into ubiquitous names for refs; no more synonyms ([bb71ef5](https://github.com/ehmpathy/domain-objects/commit/bb71ef5fcb870c312b3263d0566d893a71cb2891))
+
 ## [0.26.1](https://github.com/ehmpathy/domain-objects/compare/v0.26.0...v0.26.1) (2025-11-23)
 
 
