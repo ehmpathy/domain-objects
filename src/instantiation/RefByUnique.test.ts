@@ -134,6 +134,30 @@ describe('DomainRefByUnique', () => {
       });
       expect(ref).toBeInstanceOf(RefByUnique);
     });
+    it('should be an instance of domain literal', () => {
+      const ref = new RefByUnique<typeof SeaTurtle>({
+        seawaterSecurityNumber: '821',
+      });
+      expect(ref).toBeInstanceOf(DomainLiteral);
+    });
+
+    it('should narrow down to only the unique key ref when full instance is passed to RefByUnique constructor', () => {
+      // create full turtle instance
+      const turtle = new SeaTurtle({
+        uuid: '123e4567-e89b-12d3-a456-426614174000',
+        seawaterSecurityNumber: '821',
+        name: 'Crush',
+      });
+
+      // pass the full instance to RefByUnique constructor
+      const ref = new RefByUnique<typeof SeaTurtle>(turtle); // turtle fits into ref by unique, since its a superset
+
+      // the ref should be stripped of everything beyond refByUnique though, on outcome
+      expect(ref).toBeInstanceOf(RefByUnique);
+      expect(ref).toHaveProperty('seawaterSecurityNumber', '821');
+      expect(ref).not.toHaveProperty('uuid');
+      expect(ref).not.toHaveProperty('name');
+    });
 
     describe('nested', () => {
       it('should work with nested RefByUnique in static nested declaration', () => {
@@ -142,11 +166,30 @@ describe('DomainRefByUnique', () => {
           algea: 'ALIL',
         });
 
-        expect(shell.turtle).toBeInstanceOf(DomainLiteral);
+        expect(shell.turtle).toBeInstanceOf(RefByUnique);
         expect(shell.turtle).toHaveProperty('seawaterSecurityNumber', '821');
         expect(shell.turtle).not.toHaveProperty('name');
       });
+      it('should narrow down to only the unique key attributes with nested RefByUnique in static nested declaration', () => {
+        // create full turtle instance
+        const turtle = new SeaTurtle({
+          uuid: '123e4567-e89b-12d3-a456-426614174000',
+          seawaterSecurityNumber: '821',
+          name: 'Crush',
+        });
 
+        // create a shell, which uses the full turtle instance in declaration
+        const shell = new SeaTurtleShell({
+          turtle,
+          algea: 'ALIL',
+        });
+
+        // prove it does not have any non unique key attributes anymore => it was narrowed
+        expect(shell.turtle).toBeInstanceOf(RefByUnique);
+        expect(shell.turtle).toHaveProperty('seawaterSecurityNumber', '821');
+        expect(shell.turtle).not.toHaveProperty('name');
+        expect(shell.turtle).not.toHaveProperty('uuid');
+      });
       it('should work with array of nested RefByUnique', () => {
         const family = new SeaTurtleFamily({
           members: [
