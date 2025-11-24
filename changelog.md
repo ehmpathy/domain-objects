@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.29.0](https://github.com/ehmpathy/domain-objects/compare/v0.28.1...v0.29.0) (2025-11-24)
+
+
+### Features
+
+* **mark:** mark classes explicitly for cross version compat ([35f784c](https://github.com/ehmpathy/domain-objects/commit/35f784cdeb9868e6573b67b872bf561455ae27df))
+
 ## [0.28.1](https://github.com/ehmpathy/domain-objects/compare/v0.28.0...v0.28.1) (2025-11-24)
 
 
