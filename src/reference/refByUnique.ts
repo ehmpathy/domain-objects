@@ -1,6 +1,6 @@
 import { UnexpectedCodePathError } from 'helpful-errors';
 
-import { RefByUnique } from './RefByUnique.type';
+import { RefByUnique } from '../instantiation/RefByUnique';
 import { DomainObjectShape, Refable } from './Refable';
 
 /**

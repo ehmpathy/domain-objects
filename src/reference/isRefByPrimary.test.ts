@@ -1,6 +1,6 @@
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { RefByPrimary } from './RefByPrimary.type';
-import { RefByUnique } from './RefByUnique.type';
+import { RefByPrimary } from '../instantiation/RefByPrimary';
+import { RefByUnique } from '../instantiation/RefByUnique';
 import { isRefByPrimary } from './isRefByPrimary';
 
 describe('isRefByPrimary', () => {
@@ -35,7 +35,7 @@ describe('isRefByPrimary', () => {
       // if within the type guard, true
       if (isRefByPrimary({ of: SeaTurtle })(ref)) {
         // should be able to access the uuid
-        const uuid: string = ref.uuid;
+        const uuid: string | undefined = ref.uuid;
 
         // should be able to assign to the primary key shape
         const pk: RefByPrimary<typeof SeaTurtle> = ref;

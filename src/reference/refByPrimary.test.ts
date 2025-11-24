@@ -1,5 +1,5 @@
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { RefByPrimary } from './RefByPrimary.type';
+import { RefByPrimary } from '../instantiation/RefByPrimary';
 import { refByPrimary } from './refByPrimary';
 
 describe('refByPrimary', () => {
@@ -35,7 +35,7 @@ describe('refByPrimary', () => {
     const pk: RefByPrimary<typeof SeaTurtle> = ref; // eslint-disable-line @typescript-eslint/no-unused-vars
 
     // should be able to access the primary key property
-    const uuid: string = ref.uuid; // eslint-disable-line @typescript-eslint/no-unused-vars
+    const uuid: string | undefined = ref.uuid; // eslint-disable-line @typescript-eslint/no-unused-vars
 
     // @ts-expect-error: Property 'name' does not exist on type 'Required<Pick<SeaTurtle, "uuid">>'.
     const name: string = ref.name; // eslint-disable-line @typescript-eslint/no-unused-vars

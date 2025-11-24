@@ -1,8 +1,8 @@
 import { UnexpectedCodePathError } from 'helpful-errors';
 import { isPresent } from 'type-fns';
 
+import { RefByUnique } from '../instantiation/RefByUnique';
 import { Ref } from './Ref.type';
-import { RefByUnique } from './RefByUnique.type';
 import { DomainObjectShape, Refable } from './Refable';
 
 export const isRefByUnique =

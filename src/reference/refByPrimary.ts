@@ -1,6 +1,6 @@
 import { UnexpectedCodePathError } from 'helpful-errors';
 
-import { RefByPrimary } from './RefByPrimary.type';
+import { RefByPrimary } from '../instantiation/RefByPrimary';
 import { DomainObjectShape, Refable } from './Refable';
 
 /**

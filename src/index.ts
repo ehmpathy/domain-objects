@@ -1,5 +1,7 @@
 export { DomainObject } from './instantiation/DomainObject';
 export { DomainLiteral } from './instantiation/DomainLiteral';
+export { RefByUnique } from './instantiation/RefByUnique';
+export { RefByPrimary } from './instantiation/RefByPrimary';
 export { DomainEntity } from './instantiation/DomainEntity';
 export { DomainEvent } from './instantiation/DomainEvent';
 export { HelpfulJoiValidationError } from './instantiation/validate/HelpfulJoiValidationError';
@@ -20,9 +22,7 @@ export { isPropertyNameAReferenceExplicitly } from './relationships/isPropertyNa
 export { isPropertyNameAReferenceIntuitively } from './relationships/isPropertyNameAReference/isPropertyNameAReferenceIntuitively';
 
 export { RefKeysUnique } from './reference/RefKeysUnique';
-export { RefByUnique } from './reference/RefByUnique.type';
 export { RefKeysPrimary } from './reference/RefKeysPrimary';
-export { RefByPrimary } from './reference/RefByPrimary.type';
 export { Ref } from './reference/Ref.type';
 export { isRefByPrimary } from './reference/isRefByPrimary';
 export { isRefByUnique } from './reference/isRefByUnique';

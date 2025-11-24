@@ -382,6 +382,51 @@ const empty: Ref<typeof EarthWorm> = {};
 👉 `RefByUnique` for unique-only references,
 👉 `Ref` when you want to allow either.
 
+### Instantiating Reference Objects
+
+You can instantiate reference objects directly using the `RefByUnique` or `RefByPrimary` constructors:
+
+```ts
+import { RefByUnique, RefByPrimary } from 'domain-objects';
+
+// Using RefByUnique
+const turtleRef = RefByUnique.build<typeof SeaTurtle>({
+  seawaterSecurityNumber: '821',
+});
+
+// Using RefByPrimary
+const turtleRefById = RefByPrimary.build<typeof SeaTurtle>({
+  uuid: 'beefbeef-cafe-babe-0000-000000000001',
+});
+```
+
+### Nested Reference Hydration
+
+Just like other nested domain objects, references can be automatically hydrated when used as nested properties:
+
+```ts
+import { DomainEntity, RefByUnique, RefByPrimary } from 'domain-objects';
+
+interface SeaTurtleShell {
+  turtle: RefByUnique<typeof SeaTurtle>;
+  algea: 'ALOT' | 'ALIL';
+}
+class SeaTurtleShell extends DomainEntity<SeaTurtleShell> implements SeaTurtleShell {
+  public static unique = ['turtle'] as const;
+  public static nested = {
+    turtle: RefByUnique<typeof SeaTurtle>,
+  };
+}
+
+// now you can pass a plain object and it will be hydrated as a RefByUnique
+const shell = new SeaTurtleShell({
+  turtle: { seawaterSecurityNumber: '821' }, // plain object
+  algea: 'ALOT',
+});
+
+expect(shell.turtle).toBeInstanceOf(RefByUnique); // ✅ automatically hydrated!
+expect(shell.turtle.seawaterSecurityNumber).toEqual('821');
+```
 
 ## Run Time Validation
 

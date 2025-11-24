@@ -14,7 +14,7 @@ import { DomainObject } from './DomainObject';
  * - A `Address { street, city, state, country }` is a literal. Changing any of the properties, like `street`, produces a completely new address
  * - A `Geocode { latitude, longitude }` is a literal. Changing either property means you are dealing with a new geocode
  */
-export abstract class DomainLiteral<
+export class DomainLiteral<
   T extends Record<string, any>,
 > extends DomainObject<T> {
   /**
