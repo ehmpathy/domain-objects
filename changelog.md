@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.28.1](https://github.com/ehmpathy/domain-objects/compare/v0.28.0...v0.28.1) (2025-11-24)
+
+
+### Bug Fixes
+
+* **obs:** increase observability of getUniqueIdentifier rejections ([782b6fb](https://github.com/ehmpathy/domain-objects/commit/782b6fb6346570457480ca101a0e04ac820ac6ac))
+
 ## [0.28.0](https://github.com/ehmpathy/domain-objects/compare/v0.27.0...v0.28.0) (2025-11-24)
 
 
