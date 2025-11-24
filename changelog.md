@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.29.1](https://github.com/ehmpathy/domain-objects/compare/v0.29.0...v0.29.1) (2025-11-24)
+
+
+### Bug Fixes
+
+* **refs:** ensure RefByUnique and RefByPrimary constructors narrow down the attributes if built from Refable instance ([6359661](https://github.com/ehmpathy/domain-objects/commit/6359661ab048f7ba495cc0e5a9a86759d2ba5ea8))
+
 ## [0.29.0](https://github.com/ehmpathy/domain-objects/compare/v0.28.1...v0.29.0) (2025-11-24)
 
 
