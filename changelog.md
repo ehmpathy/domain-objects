@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.29.2](https://github.com/ehmpathy/domain-objects/compare/v0.29.1...v0.29.2) (2025-11-24)
+
+
+### Bug Fixes
+
+* **refs:** instantiate refs to domain entities within props ([001bdd8](https://github.com/ehmpathy/domain-objects/commit/001bdd89fb0c46fbc62e43d804eae2b0232c1329))
+
 ## [0.29.1](https://github.com/ehmpathy/domain-objects/compare/v0.29.0...v0.29.1) (2025-11-24)
 
 
