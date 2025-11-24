@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.28.0](https://github.com/ehmpathy/domain-objects/compare/v0.27.0...v0.28.0) (2025-11-24)
+
+
+### Features
+
+* **refs:** enable instantiation of RefByUnique and RefByPrimary ([b466b76](https://github.com/ehmpathy/domain-objects/commit/b466b763e91a74e2e3e1cab489f35b16883a67f0))
+
 ## [0.27.0](https://github.com/ehmpathy/domain-objects/compare/v0.26.1...v0.27.0) (2025-11-23)
 
 
