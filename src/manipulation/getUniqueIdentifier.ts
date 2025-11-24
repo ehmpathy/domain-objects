@@ -5,7 +5,10 @@ import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomai
 import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainEvent } from '../instantiation/DomainEvent';
 import { DomainLiteral } from '../instantiation/DomainLiteral';
-import { DomainObject } from '../instantiation/DomainObject';
+import { isOfDomainEntity } from '../instantiation/inherit/isOfDomainEntity';
+import { isOfDomainEvent } from '../instantiation/inherit/isOfDomainEvent';
+import { isOfDomainLiteral } from '../instantiation/inherit/isOfDomainLiteral';
+import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
 import { refByUnique } from '../reference/refByUnique';
 import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 
@@ -18,7 +21,7 @@ export const getUniqueIdentifier = <T extends Record<string, any>>(
   obj: DomainEntity<T> | DomainEvent<T> | DomainLiteral<T>,
 ): Partial<T> => {
   // make sure its an instance of DomainObject
-  if (!(obj instanceof DomainObject))
+  if (!isOfDomainObject(obj))
     throw new BadRequestError(
       'getUniqueIdentifier called on object that is not an instance of a DomainObject. Are you sure you instantiated the object? (Related: see `DomainObject.nested`)',
       {
@@ -27,7 +30,7 @@ export const getUniqueIdentifier = <T extends Record<string, any>>(
     );
 
   // handle DomainEntity
-  if (obj instanceof DomainEntity || obj instanceof DomainEvent) {
+  if (isOfDomainEntity(obj) || isOfDomainEvent(obj)) {
     const className = (obj.constructor as typeof DomainEntity).name;
     const uniqueKeys = (obj.constructor as typeof DomainEntity).unique;
     if (!uniqueKeys)
@@ -46,7 +49,7 @@ export const getUniqueIdentifier = <T extends Record<string, any>>(
   }
 
   // handle DomainLiteral
-  if (obj instanceof DomainLiteral) {
+  if (isOfDomainLiteral(obj)) {
     const ignoreList = (obj.constructor as typeof DomainLiteral).metadata ?? [
       'id',
       'uuid',

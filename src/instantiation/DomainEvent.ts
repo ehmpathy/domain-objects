@@ -1,4 +1,8 @@
 import { DomainObject } from './DomainObject';
+import { VERSION } from './version';
+
+// marker symbol (cross-version, global registry)
+export const MARK_AS_DOMAIN_EVENT = Symbol.for('domain-objects/DomainEvent');
 
 /**
  * In Domain Driven Design, an Event is a type of Domain Object for which:
@@ -17,6 +21,14 @@ import { DomainObject } from './DomainObject';
 export abstract class DomainEvent<
   T extends Record<string, any>,
 > extends DomainObject<T> {
+  /**
+   * DomainEvent marker symbol for cross-version compatibility.
+   *
+   * Uses Symbol.for() to create a global symbol that works across different versions
+   * of the domain-objects library. The value is the version string.
+   */
+  public static readonly [MARK_AS_DOMAIN_EVENT] = VERSION;
+
   /**
    * `DomainEvent.primary` defines the surrogate key of the domain.event, utilized as the primary key in persistance
    *

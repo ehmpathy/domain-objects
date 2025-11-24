@@ -2,6 +2,10 @@ import { withImmute, WithImmute } from '../manipulation/immute/withImmute';
 import { DomainObjectShape } from '../reference/Refable';
 import { hydrateNestedDomainObjects } from './hydrate/hydrateNestedDomainObjects';
 import { SchemaOptions, validate } from './validate/validate';
+import { VERSION } from './version';
+
+// marker symbol (cross-version, global registry)
+export const MARK_AS_DOMAIN_OBJECT = Symbol.for('domain-objects/DomainObject');
 
 export interface DomainObjectInstantiationOptions {
   /**
@@ -46,6 +50,14 @@ export class DomainObject<T extends DomainObjectShape> {
     // 3. assign all properties to self if passed validation
     Object.assign(this, hydratedProps);
   }
+
+  /**
+   * DomainObject marker symbol for cross-version compatibility.
+   *
+   * Uses Symbol.for() to create a global symbol that works across different versions
+   * of the domain-objects library. The value is the version string.
+   */
+  public static readonly [MARK_AS_DOMAIN_OBJECT] = VERSION;
 
   /**
    * DomainObject.alias

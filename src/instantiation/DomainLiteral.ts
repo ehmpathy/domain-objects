@@ -1,4 +1,10 @@
 import { DomainObject } from './DomainObject';
+import { VERSION } from './version';
+
+// marker symbol (cross-version, global registry)
+export const MARK_AS_DOMAIN_LITERAL = Symbol.for(
+  'domain-objects/DomainLiteral',
+);
 
 /**
  * In Domain Driven Design, a Literal (a.k.a. Value Object), is a type of Domain Object for which:
@@ -17,6 +23,14 @@ import { DomainObject } from './DomainObject';
 export class DomainLiteral<
   T extends Record<string, any>,
 > extends DomainObject<T> {
+  /**
+   * DomainLiteral marker symbol for cross-version compatibility.
+   *
+   * Uses Symbol.for() to create a global symbol that works across different versions
+   * of the domain-objects library. The value is the version string.
+   */
+  public static readonly [MARK_AS_DOMAIN_LITERAL] = VERSION;
+
   /**
    * `DomainLiteral.primary` defines the surrogate key of the domain.literal, utilized as the primary key in persistance
    *

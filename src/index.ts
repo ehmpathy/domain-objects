@@ -1,9 +1,22 @@
-export { DomainObject } from './instantiation/DomainObject';
-export { DomainLiteral } from './instantiation/DomainLiteral';
+export {
+  DomainObject,
+  MARK_AS_DOMAIN_OBJECT,
+} from './instantiation/DomainObject';
+export {
+  DomainLiteral,
+  MARK_AS_DOMAIN_LITERAL,
+} from './instantiation/DomainLiteral';
 export { RefByUnique } from './instantiation/RefByUnique';
 export { RefByPrimary } from './instantiation/RefByPrimary';
-export { DomainEntity } from './instantiation/DomainEntity';
-export { DomainEvent } from './instantiation/DomainEvent';
+export {
+  DomainEntity,
+  MARK_AS_DOMAIN_ENTITY,
+} from './instantiation/DomainEntity';
+export { DomainEvent, MARK_AS_DOMAIN_EVENT } from './instantiation/DomainEvent';
+export { isOfDomainObject } from './instantiation/inherit/isOfDomainObject';
+export { isOfDomainEntity } from './instantiation/inherit/isOfDomainEntity';
+export { isOfDomainEvent } from './instantiation/inherit/isOfDomainEvent';
+export { isOfDomainLiteral } from './instantiation/inherit/isOfDomainLiteral';
 export { HelpfulJoiValidationError } from './instantiation/validate/HelpfulJoiValidationError';
 export { HelpfulYupValidationError } from './instantiation/validate/HelpfulYupValidationError';
 export { DomainEntityUniqueKeysMustBeDefinedError } from './manipulation/DomainEntityUniqueKeysMustBeDefinedError';

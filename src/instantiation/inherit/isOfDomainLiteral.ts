@@ -1,0 +1,19 @@
+import { DomainLiteral, MARK_AS_DOMAIN_LITERAL } from '../DomainLiteral';
+
+/**
+ * .what = checks if an object is an instance of DomainLiteral
+ * .why = supports cross version compatability evaluation
+ */
+export const isOfDomainLiteral = (obj: unknown): boolean => {
+  // Check direct instanceof first (fast path for same-version)
+  if (obj instanceof DomainLiteral) return true;
+
+  // Check for the marker symbol in the prototype chain (cross-version support)
+  let proto = (obj as any)?.constructor;
+  while (proto) {
+    if (proto[MARK_AS_DOMAIN_LITERAL]) return true;
+    proto = Object.getPrototypeOf(proto);
+  }
+
+  return false;
+};

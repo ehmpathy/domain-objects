@@ -1,4 +1,8 @@
 import { DomainObject } from './DomainObject';
+import { VERSION } from './version';
+
+// marker symbol (cross-version, global registry)
+export const MARK_AS_DOMAIN_ENTITY = Symbol.for('domain-objects/DomainEntity');
 
 /**
  * In Domain Driven Design, an Entity is a type of Domain Object for which:
@@ -18,6 +22,14 @@ import { DomainObject } from './DomainObject';
 export class DomainEntity<
   T extends Record<string, any>,
 > extends DomainObject<T> {
+  /**
+   * DomainEntity marker symbol for cross-version compatibility.
+   *
+   * Uses Symbol.for() to create a global symbol that works across different versions
+   * of the domain-objects library. The value is the version string.
+   */
+  public static readonly [MARK_AS_DOMAIN_ENTITY] = VERSION;
+
   /**
    * `DomainEntity.primary` defines the surrogate key of the domain.entity, utilized as the primary key in persistance
    *
