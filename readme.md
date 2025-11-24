@@ -113,7 +113,7 @@ const event = new AirQualityMeasuredEvent({
 
 ### runtime validation
 
-> everyone has types until they get punched in the runtime - mike typeson
+> everyone has types until they get punched in the runtime - mike typeson 🥊
 
 ```ts
 // define your domain object with a schema this time

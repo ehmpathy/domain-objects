@@ -34,15 +34,27 @@ export type RefByUnique<
 class RefByUniqueBase<T extends DomainObjectShape> extends DomainLiteral<T> {
   constructor(props: T) {
     // if props itself is a domain entity or domain event, extract its reference
-    if (
-      props &&
-      typeof props === 'object' &&
-      (isOfDomainEntity(props) || isOfDomainEvent(props))
-    ) {
+    if (isOfDomainEntity(props) || isOfDomainEvent(props)) {
       super(refByUnique(props as any) as T);
-    } else {
-      super(props);
+      return;
     }
+
+    // if props is not itself a domain entity/event, check each property
+    // and apply refByUnique on any nested domain entities/events
+    const transformedProps: Record<string, any> = {};
+    for (const key of Object.keys(props)) {
+      const value = (props as any)[key];
+      if (
+        value &&
+        typeof value === 'object' &&
+        (isOfDomainEntity(value) || isOfDomainEvent(value))
+      ) {
+        transformedProps[key] = RefByUnique.as(value); // todo: is it safe to assume its always unique keys nested within unique keys? find examples where its not?
+      } else {
+        transformedProps[key] = value;
+      }
+    }
+    super(transformedProps as T);
   }
 }
 
