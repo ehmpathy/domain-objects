@@ -2,8 +2,9 @@ import { UnexpectedCodePathError } from 'helpful-errors';
 import { pick } from 'type-fns';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
-import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainObject } from '../instantiation/DomainObject';
+import { type DomainEntity } from '../instantiation/DomainEntity';
+import { isOfDomainEntity } from '../instantiation/inherit/isOfDomainEntity';
+import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
 import { DomainEntityUpdatablePropertiesMustBeDefinedError } from './DomainEntityUpdatablePropertiesMustBeDefinedError';
 
 /**
@@ -18,7 +19,7 @@ export const getUpdatableProperties = <T extends Record<string, any>>(
   dobj: DomainEntity<T>,
 ): Partial<T> => {
   // make sure its an instance of DomainObject
-  if (!(dobj instanceof DomainObject))
+  if (!isOfDomainObject(dobj))
     throw new Error(
       'getUpdatableProperties called on object that is not an instance of a DomainObject. Are you sure you instantiated the object? (Related: see `DomainObject.nested`)',
     );
@@ -27,7 +28,7 @@ export const getUpdatableProperties = <T extends Record<string, any>>(
   assertDomainObjectIsSafeToManipulate(dobj);
 
   // handle DomainEntity
-  if (dobj instanceof DomainEntity) {
+  if (isOfDomainEntity(dobj)) {
     const className = (dobj.constructor as typeof DomainEntity).name;
     const updatableProps = (dobj.constructor as typeof DomainEntity).updatable;
     if (!updatableProps)

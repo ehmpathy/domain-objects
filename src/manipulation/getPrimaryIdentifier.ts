@@ -2,10 +2,13 @@ import { BadRequestError, UnexpectedCodePathError } from 'helpful-errors';
 import { pick } from 'type-fns';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
-import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainEvent } from '../instantiation/DomainEvent';
-import { DomainLiteral } from '../instantiation/DomainLiteral';
-import { DomainObject } from '../instantiation/DomainObject';
+import { type DomainEntity } from '../instantiation/DomainEntity';
+import { type DomainEvent } from '../instantiation/DomainEvent';
+import { type DomainLiteral } from '../instantiation/DomainLiteral';
+import { isOfDomainEntity } from '../instantiation/inherit/isOfDomainEntity';
+import { isOfDomainEvent } from '../instantiation/inherit/isOfDomainEvent';
+import { isOfDomainLiteral } from '../instantiation/inherit/isOfDomainLiteral';
+import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
 import { DomainEntityPrimaryKeysMustBeDefinedError } from './DomainEntityPrimaryKeysMustBeDefinedError';
 
 /**
@@ -17,7 +20,7 @@ export const getPrimaryIdentifier = <T extends Record<string, any>>(
   obj: DomainEntity<T> | DomainEvent<T> | DomainLiteral<T>,
 ): Partial<T> | undefined => {
   // make sure its an instance of DomainObject
-  if (!(obj instanceof DomainObject))
+  if (!isOfDomainObject(obj))
     throw new BadRequestError(
       'getUniqueIdentifier called on object that is not an instance of a DomainObject. Are you sure you instantiated the object? (Related: see `DomainObject.nested`)',
       { obj },
@@ -27,11 +30,7 @@ export const getPrimaryIdentifier = <T extends Record<string, any>>(
   assertDomainObjectIsSafeToManipulate(obj);
 
   // handle DomainEntity, DomainEvent, and DomainLiteral
-  if (
-    obj instanceof DomainEntity ||
-    obj instanceof DomainEvent ||
-    obj instanceof DomainLiteral
-  ) {
+  if (isOfDomainEntity(obj) || isOfDomainEvent(obj) || isOfDomainLiteral(obj)) {
     const className = (obj.constructor as typeof DomainEntity).name;
     const primaryKeys = (obj.constructor as typeof DomainEntity).primary;
     if (!primaryKeys)

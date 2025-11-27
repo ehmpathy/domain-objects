@@ -1,5 +1,5 @@
-/* eslint-disable no-underscore-dangle */
 import { DomainObject } from '../DomainObject';
+import { isOfDomainObject } from '../inherit/isOfDomainObject';
 
 const isArray = <T>(val: T | Array<T>): val is Array<T> => Array.isArray(val);
 
@@ -61,8 +61,9 @@ export const hydrateNestedDomainObjects = ({
       );
     const instantiateThisPropIfNeeded = (prop: any) => {
       // if it's already an instance of a domain object, then just check that it's one of the options specified and return it if so
-      const instantiatedClassName =
-        prop instanceof DomainObject ? prop.constructor.name : null;
+      const instantiatedClassName = isOfDomainObject(prop)
+        ? prop.constructor.name
+        : null;
       if (instantiatedClassName) {
         // if the name is included in the valid nested class options, then return it
         if (

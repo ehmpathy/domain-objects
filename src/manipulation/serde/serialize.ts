@@ -5,6 +5,9 @@ import { assertDomainObjectIsSafeToManipulate } from '../../constraints/assertDo
 import { DomainEntity } from '../../instantiation/DomainEntity';
 import { DomainLiteral } from '../../instantiation/DomainLiteral';
 import { DomainObject } from '../../instantiation/DomainObject';
+import { isOfDomainEntity } from '../../instantiation/inherit/isOfDomainEntity';
+import { isOfDomainLiteral } from '../../instantiation/inherit/isOfDomainLiteral';
+import { isOfDomainObject } from '../../instantiation/inherit/isOfDomainObject';
 import { getUniqueIdentifier } from '../getUniqueIdentifier';
 
 interface SerializeOptions {
@@ -110,18 +113,17 @@ const toSerializableObject = (
   const stringifiableObj: Record<string, any> = {};
 
   // if this object is a DomainObject, add its name to the serial parts as metadata (i.e., underscore suffix)
-  if (obj instanceof DomainObject)
-    stringifiableObj._dobj = obj.constructor.name;
+  if (isOfDomainObject(obj)) stringifiableObj._dobj = obj.constructor.name;
 
   // if this object is a domain object, make sure that it is safe to manipulate
-  if (obj instanceof DomainObject) assertDomainObjectIsSafeToManipulate(obj);
+  if (isOfDomainObject(obj)) assertDomainObjectIsSafeToManipulate(obj);
 
   // if this object is a persistable DomainObject AND its not the root object we're serializing && lossless is off, then only consider its unique properties for serialization; (i.e., only consider which domain objects the root object references, not the current state of the domain objects the root object references)
   let objToMakeSerializable = obj;
   if (
     !root &&
     !options.lossless &&
-    (obj instanceof DomainEntity || obj instanceof DomainLiteral)
+    (isOfDomainEntity(obj) || isOfDomainLiteral(obj))
   ) {
     objToMakeSerializable = getUniqueIdentifier(obj);
   }

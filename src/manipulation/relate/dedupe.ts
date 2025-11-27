@@ -2,16 +2,22 @@ import { BadRequestError, UnexpectedCodePathError } from 'helpful-errors';
 
 import { DomainEntity } from '../../instantiation/DomainEntity';
 import { DomainObject } from '../../instantiation/DomainObject';
+import { isOfDomainEntity } from '../../instantiation/inherit/isOfDomainEntity';
+import { isOfDomainObject } from '../../instantiation/inherit/isOfDomainObject';
 import { getUniqueIdentifier } from '../getUniqueIdentifier';
 import { omitMetadataValues } from '../omitMetadataValues';
 import { serialize } from '../serde/serialize';
 
 // define how to get the dedupe identity key for any object
 const toDedupeIdentity = <T>(obj: T) =>
-  serialize(obj instanceof DomainObject ? getUniqueIdentifier(obj) : obj);
+  serialize(
+    isOfDomainObject(obj) ? getUniqueIdentifier(obj as DomainObject<any>) : obj,
+  );
 
 const toVersionIdentity = <T>(obj: T) =>
-  obj instanceof DomainEntity ? serialize(omitMetadataValues(obj)) : undefined; // if not an entity, there is no version identity
+  isOfDomainEntity(obj)
+    ? serialize(omitMetadataValues(obj as DomainEntity<any>))
+    : undefined; // if not an entity, there is no version identity
 
 /**
  * a method which deduplicates objects by their identity from within an array
@@ -69,7 +75,7 @@ export const dedupe = <T>(
     // if it has been seen, is an entity, and the caller didn't ask to CHOOSE_FIRST_OCCURRENCE, then check whether we should fail fast
     if (
       hasBeenPrevSeen &&
-      thisObj instanceof DomainEntity &&
+      isOfDomainEntity(thisObj) &&
       options?.onMultipleEntityVersions !== 'CHOOSE_FIRST_OCCURRENCE'
     ) {
       const versionPrevSeen = prevSeenMetadata.version;

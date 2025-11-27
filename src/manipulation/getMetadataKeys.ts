@@ -1,6 +1,8 @@
-import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainEvent } from '../instantiation/DomainEvent';
-import { DomainObject } from '../instantiation/DomainObject';
+import { type DomainEntity } from '../instantiation/DomainEntity';
+import { type DomainObject } from '../instantiation/DomainObject';
+import { isOfDomainEntity } from '../instantiation/inherit/isOfDomainEntity';
+import { isOfDomainEvent } from '../instantiation/inherit/isOfDomainEvent';
+import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
 import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 
 const DEFAULT_METADATA_KEYS = [
@@ -19,7 +21,7 @@ export const getMetadataKeys = (
   options?: { nameOfFunctionNeededFor?: string },
 ): string[] => {
   // make sure its an instance of DomainObject
-  if (!(obj instanceof DomainObject))
+  if (!isOfDomainObject(obj))
     throw new Error(
       'getMetadataKeys called on object that is not an instance of a DomainObject. Are you sure you instantiated the object?',
     );
@@ -30,7 +32,7 @@ export const getMetadataKeys = (
   if (metadataKeysDeclared) return metadataKeysDeclared;
 
   // if it wasn't explicitly declared and its a DomainEntity or DomainEvent, then check to see if uuid is part of the unique key and augment default keys based on that
-  if (obj instanceof DomainEntity || obj instanceof DomainEvent) {
+  if (isOfDomainEntity(obj) || isOfDomainEvent(obj)) {
     const className = (obj.constructor as typeof DomainEntity).name;
     const uniqueKeys = (obj.constructor as typeof DomainEntity).unique;
     if (!uniqueKeys)

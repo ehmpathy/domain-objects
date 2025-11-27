@@ -2,7 +2,8 @@ import { UnexpectedCodePathError } from 'helpful-errors';
 import { omit } from 'type-fns';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
-import { DomainObject } from '../instantiation/DomainObject';
+import { type DomainObject } from '../instantiation/DomainObject';
+import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
 import { getMetadataKeys } from './getMetadataKeys';
 
 /**
@@ -13,7 +14,7 @@ import { getMetadataKeys } from './getMetadataKeys';
  */
 const recursivelyOmitMetadataValuesFromObjectValue: any = (thisValue: any) => {
   // handle directly nested domain object
-  if (thisValue instanceof DomainObject) return omitMetadataValues(thisValue); // eslint-disable-line @typescript-eslint/no-use-before-define
+  if (isOfDomainObject(thisValue)) return omitMetadataValues(thisValue); // eslint-disable-line @typescript-eslint/no-use-before-define
 
   // handle an array of one level deep (doesn't handle Array of Array, for simplicity)
   if (Array.isArray(thisValue))
@@ -42,7 +43,7 @@ export const omitMetadataValues = <T extends DomainObject<Record<string, any>>>(
     return recursivelyOmitMetadataValuesFromObjectValue(obj);
 
   // make sure its an instance of DomainObject
-  if (!(obj instanceof DomainObject))
+  if (!isOfDomainObject(obj))
     throw new UnexpectedCodePathError(
       'omitMetadataValues called on object that is not an instance of a DomainObject. Are you sure you instantiated the object? (Related: see `DomainObject.nested`)',
       { obj },
