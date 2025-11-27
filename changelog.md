@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.29.3](https://github.com/ehmpathy/domain-objects/compare/v0.29.2...v0.29.3) (2025-11-27)
+
+
+### Bug Fixes
+
+* **refs:** assure that RefByPrimary requires presence when key is optionable metadata ([51f728c](https://github.com/ehmpathy/domain-objects/commit/51f728c9844f3c73172801a20d0ae2b509edf950))
+
 ## [0.29.2](https://github.com/ehmpathy/domain-objects/compare/v0.29.1...v0.29.2) (2025-11-24)
 
 
