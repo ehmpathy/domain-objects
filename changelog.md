@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.29.4](https://github.com/ehmpathy/domain-objects/compare/v0.29.3...v0.29.4) (2025-11-27)
+
+
+### Bug Fixes
+
+* **manip:** replace all instanceof references with cross-version isOfDomainX pattern ([756c4a6](https://github.com/ehmpathy/domain-objects/commit/756c4a67a96ee321972cf0d3bce2ff12fbd45eb6))
+* **practs:** bump to latest best ([4f35a7b](https://github.com/ehmpathy/domain-objects/commit/4f35a7b9255bf89ed489a59369241ea9a0a0109a))
+
 ## [0.29.3](https://github.com/ehmpathy/domain-objects/compare/v0.29.2...v0.29.3) (2025-11-27)
 
 
