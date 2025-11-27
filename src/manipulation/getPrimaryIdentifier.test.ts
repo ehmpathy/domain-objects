@@ -1,12 +1,7 @@
-import { v4 as uuid } from 'uuid';
-
-import { DomainObjectNotSafeToManipulateError } from '../constraints/assertDomainObjectIsSafeToManipulate';
 import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainLiteral } from '../instantiation/DomainLiteral';
 import { DomainEntityPrimaryKeysMustBeDefinedError } from './DomainEntityPrimaryKeysMustBeDefinedError';
-import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 import { getPrimaryIdentifier } from './getPrimaryIdentifier';
-import { getUniqueIdentifier } from './getUniqueIdentifier';
 
 describe('getPrimaryIdentifier', () => {
   describe('literal', () => {

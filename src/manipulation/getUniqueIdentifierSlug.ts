@@ -1,7 +1,7 @@
 import { sha256 } from 'cross-sha256';
 
-import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainLiteral } from '../instantiation/DomainLiteral';
+import { type DomainEntity } from '../instantiation/DomainEntity';
+import { type DomainLiteral } from '../instantiation/DomainLiteral';
 import { getUniqueIdentifier } from './getUniqueIdentifier';
 
 /**

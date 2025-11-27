@@ -369,8 +369,8 @@ describe('omitMetadataValues', () => {
       expect(starbaseWithoutMetadataValues.uuid).toBeUndefined();
       expect(starbaseWithoutMetadataValues.address.id).toBeUndefined();
       expect(starbaseWithoutMetadataValues.address.uuid).toBeUndefined();
-      expect(starbaseWithoutMetadataValues.photos[0]!.id).toBeUndefined();
-      expect(starbaseWithoutMetadataValues.photos[0]!.uuid).toBeUndefined();
+      expect(starbaseWithoutMetadataValues.photos[0]?.id).toBeUndefined();
+      expect(starbaseWithoutMetadataValues.photos[0]?.uuid).toBeUndefined();
     });
   });
 });

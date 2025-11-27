@@ -7,11 +7,10 @@ on:
         type: string
         description: the aws region within which we should run the tests
         required: false
+    secrets:
       aws-account-id:
-        type: string
         description: the id of the account the credentials are expected to access
         required: false
-    secrets:
       aws-access-key-id:
         required: false
         description: required credentials to authenticate with aws the aws account against which to run the tests
@@ -154,7 +153,7 @@ jobs:
           key: ${{ needs.install.outputs.node-modules-cache-key }}
 
       - name: configure aws credentials
-        if: "${{ inputs.aws-account-id != '' }}"
+        if: "${{ inputs.aws-region != '' }}"
         uses: aws-actions/configure-aws-credentials@v1
         id: credentials
         with:
@@ -163,9 +162,9 @@ jobs:
           aws-region: ${{ inputs.aws-region }}
 
       - name: confirm aws credentials
-        if: "${{ inputs.aws-account-id != '' }}"
+        if: "${{ inputs.aws-region != '' }}"
         run: |
-          [[ ${{steps.credentials.outputs.aws-account-id}} != ${{ inputs.aws-account-id }} ]] \
+          [[ ${{steps.credentials.outputs.aws-account-id}} != ${{ secrets.aws-account-id }} ]] \
             && echo 'wrong aws account' && exit 1 \
             || echo 'correct aws account';
 
@@ -194,7 +193,7 @@ jobs:
           key: ${{ needs.install.outputs.node-modules-cache-key }}
 
       - name: configure aws credentials
-        if: "${{ inputs.aws-account-id != '' }}"
+        if: "${{ inputs.aws-region != '' }}"
         uses: aws-actions/configure-aws-credentials@v1
         id: credentials
         with:
@@ -203,9 +202,9 @@ jobs:
           aws-region: ${{ inputs.aws-region }}
 
       - name: confirm aws credentials
-        if: "${{ inputs.aws-account-id != '' }}"
+        if: "${{ inputs.aws-region != '' }}"
         run: |
-          [[ ${{steps.credentials.outputs.aws-account-id}} != ${{ inputs.aws-account-id }} ]] \
+          [[ ${{steps.credentials.outputs.aws-account-id}} != ${{ secrets.aws-account-id }} ]] \
             && echo 'wrong aws account' && exit 1 \
             || echo 'correct aws account';
 

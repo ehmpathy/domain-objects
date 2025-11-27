@@ -1,4 +1,4 @@
-import { HasMetadata, OmitMetadata } from 'type-fns';
+import { type HasMetadata, type OmitMetadata } from 'type-fns';
 
 import { DomainEntity } from './DomainEntity';
 import { DomainLiteral } from './DomainLiteral';

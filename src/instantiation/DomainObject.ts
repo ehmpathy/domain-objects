@@ -1,7 +1,7 @@
-import { withImmute, WithImmute } from '../manipulation/immute/withImmute';
-import { DomainObjectShape } from '../reference/Refable';
+import { withImmute, type WithImmute } from '../manipulation/immute/withImmute';
+import { type DomainObjectShape } from '../reference/Refable';
 import { hydrateNestedDomainObjects } from './hydrate/hydrateNestedDomainObjects';
-import { SchemaOptions, validate } from './validate/validate';
+import { type SchemaOptions, validate } from './validate/validate';
 import { VERSION } from './version';
 
 // marker symbol (cross-version, global registry)

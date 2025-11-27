@@ -1,6 +1,6 @@
-import { RefByPrimary } from '../instantiation/RefByPrimary';
-import { RefByUnique } from '../instantiation/RefByUnique';
-import { DomainObjectShape, Refable } from './Refable';
+import { type RefByPrimary } from '../instantiation/RefByPrimary';
+import { type RefByUnique } from '../instantiation/RefByUnique';
+import { type DomainObjectShape, type Refable } from './Refable';
 
 /**
  * declares a reference to a domain.entity or a domain.event
