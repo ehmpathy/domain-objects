@@ -1,3 +1,5 @@
+import { HasMetadata } from 'type-fns';
+
 import { DomainEntity } from '../instantiation/DomainEntity';
 import { RefByPrimary } from '../instantiation/RefByPrimary';
 import { refByPrimary } from './refByPrimary';
@@ -52,5 +54,17 @@ describe('refByPrimary', () => {
     expect(() => {
       refByPrimary(fish as any);
     }).toThrow('can not create refByPrimary on a dobj which does not declare');
+  });
+
+  it('should throw an error if any primary key is undefined', () => {
+    // create a turtle without uuid (it's optional, simulating pre-persistence state)
+    const turtle = new SeaTurtle({
+      seawaterSecurityNumber: '821',
+      name: 'Crush',
+    });
+
+    expect(() => {
+      refByPrimary<typeof SeaTurtle>(turtle as HasMetadata<SeaTurtle>);
+    }).toThrow(/primary key .* is undefined/i);
   });
 });

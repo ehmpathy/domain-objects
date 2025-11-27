@@ -1,4 +1,4 @@
-import { UnexpectedCodePathError } from 'helpful-errors';
+import { BadRequestError, UnexpectedCodePathError } from 'helpful-errors';
 
 import { RefByPrimary } from '../instantiation/RefByPrimary';
 import { DomainObjectShape, Refable } from './Refable';
@@ -40,7 +40,14 @@ export const refByPrimary = <
   // extract only the primary key properties from the instance
   const ref: Record<string, any> = {};
   for (const key of primaryKeys) {
-    ref[key] = (instance as any)[key];
+    const value = (instance as any)[key];
+    if (value === undefined) {
+      throw new BadRequestError(
+        `refByPrimary: primary key '${key}' is undefined; primary keys must have defined values at reference time.`,
+        { dobj: DomainObjectConstructor?.name, key },
+      );
+    }
+    ref[key] = value;
   }
 
   return ref as RefByPrimary<TDobj, TShape, TPrimary, TUnique>;

@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-redeclare */
+import { BadRequestError } from 'helpful-errors';
+
 import { RefKeysPrimary } from '../reference/RefKeysPrimary';
 import { DomainObjectShape, Refable } from '../reference/Refable';
 import { refByPrimary } from '../reference/refByPrimary';
@@ -28,7 +30,7 @@ export type RefByPrimary<
   TShape extends DomainObjectShape = any, // todo: update DomainObjectShape -> DomainReferenceableInstance to enable extraction of primary and unique keys via types, when typescript supports constructor inference from instances
   TPrimary extends readonly string[] = any,
   TUnique extends readonly string[] = any,
-> = Pick<InstanceType<TDobj>, RefKeysPrimary<TDobj>[number]>;
+> = Required<Pick<InstanceType<TDobj>, RefKeysPrimary<TDobj>[number]>>;
 
 // extend the domain literal into a custom class, so that we can rename it into RefByUnique, without mutating the global DomainLiteral class
 class RefByPrimaryBase<T extends DomainObjectShape> extends DomainLiteral<T> {
@@ -41,6 +43,17 @@ class RefByPrimaryBase<T extends DomainObjectShape> extends DomainLiteral<T> {
     ) {
       super(refByPrimary(props as any) as T);
     } else {
+      // validate that no primary key values are undefined at runtime
+      if (props && typeof props === 'object') {
+        for (const key of Object.keys(props)) {
+          if ((props as Record<string, unknown>)[key] === undefined) {
+            throw new BadRequestError(
+              `RefByPrimary: primary key '${key}' is undefined; primary keys must have defined values at reference time.`,
+              { props },
+            );
+          }
+        }
+      }
       super(props);
     }
   }
