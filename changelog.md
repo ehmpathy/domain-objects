@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.0](https://github.com/ehmpathy/domain-objects/compare/v0.30.0...v0.31.0) (2025-11-28)
+
+
+### Features
+
+* **readonly:** expose HasReadonly generic and hasReadonly guard ([#90](https://github.com/ehmpathy/domain-objects/issues/90)) ([64a7523](https://github.com/ehmpathy/domain-objects/commit/64a75232c89cd31574a9208328b287171c15caf5))
+
 ## [0.30.0](https://github.com/ehmpathy/domain-objects/compare/v0.29.5...v0.30.0) (2025-11-28)
 
 
