@@ -21,6 +21,7 @@ export { HelpfulJoiValidationError } from './instantiation/validate/HelpfulJoiVa
 export { HelpfulYupValidationError } from './instantiation/validate/HelpfulYupValidationError';
 export { DomainEntityUniqueKeysMustBeDefinedError } from './manipulation/DomainEntityUniqueKeysMustBeDefinedError';
 export { DomainEntityUpdatablePropertiesMustBeDefinedError } from './manipulation/DomainEntityUpdatablePropertiesMustBeDefinedError';
+export { DomainObjectMetadataMustBeDefinedError } from './manipulation/DomainObjectMetadataMustBeDefinedError';
 
 export { getPrimaryIdentifier } from './manipulation/getPrimaryIdentifier';
 export { getUniqueIdentifier } from './manipulation/getUniqueIdentifier';
@@ -39,6 +40,8 @@ export { isPropertyNameAReferenceIntuitively } from './relationships/isPropertyN
 
 export { RefKeysUnique } from './reference/RefKeysUnique';
 export { RefKeysPrimary } from './reference/RefKeysPrimary';
+export { ConstructorOf, HasReadonly } from './manipulation/HasReadonly.type';
+export { hasReadonly } from './manipulation/hasReadonly';
 export { Ref } from './reference/Ref.type';
 export { isRefByPrimary } from './reference/isRefByPrimary';
 export { isRefByUnique } from './reference/isRefByUnique';
