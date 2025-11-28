@@ -63,4 +63,25 @@ export class DomainEntity<
    * - an `Email { uuid, externalId, toAddress, fromAddress, message, status }` is likely only going to have `status` be updatable, as by changing the `toAddress` would, in this case, make us consider it to be a different email!
    */
   public static updatable: readonly string[];
+
+  /**
+   * `DomainEntity.readonly` defines intrinsic domain attributes that are set by the persistence layer.
+   *
+   * Both metadata and readonly are set by the persistence layer, but they differ in what they describe:
+   * - metadata describes the persistence of the object (e.g., id, uuid, createdAt) - not the object itself
+   * - readonly (non-metadata) describes intrinsic attributes of the object that the persistence layer sets
+   *
+   * Note: metadata is already a special subset of readonly. This property is for non-metadata readonly attributes.
+   *
+   * Note: only DomainEntity supports explicit readonly keys, not DomainEvent or DomainLiteral.
+   * - DomainEvent: immutable by nature, all properties are known before persistence
+   * - DomainLiteral: immutable by nature, fully defined by intrinsic properties
+   *
+   * for example,
+   * - a `DeclaredAwsRdsCluster { arn, name, host, port, status }` has `metadata = ['arn']` (AWS-assigned identity)
+   *   and `readonly = ['host', 'port', 'status']` (AWS-resolved attributes that describe the cluster)
+   * - a `DeclaredAwsLambdaFunction { arn, name, lastModified, codeSize }` has `readonly = ['lastModified', 'codeSize']`
+   *   as these are resolved from AWS and describe real attributes of the function
+   */
+  public static readonly: readonly string[];
 }

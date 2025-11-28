@@ -3,9 +3,9 @@ import Joi from 'joi';
 import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainLiteral } from '../instantiation/DomainLiteral';
 import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
-import { omitMetadataValues } from './omitMetadataValues';
+import { omitMetadata } from './omitMetadata';
 
-describe('omitMetadataValues', () => {
+describe('omitMetadata', () => {
   describe('literal', () => {
     // define domain object with all metadata values that we support
     interface Tool {
@@ -30,7 +30,7 @@ describe('omitMetadataValues', () => {
       });
 
       // check none of them are defined after omitting
-      const hammerWithoutMetadataValues = omitMetadataValues(hammer);
+      const hammerWithoutMetadataValues = omitMetadata(hammer);
       expect(hammerWithoutMetadataValues.id).toEqual(undefined);
       expect(hammerWithoutMetadataValues.uuid).toEqual(undefined);
       expect(hammerWithoutMetadataValues.createdAt).toEqual(undefined);
@@ -56,7 +56,7 @@ describe('omitMetadataValues', () => {
       });
 
       // check none of them are defined after omitting
-      const hammerWithoutMetadataValues = omitMetadataValues(hammer);
+      const hammerWithoutMetadataValues = omitMetadata(hammer);
       expect(hammerWithoutMetadataValues.id).toEqual(undefined);
       expect(hammerWithoutMetadataValues.uuid).toEqual(undefined);
       expect(hammerWithoutMetadataValues.createdAt).toEqual(undefined);
@@ -76,7 +76,7 @@ describe('omitMetadataValues', () => {
       });
 
       // check none of them are defined after omitting
-      const hammerWithoutMetadataValues = omitMetadataValues(hammer);
+      const hammerWithoutMetadataValues = omitMetadata(hammer);
       expect(hammerWithoutMetadataValues.id).toEqual(undefined);
       expect(hammerWithoutMetadataValues.uuid).toEqual(undefined);
       expect(hammerWithoutMetadataValues.createdAt).toEqual(undefined);
@@ -119,7 +119,7 @@ describe('omitMetadataValues', () => {
       });
 
       // check none of them are defined after omitting
-      const boosterWithoutMetadataValues = omitMetadataValues(booster);
+      const boosterWithoutMetadataValues = omitMetadata(booster);
       expect(boosterWithoutMetadataValues.id).toBeUndefined();
       expect(boosterWithoutMetadataValues.uuid).toBeUndefined();
       expect(boosterWithoutMetadataValues.createdAt).toBeUndefined();
@@ -154,7 +154,7 @@ describe('omitMetadataValues', () => {
       });
 
       // check none of them are defined after omitting
-      const boosterWithoutMetadataValues = omitMetadataValues([booster]);
+      const boosterWithoutMetadataValues = omitMetadata([booster]);
       expect(boosterWithoutMetadataValues[0].id).toBeUndefined();
       expect(boosterWithoutMetadataValues[0].uuid).toBeUndefined();
       expect(boosterWithoutMetadataValues[0].createdAt).toBeUndefined();
@@ -185,7 +185,7 @@ describe('omitMetadataValues', () => {
       });
 
       // check none of them are defined after omitting
-      const boosterWithoutMetadataValues = omitMetadataValues(booster);
+      const boosterWithoutMetadataValues = omitMetadata(booster);
       expect(boosterWithoutMetadataValues.id).toBeUndefined();
       expect(boosterWithoutMetadataValues.uuid).toBeUndefined();
       expect(boosterWithoutMetadataValues.createdAt).toBeUndefined();
@@ -210,7 +210,7 @@ describe('omitMetadataValues', () => {
       });
 
       // check none of them are defined after omitting
-      const boosterWithoutMetadataValues = omitMetadataValues(booster);
+      const boosterWithoutMetadataValues = omitMetadata(booster);
       expect(boosterWithoutMetadataValues.id).toBeUndefined();
       expect(boosterWithoutMetadataValues.uuid).toBeUndefined();
       expect(boosterWithoutMetadataValues.createdAt).toBeUndefined();
@@ -243,7 +243,7 @@ describe('omitMetadataValues', () => {
       });
 
       // check none of them are defined after omitting
-      const ownerWithoutMetadataValues = omitMetadataValues(owner);
+      const ownerWithoutMetadataValues = omitMetadata(owner);
       expect(ownerWithoutMetadataValues.id).toBeUndefined();
       expect(ownerWithoutMetadataValues.uuid).toBeDefined();
 
@@ -280,7 +280,7 @@ describe('omitMetadataValues', () => {
       });
 
       // check none of them are defined after omitting
-      const ownerWithoutMetadataValues = omitMetadataValues(owner);
+      const ownerWithoutMetadataValues = omitMetadata(owner);
       expect(ownerWithoutMetadataValues.id).toBeUndefined();
       expect(ownerWithoutMetadataValues.uuid).toBeDefined();
 
@@ -309,12 +309,12 @@ describe('omitMetadataValues', () => {
 
       // check that error is thrown, because we cant figure out whether uuid is metadata or not in this case
       try {
-        omitMetadataValues(dweller);
+        omitMetadata(dweller);
         throw new Error('should not reach here');
       } catch (error) {
         if (!(error instanceof Error)) throw error;
         expect(error.message).toContain(
-          '`LotDweller.unique` must be defined, to be able to `omitMetadataValues`',
+          '`LotDweller.unique` must be defined, to be able to `omitMetadata`',
         );
         expect(error).toBeInstanceOf(DomainEntityUniqueKeysMustBeDefinedError);
       }
@@ -364,7 +364,7 @@ describe('omitMetadataValues', () => {
         }),
         photos: [new Photo({ id: 1, uuid: '__uuid__', url: 'https://...' })],
       });
-      const starbaseWithoutMetadataValues = omitMetadataValues(starbase);
+      const starbaseWithoutMetadataValues = omitMetadata(starbase);
       expect(starbaseWithoutMetadataValues.id).toBeUndefined();
       expect(starbaseWithoutMetadataValues.uuid).toBeUndefined();
       expect(starbaseWithoutMetadataValues.address.id).toBeUndefined();

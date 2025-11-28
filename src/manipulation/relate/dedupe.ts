@@ -5,7 +5,7 @@ import { DomainObject } from '../../instantiation/DomainObject';
 import { isOfDomainEntity } from '../../instantiation/inherit/isOfDomainEntity';
 import { isOfDomainObject } from '../../instantiation/inherit/isOfDomainObject';
 import { getUniqueIdentifier } from '../getUniqueIdentifier';
-import { omitMetadataValues } from '../omitMetadataValues';
+import { omitMetadata } from '../omitMetadata';
 import { serialize } from '../serde/serialize';
 
 // define how to get the dedupe identity key for any object
@@ -16,7 +16,7 @@ const toDedupeIdentity = <T>(obj: T) =>
 
 const toVersionIdentity = <T>(obj: T) =>
   isOfDomainEntity(obj)
-    ? serialize(omitMetadataValues(obj as DomainEntity<any>))
+    ? serialize(omitMetadata(obj as DomainEntity<any>))
     : undefined; // if not an entity, there is no version identity
 
 /**
