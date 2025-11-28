@@ -27,7 +27,10 @@ export { getUniqueIdentifier } from './manipulation/getUniqueIdentifier';
 export { getUniqueIdentifierSlug } from './manipulation/getUniqueIdentifierSlug';
 export { getUpdatableProperties } from './manipulation/getUpdatableProperties';
 export { getMetadataKeys } from './manipulation/getMetadataKeys';
-export { omitMetadataValues } from './manipulation/omitMetadataValues';
+export { getReadonlyKeys } from './manipulation/getReadonlyKeys';
+export { omitMetadata } from './manipulation/omitMetadata';
+export { omitMetadata as omitMetadataValues } from './manipulation/omitMetadata'; // @deprecated - use omitMetadata
+export { omitReadonly } from './manipulation/omitReadonly';
 export { dedupe } from './manipulation/relate/dedupe';
 export { serialize } from './manipulation/serde/serialize';
 export { deserialize } from './manipulation/serde/deserialize';

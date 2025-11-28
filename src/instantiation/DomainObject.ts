@@ -127,15 +127,24 @@ export class DomainObject<T extends DomainObjectShape> {
    *
    * Context,
    * - domain objects are often persisted inside of storage mechanisms that assign metadata to them, such as ids or timestamps
-   * - metadata simply adds information _about_ the object, without contributing to _defining_ the object
+   * - metadata is a special subset of readonly: attributes set by the persistence layer that describe the persistence of the object (not intrinsic attributes of the domain object itself)
+   * - metadata is applicable to all domain objects (entities, events, and literals)
+   *
+   * Metadata vs Readonly,
+   * - both metadata and readonly are set by the persistence layer
+   * - metadata describes how the object is persisted (e.g., id, uuid, createdAt) - not the object itself
+   * - readonly (non-metadata) describes intrinsic attributes of the object that the persistence layer sets (e.g., deployed ip address, deployed host, etc)
    *
    * Relevance,
    * - metadata properties do not contribute to the unique key of a DomainLiteral
-   * - metadata properties can be easily stripped from an object by using the `omitMetadataValues` method
+   * - metadata properties can be easily stripped from an object by using the `omitMetadata` method
+   * - all readonly properties (metadata + explicit readonly) can be stripped using `omitReadonly`
    *
    * By default,
    * - `id`, `createdAt`, `updatedAt`, and `effectiveAt` are considered metadata keys
    * - `uuid` is also considered a metadata key, if it is not included in the unique key of the DomainEntity or DomainEvent
+   *
+   * @see DomainEntity.readonly - for broader readonly attributes on entities (intrinsic attributes set by persistence layer)
    */
   public static metadata: readonly string[];
 

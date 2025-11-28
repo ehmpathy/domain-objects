@@ -177,7 +177,7 @@ const areTheSame = serialize(getUniqueIdentifier(northAmerica)) === serialize(ge
 ### change detection
 
 ```ts
-import { serialize, omitMetadataValues } from 'domain-objects';
+import { serialize, omitMetadata } from 'domain-objects';
 
 // shiny new spaceship, full of fuel
 const sn5 = new Spaceship({
@@ -190,14 +190,14 @@ const sn5 = new Spaceship({
 const sn5Saved = new Spaceship({ ...sn5, id: 821, updatedAt: now() }); // the database will add metadata to it
 
 // lets check that in the process of saving to the database, no unexpected changes were introduced
-const hadChangeDuringSave = serialize(omitMetadataValues(sn5)) !== serialize(omitMetadataValues(sn5Saved)); // note: we omit the metadata values since we dont care that one has db generated values like id specified and the other does not
+const hadChangeDuringSave = serialize(omitMetadata(sn5)) !== serialize(omitMetadata(sn5Saved)); // note: we omit the metadata values since we dont care that one has db generated values like id specified and the other does not
 expect(hadChangeDuringSave).toEqual(false); // even though an id was added to sn5Saved, the non-metadata attributes have not changed, so we can say there is no change as desired
 
 // we do some business logic, and in the process, the space ship flys around and uses up fuel
 const sn5AfterFlying = new Spaceship({ ...sn5, fuelQuantity: 4500 });
 
 // lets programmatically detect whether there was a change now
-const hadChangeAfterFlying = serialize(omitMetadataValues(spaceport)) !== serialize(omitMetadataValues(spaceportAfterFlight));
+const hadChangeAfterFlying = serialize(omitMetadata(spaceport)) !== serialize(omitMetadata(spaceportAfterFlight));
 expect(hadChangeAfterFlying).toEqual(true); // because the fuelQuantity has decreased, the Spaceship has had a change after flying
 ```
 
@@ -559,6 +559,60 @@ Domain modeling gives additional information that we can use for `change detecti
 - remove non-unique properties from nested domain objects
 
 due to this deterministic serialization, we are able to use this fn for [`change detection`](#change-detection) and [`identity comparisons`](#identity-comparison). See the [examples](#usage-examples) section above for an example of each.
+
+
+## Readonly vs Metadata Properties
+
+Domain objects support two categories of readonly properties. Both are set by the persistence layer, but they differ in what they describe. **Metadata is a special subset of readonly** - all metadata is readonly, but not all readonly is metadata.
+
+### Metadata Properties (Persistence Descriptors - All Domain Objects)
+
+**Metadata** are attributes set by the persistence layer that describe the persistence of the object - not intrinsic attributes of the domain object itself. This is the most common type of readonly property and applies to **all domain objects** (entities, events, and literals).
+
+- Default metadata keys: `id`, `uuid`, `createdAt`, `updatedAt`, `effectiveAt`
+- Customize via `static metadata = ['...'] as const;`
+- Omit with `omitMetadata(obj)`
+
+```ts
+class User extends DomainEntity<User> implements User {
+  public static primary = ['id'] as const;
+  public static unique = ['email'] as const;
+  public static metadata = ['id', 'createdAt', 'updatedAt'] as const;
+}
+```
+
+### Readonly Properties (Intrinsic Attributes Set by Persistence - Entities Only)
+
+**Readonly** (non-metadata) are intrinsic attributes of the object that the persistence layer sets. Unlike metadata (which describes the persistence), these describe real attributes of the domain object.
+
+- Only applicable to **DomainEntity** (not DomainEvent or DomainLiteral)
+- No default readonly keys (domain-specific, must be explicitly declared)
+- Declare via `static readonly = ['...'] as const;`
+- Omit with `omitReadonly(obj)` - this omits **both** metadata AND explicit readonly keys
+
+**Why only DomainEntity?**
+- **DomainEvent**: Immutable by nature. All properties are known before persistence - there's no concept of persistence-layer-set intrinsic attributes.
+- **DomainLiteral**: Immutable by nature and fully defined by intrinsic properties. If a property changes, it's a different literal.
+
+```ts
+class AwsRdsCluster extends DomainEntity<AwsRdsCluster> implements AwsRdsCluster {
+  public static primary = ['arn'] as const;
+  public static unique = ['name'] as const;
+  public static metadata = ['arn'] as const;                    // AWS-assigned identity (describes persistence)
+  public static readonly = ['host', 'port', 'status'] as const; // AWS-resolved intrinsic attributes (describes the object)
+}
+```
+
+### Key Distinction
+
+| Aspect | Metadata | Readonly (broader) |
+|--------|----------|----------|
+| Relationship | A special **subset of** readonly | The **superset** containing metadata + more |
+| Applies to | All domain objects | DomainEntity only |
+| What it describes | Persistence of the object | Intrinsic attributes of the object |
+| Set by | Persistence layer | Persistence layer |
+| Default keys | Yes (`id`, `uuid`, etc.) | No (explicit only) |
+| Omit function | `omitMetadata()` | `omitReadonly()` (includes metadata) |
 
 
 ## `DomainObject.build`
