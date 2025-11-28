@@ -78,7 +78,7 @@
     "cz-conventional-changelog": "^3.0.1",
     "declapract": "^0.12.3",
     "declapract-typescript-ehmpathy": "^0.40.0",
-    "declastruct": "^1.1.9",
+    "declastruct": "^1.1.10",
     "declastruct-github": "^1.0.2",
     "depcheck": "1.4.3",
     "eslint": "8.56.0",
