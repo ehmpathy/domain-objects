@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.29.5](https://github.com/ehmpathy/domain-objects/compare/v0.29.4...v0.29.5) (2025-11-28)
+
+
+### Bug Fixes
+
+* **cicd:** unblock declastruct-github provision of repo ([b3f6726](https://github.com/ehmpathy/domain-objects/commit/b3f6726eb37fb5282163c9c30009fdb37af55608))
+
 ## [0.29.4](https://github.com/ehmpathy/domain-objects/compare/v0.29.3...v0.29.4) (2025-11-27)
 
 
