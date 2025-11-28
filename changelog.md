@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.30.0](https://github.com/ehmpathy/domain-objects/compare/v0.29.5...v0.30.0) (2025-11-28)
+
+
+### Features
+
+* **readonly:** support readonly attributes on entities ([#88](https://github.com/ehmpathy/domain-objects/issues/88)) ([45a7882](https://github.com/ehmpathy/domain-objects/commit/45a7882327962a14c3b733f583eb648adbba4f73))
+
 ## [0.29.5](https://github.com/ehmpathy/domain-objects/compare/v0.29.4...v0.29.5) (2025-11-28)
 
 
