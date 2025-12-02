@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { v4 as uuid } from 'uuid';
+import { getUuid as uuid } from 'uuid-fns';
 import * as yup from 'yup';
 import { z } from 'zod';
 

@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { getUuid as uuid } from 'uuid-fns';
 
 import { DomainObject } from '../instantiation/DomainObject';
 import { assertDomainObjectIsSafeToManipulate } from './assertDomainObjectIsSafeToManipulate';

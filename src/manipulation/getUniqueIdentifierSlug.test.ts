@@ -20,7 +20,7 @@ describe('getUniqueIdentifierSlug', () => {
     });
     const slug = getUniqueIdentifierSlug(address);
     expect(slug).toEqual(
-      'Address.Austin.78704.TX.123ElmStreet.e3e858b5d0a134d71970398358e8601acd48a3c7b06f17beadf56319242e180c',
+      'Address.Austin.78704.TX.123ElmStreet.ba7ce39e2e5b536697c187a51757e998',
     );
   });
   it('should look reasonable for an entity', () => {
@@ -39,8 +39,6 @@ describe('getUniqueIdentifierSlug', () => {
       passengers: 21,
     });
     const slug = getUniqueIdentifierSlug(ship);
-    expect(slug).toEqual(
-      'RocketShip.SN5.88b02544d3a4e5eb8e803136027931f0d54cb5d6f77ec0e8906afe61928b8046',
-    );
+    expect(slug).toEqual('RocketShip.SN5.81fef118d2af53b3823d4e287f4afc3a');
   });
 });

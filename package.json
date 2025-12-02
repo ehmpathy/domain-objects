@@ -53,12 +53,10 @@
     "prepare:husky": "npx husky install && chmod ug+x .husky/*"
   },
   "dependencies": {
-    "@types/joi": "^17.2.3",
-    "@types/yup": "^0.29.6",
     "change-case": "^4.1.2",
-    "cross-sha256": "^1.2.0",
     "helpful-errors": "^1.5.3",
-    "type-fns": "^1.20.2"
+    "type-fns": "^1.20.2",
+    "uuid-fns": "^1.1.1"
   },
   "devDependencies": {
     "@babel/core": "7.28.5",
@@ -69,7 +67,8 @@
     "@trivago/prettier-plugin-sort-imports": "4.3.0",
     "@tsconfig/node-lts-strictest": "18.12.1",
     "@types/jest": "29.2.4",
-    "@types/uuid": "9.0.0",
+    "@types/joi": "^17.2.3",
+    "@types/yup": "^0.29.6",
     "@typescript-eslint/eslint-plugin": "7.8.0",
     "@typescript-eslint/parser": "7.8.0",
     "babel-jest": "30.2.0",
@@ -95,7 +94,6 @@
     "ts-jest": "29.4.5",
     "tsx": "^4.20.6",
     "typescript": "5.4.5",
-    "uuid": "^3.4.0",
     "yup": "^0.29.3",
     "zod": "^3.23.8"
   },
