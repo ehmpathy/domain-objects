@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.1](https://github.com/ehmpathy/domain-objects/compare/v0.31.0...v0.31.1) (2025-12-02)
+
+
+### Bug Fixes
+
+* **deps:** drop cross-sha256 hash dep ([#92](https://github.com/ehmpathy/domain-objects/issues/92)) ([24b7526](https://github.com/ehmpathy/domain-objects/commit/24b752683cc20aea8a23bbf81c0bbc398c965f29))
+
 ## [0.31.0](https://github.com/ehmpathy/domain-objects/compare/v0.30.0...v0.31.0) (2025-11-28)
 
 
