@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid';
+import { getUuid as uuid } from 'uuid-fns';
 
 import { DomainEntity } from './DomainEntity';
 import { DomainObject } from './DomainObject';

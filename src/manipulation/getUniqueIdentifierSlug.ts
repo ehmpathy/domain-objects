@@ -1,4 +1,4 @@
-import { sha256 } from 'cross-sha256';
+import { getHash } from 'uuid-fns';
 
 import { type DomainEntity } from '../instantiation/DomainEntity';
 import { type DomainLiteral } from '../instantiation/DomainLiteral';
@@ -16,7 +16,7 @@ import { getUniqueIdentifier } from './getUniqueIdentifier';
  *
  * strategy
  * - define the human readable portion of the slug by concatenating the unique identifier values and omitting non-safe characters (safe = `\w`, `.`, `-`, `_`)
- * - define the identity uniqueness guarantee by using sha256 to guarantee that the total string will no have collisions due to excluding non-safe characters
+ * - define the identity uniqueness guarantee by using a sha1-uuid to guarantee that the total string will no have collisions due to excluding non-safe characters
  */
 export const getUniqueIdentifierSlug = (
   dobj: DomainEntity<any> | DomainLiteral<any>,
@@ -32,9 +32,7 @@ export const getUniqueIdentifierSlug = (
     .slice(0, 128); // limit the characters
 
   // define the uniqueness guarantee part, to ensure that there's no collisions in uniqueness due to removing non-safe characters
-  const uniquePart = new sha256()
-    .update(JSON.stringify(identifier))
-    .digest('hex');
+  const uniquePart = getHash(JSON.stringify(identifier)).replace(/-/g, '');
 
   // return the combination
   return [humanPart, uniquePart].join('.');
