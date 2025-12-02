@@ -1,5 +1,5 @@
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { type RefByUnique } from '../instantiation/RefByUnique';
+import type { RefByUnique } from '../instantiation/RefByUnique';
 import { refByUnique } from './refByUnique';
 
 describe('refByUnique', () => {

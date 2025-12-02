@@ -49,7 +49,10 @@ describe('isOfDomainLiteral', () => {
     const mark = Symbol.for('domain-objects/DomainLiteral');
     class LegacyDomainLiteral {
       public static readonly [mark] = '0.20.0'; // Old version
-      constructor(public street: string, public city: string) {}
+      constructor(
+        public street: string,
+        public city: string,
+      ) {}
     }
 
     const legacy = new LegacyDomainLiteral('123 Main St', 'Portland');

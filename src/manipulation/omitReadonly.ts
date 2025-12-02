@@ -2,7 +2,7 @@ import { UnexpectedCodePathError } from 'helpful-errors';
 import { omit } from 'type-fns';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
-import { type DomainObject } from '../instantiation/DomainObject';
+import type { DomainObject } from '../instantiation/DomainObject';
 import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
 import { getReadonlyKeys } from './getReadonlyKeys';
 
@@ -67,12 +67,15 @@ export const omitReadonly = <T extends DomainObject<Record<string, any>>>(
 
   // object with omit applied recursively on each property
   const objectWithEachDomainObjectKeyRecursivelyOmitted: typeof obj =
-    Object.entries(obj).reduce((summary, [thisKey, thisValue]) => {
-      return {
-        ...summary,
-        [thisKey]: recursivelyOmitReadonlyFromObjectValue(thisValue),
-      };
-    }, {} as typeof obj);
+    Object.entries(obj).reduce(
+      (summary, [thisKey, thisValue]) => {
+        return {
+          ...summary,
+          [thisKey]: recursivelyOmitReadonlyFromObjectValue(thisValue),
+        };
+      },
+      {} as typeof obj,
+    );
 
   // omit all of the readonly keys
   const objWithoutReadonlyValues = omit(

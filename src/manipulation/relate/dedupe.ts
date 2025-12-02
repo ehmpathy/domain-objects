@@ -1,7 +1,7 @@
 import { BadRequestError, UnexpectedCodePathError } from 'helpful-errors';
 
-import { DomainEntity } from '../../instantiation/DomainEntity';
-import { DomainObject } from '../../instantiation/DomainObject';
+import type { DomainEntity } from '../../instantiation/DomainEntity';
+import type { DomainObject } from '../../instantiation/DomainObject';
 import { isOfDomainEntity } from '../../instantiation/inherit/isOfDomainEntity';
 import { isOfDomainObject } from '../../instantiation/inherit/isOfDomainObject';
 import { getUniqueIdentifier } from '../getUniqueIdentifier';

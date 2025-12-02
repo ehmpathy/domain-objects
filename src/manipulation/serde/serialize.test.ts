@@ -38,7 +38,7 @@ describe('serialize', () => {
   describe('arrays', () => {
     it('should be able to serialize arrays', () => {
       const serial = serialize(['821', 721, 'leopard', 7, 'apple', 3]);
-      expect(serial).toEqual(`[\"821"\,721,\"leopard\",7,\"apple\",3]`);
+      expect(serial).toEqual(`["821",721,"leopard",7,"apple",3]`);
     });
     it('should serialize them in a way that can be used to compare the order of items within the array', () => {
       const serialA = serialize([3, '821', 721, 'leopard', 'apple']);
@@ -65,7 +65,7 @@ describe('serialize', () => {
         const serial = serialize(['821', 721, 'leopard', 7, 'apple', 3], {
           orderless: true,
         });
-        expect(serial).toEqual(`[\"821"\,\"apple\",\"leopard\",3,7,721]`); // note that it sorts the values, for determinism, since order does not matter
+        expect(serial).toEqual(`["821","apple","leopard",3,7,721]`); // note that it sorts the values, for determinism, since order does not matter
       });
       it('should serialize them in a way that can be used to compare two arrays deterministically when order does not matter', () => {
         const serialA = serialize([3, '821', 721, 'leopard', 'apple'], {
@@ -169,7 +169,7 @@ describe('serialize', () => {
       const serial = serialize(ship);
       expect(serial).toContain('Spaceship');
       expect(serial).toEqual(
-        `{\"_dobj\":\"Spaceship\",\"fuelQuantity\":9001,\"passengers\":21,\"serialNumber\":\"__UUID__\"}`,
+        `{"_dobj":"Spaceship","fuelQuantity":9001,"passengers":21,"serialNumber":"__UUID__"}`,
       );
     });
     it('should add the domain object name as metadata recursively, for all nested domain objects too', () => {
@@ -258,7 +258,7 @@ describe('serialize', () => {
       const serial = serialize(worm);
       expect(serial).toContain('GlowWorm');
       expect(serial).toEqual(
-        `{\"_dobj\":\"GlowWorm\",\"color\":\"purple\",\"glowing\":true}`,
+        `{"_dobj":"GlowWorm","color":"purple","glowing":true}`,
       );
     });
 

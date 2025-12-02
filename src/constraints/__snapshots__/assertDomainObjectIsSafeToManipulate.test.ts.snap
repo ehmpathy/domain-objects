@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`assertDomainObjectIsSafeToManipulate should throw a helpful error if any of the properties are a nested object not explicitly defined 1`] = `
 "

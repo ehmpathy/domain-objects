@@ -1,5 +1,5 @@
-import { DomainObject } from '../..';
-import { DomainObjectInstantiationOptions } from '../../instantiation/DomainObject';
+import type { DomainObject } from '../..';
+import type { DomainObjectInstantiationOptions } from '../../instantiation/DomainObject';
 
 export class DeserializationMissingDomainObjectClassError extends Error {
   constructor({ className }: { className: string }) {
@@ -94,8 +94,8 @@ const toHydratedObject = (
 
     // lookup the domain object constructor from context
     const DomainObjectConstructor = context.with.find(
-      (constructor) =>
-        (constructor as typeof DomainObject).name === domainObjectClassName,
+      (thisConstructor) =>
+        (thisConstructor as typeof DomainObject).name === domainObjectClassName,
     ) as typeof DomainObject | undefined;
     if (!DomainObjectConstructor)
       throw new DeserializationMissingDomainObjectClassError({

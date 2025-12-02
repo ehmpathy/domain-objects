@@ -1,7 +1,7 @@
 import { UnexpectedCodePathError } from 'helpful-errors';
 
-import { type RefByUnique } from '../instantiation/RefByUnique';
-import { type DomainObjectShape, type Refable } from './Refable';
+import type { RefByUnique } from '../instantiation/RefByUnique';
+import type { DomainObjectShape, Refable } from './Refable';
 
 /**
  * creates a reference to a domain object by its unique key

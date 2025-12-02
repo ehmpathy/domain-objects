@@ -1,4 +1,4 @@
-import { type HasMetadata } from 'type-fns';
+import type { HasMetadata } from 'type-fns';
 
 /**
  * a constructor type that produces instances of type T

@@ -1,4 +1,4 @@
-import { type DomainObjectShape, type Refable } from './Refable';
+import type { DomainObjectShape, Refable } from './Refable';
 
 /**
  * a generic which extracts the unique keys of a domain object

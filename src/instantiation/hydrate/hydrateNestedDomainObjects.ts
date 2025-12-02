@@ -22,7 +22,7 @@ export const hydrateNestedDomainObjects = ({
   domainObjectName,
 }: {
   props: Record<string, any>;
-  nested: Record<string, typeof DomainObject | typeof DomainObject[]>;
+  nested: Record<string, typeof DomainObject | (typeof DomainObject)[]>;
   domainObjectName: string;
 }): Record<string, any> => {
   // create a new object, so as to not mutate original props
@@ -35,7 +35,7 @@ export const hydrateNestedDomainObjects = ({
   Object.keys(nested).forEach((key) => {
     // check that the value of "nested" was defined as a DomainObject or an array of DomainObject choices
     const declaredNestedDomainObjectValue = nested[key]!;
-    const DeclaredNestedDomainObjectClassOptions: typeof DomainObject[] =
+    const DeclaredNestedDomainObjectClassOptions: (typeof DomainObject)[] =
       isArray(declaredNestedDomainObjectValue)
         ? declaredNestedDomainObjectValue
         : [declaredNestedDomainObjectValue];

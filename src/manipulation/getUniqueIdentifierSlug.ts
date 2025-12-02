@@ -1,7 +1,7 @@
 import { getHash } from 'uuid-fns';
 
-import { type DomainEntity } from '../instantiation/DomainEntity';
-import { type DomainLiteral } from '../instantiation/DomainLiteral';
+import type { DomainEntity } from '../instantiation/DomainEntity';
+import type { DomainLiteral } from '../instantiation/DomainLiteral';
 import { getUniqueIdentifier } from './getUniqueIdentifier';
 
 /**
@@ -28,7 +28,7 @@ export const getUniqueIdentifierSlug = (
     .sort((a, b) => (a[0] < b[0] ? -1 : 1)) // sort by key name
     .map((val) => JSON.stringify(val[1]))
     .join('.')}`
-    .replace(/[^\w\-\_\.]/g, '') // strip non-safe characters
+    .replace(/[^\w\-_.]/g, '') // strip non-safe characters
     .slice(0, 128); // limit the characters
 
   // define the uniqueness guarantee part, to ensure that there's no collisions in uniqueness due to removing non-safe characters

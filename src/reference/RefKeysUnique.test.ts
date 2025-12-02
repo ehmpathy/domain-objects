@@ -1,5 +1,5 @@
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { type RefKeysUnique } from './RefKeysUnique';
+import type { RefKeysUnique } from './RefKeysUnique';
 
 describe('RefKeysUnique', () => {
   it('should accurately extract the unique keys of an entity', () => {

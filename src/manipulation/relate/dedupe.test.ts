@@ -68,7 +68,7 @@ describe('dedupe', () => {
       turtleOneWithId, // identity dupe
     ]);
     expect(deduped).toHaveLength(1);
-    expect(deduped[0].id).toEqual(undefined);
+    expect(deduped[0]!.id).toEqual(undefined);
   });
   it('should fail fast with a helpful error if there are multiple versions of the same entity, by default', () => {
     const turtleOneWithDiffName = new SeaTurtle({
@@ -97,7 +97,7 @@ describe('dedupe', () => {
       { onMultipleEntityVersions: 'CHOOSE_FIRST_OCCURRENCE' },
     );
     expect(deduped).toHaveLength(1);
-    expect(deduped[0].name).toEqual('Shelly C.');
+    expect(deduped[0]!.name).toEqual('Shelly C.');
   });
   it('should work on literals', () => {
     const namesUnique = dedupe([

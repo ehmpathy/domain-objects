@@ -2,9 +2,6 @@
 
 /* eslint-disable no-underscore-dangle */
 import { assertDomainObjectIsSafeToManipulate } from '../../constraints/assertDomainObjectIsSafeToManipulate';
-import { DomainEntity } from '../../instantiation/DomainEntity';
-import { DomainLiteral } from '../../instantiation/DomainLiteral';
-import { DomainObject } from '../../instantiation/DomainObject';
 import { isOfDomainEntity } from '../../instantiation/inherit/isOfDomainEntity';
 import { isOfDomainLiteral } from '../../instantiation/inherit/isOfDomainLiteral';
 import { isOfDomainObject } from '../../instantiation/inherit/isOfDomainObject';

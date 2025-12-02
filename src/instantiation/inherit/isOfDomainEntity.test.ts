@@ -49,7 +49,10 @@ describe('isOfDomainEntity', () => {
     const mark = Symbol.for('domain-objects/DomainEntity');
     class LegacyDomainEntity {
       public static readonly [mark] = '0.20.0'; // Old version
-      constructor(public uuid: string, public name: string) {}
+      constructor(
+        public uuid: string,
+        public name: string,
+      ) {}
     }
 
     const legacy = new LegacyDomainEntity('123', 'Alice');

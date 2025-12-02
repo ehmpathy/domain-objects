@@ -2,7 +2,7 @@ import { UnexpectedCodePathError } from 'helpful-errors';
 import { pick } from 'type-fns';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
-import { type DomainEntity } from '../instantiation/DomainEntity';
+import type { DomainEntity } from '../instantiation/DomainEntity';
 import { isOfDomainEntity } from '../instantiation/inherit/isOfDomainEntity';
 import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
 import { DomainEntityUpdatablePropertiesMustBeDefinedError } from './DomainEntityUpdatablePropertiesMustBeDefinedError';

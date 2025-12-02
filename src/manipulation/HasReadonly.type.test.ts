@@ -1,6 +1,6 @@
 import { DomainEntity } from '../instantiation/DomainEntity';
 import { DomainLiteral } from '../instantiation/DomainLiteral';
-import { type HasReadonly } from './HasReadonly.type';
+import type { HasReadonly } from './HasReadonly.type';
 
 describe('HasReadonly', () => {
   describe('DomainEntity', () => {

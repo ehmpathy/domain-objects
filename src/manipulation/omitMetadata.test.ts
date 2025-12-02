@@ -155,11 +155,11 @@ describe('omitMetadata', () => {
 
       // check none of them are defined after omitting
       const boosterWithoutMetadataValues = omitMetadata([booster]);
-      expect(boosterWithoutMetadataValues[0].id).toBeUndefined();
-      expect(boosterWithoutMetadataValues[0].uuid).toBeUndefined();
-      expect(boosterWithoutMetadataValues[0].createdAt).toBeUndefined();
-      expect(boosterWithoutMetadataValues[0].updatedAt).toBeUndefined();
-      expect(boosterWithoutMetadataValues[0].effectiveAt).toBeUndefined();
+      expect(boosterWithoutMetadataValues[0]!.id).toBeUndefined();
+      expect(boosterWithoutMetadataValues[0]!.uuid).toBeUndefined();
+      expect(boosterWithoutMetadataValues[0]!.createdAt).toBeUndefined();
+      expect(boosterWithoutMetadataValues[0]!.updatedAt).toBeUndefined();
+      expect(boosterWithoutMetadataValues[0]!.effectiveAt).toBeUndefined();
 
       // check that resulting object is still an instance of the literal
       expect(boosterWithoutMetadataValues[0]).toBeInstanceOf(Booster);

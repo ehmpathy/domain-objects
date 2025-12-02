@@ -4,12 +4,12 @@ import {
   withAssure,
 } from 'type-fns';
 
-import { type DomainEntity } from '../instantiation/DomainEntity';
-import { type DomainObject } from '../instantiation/DomainObject';
+import type { DomainEntity } from '../instantiation/DomainEntity';
+import type { DomainObject } from '../instantiation/DomainObject';
 import { isOfDomainEntity } from '../instantiation/inherit/isOfDomainEntity';
 import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
 import { DomainObjectMetadataMustBeDefinedError } from './DomainObjectMetadataMustBeDefinedError';
-import { type ConstructorOf, type HasReadonly } from './HasReadonly.type';
+import type { ConstructorOf, HasReadonly } from './HasReadonly.type';
 
 /**
  * runtime type guard that asserts that all readonly keys (metadata + explicit readonly)
@@ -64,7 +64,7 @@ export const hasReadonly = <TDobj extends ConstructorOf<DomainObject<any>>>({
 
     // get explicit readonly keys (only applicable to DomainEntity)
     const readonlyKeys = isOfDomainEntity(obj)
-      ? (dobj as unknown as typeof DomainEntity).readonly ?? []
+      ? ((dobj as unknown as typeof DomainEntity).readonly ?? [])
       : [];
 
     // combine metadata and readonly keys
