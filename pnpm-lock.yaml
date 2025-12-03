@@ -24,8 +24,8 @@ importers:
         specifier: 1.21.0
         version: 1.21.0
       uuid-fns:
-        specifier: ^1.1.1
-        version: 1.1.1
+        specifier: ^1.1.3
+        version: 1.1.3
     devDependencies:
       '@biomejs/biome':
         specifier: 2.3.8
@@ -70,8 +70,8 @@ importers:
         specifier: ^0.12.3
         version: 0.12.3(@types/node@22.15.21)(typescript@5.4.5)
       declapract-typescript-ehmpathy:
-        specifier: ^0.43.4
-        version: 0.43.4(declapract@0.12.3(@types/node@22.15.21)(typescript@5.4.5))
+        specifier: ^0.43.6
+        version: 0.43.6(declapract@0.12.3(@types/node@22.15.21)(typescript@5.4.5))
       declastruct:
         specifier: 1.4.0
         version: 1.4.0(domain-objects@0.31.0)
@@ -2247,8 +2247,8 @@ packages:
       supports-color:
         optional: true
 
-  declapract-typescript-ehmpathy@0.43.4:
-    resolution: {integrity: sha512-xSW7+IXnDzFy2dir0vvxJKs6K6Ddz+9b92WgijEYroVbzc7gNlh+n3uEqyUfWEP6bpEuQCXA8FVDd8tGcEKCRA==}
+  declapract-typescript-ehmpathy@0.43.6:
+    resolution: {integrity: sha512-ySNJMvizDhKodSkuklUolL7ikGHTfncaG9roMmcmXUnSg4S5dsmajOK14jIT80Mr2mFj6FMg9MvgPN77fJ2T7w==}
     peerDependencies:
       declapract: '>=0.12.1'
 
@@ -3907,8 +3907,8 @@ packages:
     resolution: {integrity: sha512-O2XFYS71d/VBULi+rkOV0DKel7+dzGGIwjTk5WZaMZhBQvO2cfvpKWIsK+lxqKYfpN6MBckujrSZISfEpfqYKA==}
     engines: {node: '>=8.0.0'}
 
-  uuid-fns@1.1.1:
-    resolution: {integrity: sha512-deXvw8Cvv53d9xWYc0jVFMfD/Tx0mKDAHFwTUzYfIEX58F5kF5aMZy30ZzQKf5cIYSDE+UH+urcyFJLZ0e+6ug==}
+  uuid-fns@1.1.3:
+    resolution: {integrity: sha512-CkXhrM23CntaT1TXiEm3rNWlsGgACEJSEew8w+rAV7Y4Z+5nTaacAxIoElrEiz7Pp9BKiZPtUtsK+TyC7pFyGw==}
     engines: {node: '>=8.0.0'}
 
   uuid@10.0.0:
@@ -5560,7 +5560,7 @@ snapshots:
 
   '@oclif/config@1.18.2':
     dependencies:
-      '@oclif/errors': 1.3.5
+      '@oclif/errors': 1.3.6
       '@oclif/parser': 3.8.17
       debug: 4.4.3(supports-color@8.1.1)
       globby: 11.1.0
@@ -6897,7 +6897,7 @@ snapshots:
     optionalDependencies:
       supports-color: 8.1.1
 
-  declapract-typescript-ehmpathy@0.43.4(declapract@0.12.3(@types/node@22.15.21)(typescript@5.4.5)):
+  declapract-typescript-ehmpathy@0.43.6(declapract@0.12.3(@types/node@22.15.21)(typescript@5.4.5)):
     dependencies:
       chalk: 4.1.2
       declapract: 0.12.3(@types/node@22.15.21)(typescript@5.4.5)
@@ -7038,7 +7038,7 @@ snapshots:
 
   domain-objects@0.22.1:
     dependencies:
-      '@ehmpathy/error-fns': 1.3.2
+      '@ehmpathy/error-fns': 1.3.7
       '@types/joi': 17.2.3
       '@types/yup': 0.29.14
       change-case: 4.1.2
@@ -8845,10 +8845,8 @@ snapshots:
       type-fns: 1.19.0
       uuid: 11.1.0
 
-  uuid-fns@1.1.1:
+  uuid-fns@1.1.3:
     dependencies:
-      domain-objects: 0.31.0
-      helpful-errors: 1.5.3
       type-fns: 1.21.0
       uuid: 11.1.0
 

@@ -14,7 +14,7 @@ jobs:
       node-modules-cache-key: ${{ steps.cache.outputs.cache-primary-key }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: node-modules deps hash
         id: deps-hash
@@ -33,7 +33,7 @@ jobs:
 
       - name: node-modules cache miss setup node
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
 

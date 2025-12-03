@@ -1,3 +1,4 @@
+import { execSync } from 'child_process';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import util from 'util';
@@ -36,9 +37,10 @@ if (
  *   - prevent time wasted debugging tests which are failing due to hard-to-read missed credential errors
  */
 const declapractUsePath = join(process.cwd(), 'declapract.use.yml');
-const requiresAwsAuth =
-  existsSync(declapractUsePath) &&
-  readFileSync(declapractUsePath, 'utf8').includes('awsAccountId');
+const declapractUseContent = existsSync(declapractUsePath)
+  ? readFileSync(declapractUsePath, 'utf8')
+  : '';
+const requiresAwsAuth = declapractUseContent.includes('awsAccountId');
 if (
   requiresAwsAuth &&
   !(process.env.AWS_PROFILE || process.env.AWS_ACCESS_KEY_ID)
@@ -46,3 +48,37 @@ if (
   throw new Error(
     'no aws credentials present. please authenticate with aws to run integration tests',
   );
+
+/**
+ * .what = verify that the testdb has been provisioned if a databaseUserName is declared
+ * .why =
+ *   - prevent time wasted waiting on tests to fail due to missing testdb
+ *   - prevent confusing "password authentication failed" errors when testdb isn't running or was provisioned for a different repo
+ */
+const requiresTestDb = declapractUseContent.includes('databaseUserName');
+if (requiresTestDb) {
+  const testConfigPath = join(process.cwd(), 'config', 'test.json');
+  if (!existsSync(testConfigPath))
+    throw new Error(
+      'config/test.json not found but serviceUser is declared in declapract.use.yml',
+    );
+  const testConfig = JSON.parse(readFileSync(testConfigPath, 'utf8'));
+  if (
+    !testConfig.database?.tunnel?.local ||
+    !testConfig.database?.role?.crud ||
+    !testConfig.database?.target?.database
+  )
+    throw new Error(
+      'config/test.json database.tunnel.local, database?.role?.crud, or database?.target?.database not found but expected',
+    );
+  try {
+    execSync(
+      `PGPASSWORD="${testConfig.database.role.crud.password}" psql -h ${testConfig.database.tunnel.local.host} -p ${testConfig.database.tunnel.local.port} -U ${testConfig.database.role.crud.username} -d ${testConfig.database.target.database} -c "SELECT 1" > /dev/null 2>&1`,
+      { timeout: 3000 },
+    );
+  } catch {
+    throw new Error(
+      `did you forget to \`npm run start:testdb\`? cant connect to database`,
+    );
+  }
+}
