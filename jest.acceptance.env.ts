@@ -21,7 +21,7 @@ if (!existsSync(join(process.cwd(), 'package.json')))
  *   - prevent time wasted waiting on tests to fail due to lack of credentials
  *   - prevent time wasted debugging tests which are failing due to hard-to-read missed credential errors
  */
-const declapractUsePath = join(process.cwd(), 'declapract.use.ts');
+const declapractUsePath = join(process.cwd(), 'declapract.use.yml');
 const requiresAwsAuth =
   existsSync(declapractUsePath) &&
   readFileSync(declapractUsePath, 'utf8').includes('awsAccountId');

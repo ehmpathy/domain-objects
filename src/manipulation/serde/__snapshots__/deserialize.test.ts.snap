@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`deserialize domain objects should throw a helpful error if attempted to deserialize a domain object without its constructor being provided in the context 1`] = `
 "

@@ -2,9 +2,9 @@ import { BadRequestError, UnexpectedCodePathError } from 'helpful-errors';
 import { pick } from 'type-fns';
 
 import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
-import { type DomainEntity } from '../instantiation/DomainEntity';
-import { type DomainEvent } from '../instantiation/DomainEvent';
-import { type DomainLiteral } from '../instantiation/DomainLiteral';
+import type { DomainEntity } from '../instantiation/DomainEntity';
+import type { DomainEvent } from '../instantiation/DomainEvent';
+import type { DomainLiteral } from '../instantiation/DomainLiteral';
 import { isOfDomainEntity } from '../instantiation/inherit/isOfDomainEntity';
 import { isOfDomainEvent } from '../instantiation/inherit/isOfDomainEvent';
 import { isOfDomainLiteral } from '../instantiation/inherit/isOfDomainLiteral';

@@ -1,3 +1,6 @@
+/**
+ * @jest-config-loader esbuild-register
+ */
 import type { Config } from 'jest';
 
 // ensure tests run in utc, like they will on cicd and on server; https://stackoverflow.com/a/56277249/15593329
@@ -12,15 +15,13 @@ const config: Config = {
   testEnvironment: 'node',
   moduleFileExtensions: ['js', 'ts'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest', // https://kulshekhar.github.io/ts-jest/docs/getting-started/presets
-    '^.+\\.(js|jsx|mjs)$': 'babel-jest', // transform esm modules with babel
+    '^.+\\.(t|j)sx?$': '@swc/jest',
   },
   transformIgnorePatterns: [
     // here's an example of how to ignore esm module transformation, when needed
     // 'node_modules/(?!(@octokit|universal-user-agent|before-after-hook)/)',
   ],
-  testMatch: ['**/*.acceptance.test.ts'],
-  setupFiles: ['core-js'],
+  testMatch: ['**/*.acceptance.test.ts', '!**/.yalc/**'],
   setupFilesAfterEnv: ['./jest.acceptance.env.ts'],
 
   // use 50% of threads to leave headroom for other processes

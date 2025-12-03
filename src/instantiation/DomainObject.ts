@@ -1,5 +1,5 @@
-import { withImmute, type WithImmute } from '../manipulation/immute/withImmute';
-import { type DomainObjectShape } from '../reference/Refable';
+import { type WithImmute, withImmute } from '../manipulation/immute/withImmute';
+import type { DomainObjectShape } from '../reference/Refable';
 import { hydrateNestedDomainObjects } from './hydrate/hydrateNestedDomainObjects';
 import { type SchemaOptions, validate } from './validate/validate';
 import { VERSION } from './version';
@@ -160,8 +160,10 @@ export class DomainObject<T extends DomainObjectShape> {
    *   - you can override the .build to add your own domain's getters, too
    */
   static build<TInstance extends DomainObjectShape>(
-    this: new (props: TInstance) => TInstance,
-    props: ConstructorParameters<typeof this>[0],
+    this: new (
+      props: TInstance,
+    ) => TInstance,
+    props: TInstance,
   ): WithImmute<TInstance> {
     const instance = new this(props);
     return withImmute(instance);

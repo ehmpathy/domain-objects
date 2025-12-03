@@ -1,4 +1,4 @@
-import { type DomainObject } from '../instantiation/DomainObject';
+import type { DomainObject } from '../instantiation/DomainObject';
 import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
 
 export class DomainObjectNotSafeToManipulateError extends Error {

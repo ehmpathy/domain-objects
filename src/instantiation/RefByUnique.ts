@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-redeclare */
-import { type RefKeysUnique } from '../reference/RefKeysUnique';
-import { type DomainObjectShape, type Refable } from '../reference/Refable';
+
+import type { DomainObjectShape, Refable } from '../reference/Refable';
+import type { RefKeysUnique } from '../reference/RefKeysUnique';
 import { refByUnique } from '../reference/refByUnique';
 import { DomainLiteral } from './DomainLiteral';
 import { isOfDomainEntity } from './inherit/isOfDomainEntity';

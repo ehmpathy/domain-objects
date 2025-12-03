@@ -6,10 +6,10 @@ import {
   DeclaredGithubRepoConfig,
   getDeclastructGithubProvider,
 } from 'declastruct-github';
+import { DomainEntity, RefByUnique } from 'domain-objects';
 import { UnexpectedCodePathError } from 'helpful-errors';
 
 import pkg from '../../package.json';
-import { DomainEntity, RefByUnique } from '../../src';
 
 export const getProviders = async (): Promise<DeclastructProvider[]> => [
   getDeclastructGithubProvider(
@@ -97,7 +97,7 @@ export const getResources = async (): Promise<DomainEntity<any>[]> => {
     requiredStatusChecks: {
       strict: true, // branch must be up to date. otherwise, we dont know if it will really pass once it is merged
       contexts: [
-        'suite / install / npm',
+        'suite / install / pnpm',
         'suite / test-commits',
         'suite / test-types',
         'suite / test-format',

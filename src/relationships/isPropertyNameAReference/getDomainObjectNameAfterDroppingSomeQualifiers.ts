@@ -25,8 +25,9 @@ export const getDomainObjectNameAfterDroppingSomeQualifiers = ({
   if (qualifiersToDrop === 0) return domainObjectName; // nothing to do in this case
 
   // drop the qualifiers
-  const partsOfName = noCase(domainObjectName) // no case splits up string w/ spaces
-    .split(' ');
+  const partsOfName =
+    noCase(domainObjectName) // no case splits up string w/ spaces
+      .split(' ');
   const nameWithoutRequestedQualifiers = pascalCase(
     partsOfName.slice(qualifiersToDrop).join(' '),
   );

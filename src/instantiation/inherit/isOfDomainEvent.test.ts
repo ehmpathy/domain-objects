@@ -57,7 +57,10 @@ describe('isOfDomainEvent', () => {
     const mark = Symbol.for('domain-objects/DomainEvent');
     class LegacyDomainEvent {
       public static readonly [mark] = '0.20.0'; // Old version
-      constructor(public userUuid: string, public occurredAt: Date) {}
+      constructor(
+        public userUuid: string,
+        public occurredAt: Date,
+      ) {}
     }
 
     const legacy = new LegacyDomainEvent('123', new Date());

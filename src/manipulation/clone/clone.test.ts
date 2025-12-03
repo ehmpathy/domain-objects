@@ -194,10 +194,10 @@ describe('clone', () => {
 
       then('mutation on array should not affect original', () => {
         result.crew.push('Charlie');
-        result.cargo[0].qty = 999;
+        result.cargo[0]!.qty = 999;
 
         expect(original.crew).toEqual(['Alice', 'Bob']);
-        expect(original.cargo[0].qty).toBe(10);
+        expect(original.cargo[0]!.qty).toBe(10);
       });
     });
 

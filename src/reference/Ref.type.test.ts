@@ -1,7 +1,7 @@
 import { given, then } from 'test-fns';
 
 import { DomainEntity } from '../instantiation/DomainEntity';
-import { type Ref } from './Ref.type';
+import type { Ref } from './Ref.type';
 
 describe('DomainReference', () => {
   given('a domain entity', () => {

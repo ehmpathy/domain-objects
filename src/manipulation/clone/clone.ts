@@ -1,12 +1,12 @@
-import { DomainObject } from '../../instantiation/DomainObject';
+import type { DomainObject } from '../../instantiation/DomainObject';
 
 // todo: expose via type-fns
 type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends Array<infer U>
     ? Array<DeepPartial<U>>
     : T[K] extends object
-    ? DeepPartial<T[K]>
-    : T[K];
+      ? DeepPartial<T[K]>
+      : T[K];
 };
 
 /**

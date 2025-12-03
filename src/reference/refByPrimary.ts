@@ -1,7 +1,7 @@
 import { BadRequestError, UnexpectedCodePathError } from 'helpful-errors';
 
-import { type RefByPrimary } from '../instantiation/RefByPrimary';
-import { type DomainObjectShape, type Refable } from './Refable';
+import type { RefByPrimary } from '../instantiation/RefByPrimary';
+import type { DomainObjectShape, Refable } from './Refable';
 
 /**
  * creates a reference to a domain object by its primary key
