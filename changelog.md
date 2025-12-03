@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.3](https://github.com/ehmpathy/domain-objects/compare/v0.31.2...v0.31.3) (2025-12-03)
+
+
+### Bug Fixes
+
+* **deps:** bump uuid-fns depver ([#96](https://github.com/ehmpathy/domain-objects/issues/96)) ([f569ee2](https://github.com/ehmpathy/domain-objects/commit/f569ee2685323e4df0187caa963c8148e532757c))
+
 ## [0.31.2](https://github.com/ehmpathy/domain-objects/compare/v0.31.1...v0.31.2) (2025-12-03)
 
 
