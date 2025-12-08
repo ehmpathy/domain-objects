@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.5](https://github.com/ehmpathy/domain-objects/compare/v0.31.4...v0.31.5) (2025-12-08)
+
+
+### Bug Fixes
+
+* **practs:** bump to latest best ([#100](https://github.com/ehmpathy/domain-objects/issues/100)) ([ca3dd88](https://github.com/ehmpathy/domain-objects/commit/ca3dd88e3cea42c436aea8e1915ab6b1af3b0d87))
+
 ## [0.31.4](https://github.com/ehmpathy/domain-objects/compare/v0.31.3...v0.31.4) (2025-12-08)
 
 
