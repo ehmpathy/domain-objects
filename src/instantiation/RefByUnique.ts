@@ -34,6 +34,8 @@ export type RefByUnique<
 
 // extend the domain literal into a custom class, so that we can rename it into RefByUnique, without mutating the global DomainLiteral class
 class RefByUniqueBase<T extends DomainObjectShape> extends DomainLiteral<T> {
+  public static metadata = [] as const;
+
   constructor(props: T) {
     // if props itself is a domain entity or domain event, extract its reference
     if (isOfDomainEntity(props) || isOfDomainEvent(props)) {

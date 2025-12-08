@@ -1,5 +1,6 @@
 import type { HasMetadata, OmitMetadata } from 'type-fns';
 
+import { omitReadonly } from '../manipulation/omitReadonly';
 import { DomainEntity } from './DomainEntity';
 import { DomainLiteral } from './DomainLiteral';
 import { RefByPrimary } from './RefByPrimary';
@@ -272,6 +273,20 @@ describe('DomainRefByPrimary', () => {
         expect(home.turtle).not.toHaveProperty('name');
         expect(home.turtle).not.toHaveProperty('seawaterSecurityNumber');
       });
+    });
+
+    it('should not omit anything when omitReadonly is called, since refs have no metadata', () => {
+      const ref = new RefByPrimary<typeof SeaTurtle>({
+        uuid: '123e4567-e89b-12d3-a456-426614174000',
+      });
+
+      const refWithoutReadonly = omitReadonly(ref);
+
+      // all properties should be preserved since RefByPrimary has metadata = []
+      expect(refWithoutReadonly.uuid).toBe(
+        '123e4567-e89b-12d3-a456-426614174000',
+      );
+      expect(refWithoutReadonly).toBeInstanceOf(RefByPrimary);
     });
   });
 });

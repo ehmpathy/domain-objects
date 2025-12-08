@@ -1,3 +1,4 @@
+import { omitReadonly } from '../manipulation/omitReadonly';
 import { isRefByPrimary } from '../reference/isRefByPrimary';
 import { isRefByUnique } from '../reference/isRefByUnique';
 import { DomainEntity } from './DomainEntity';
@@ -267,6 +268,20 @@ describe('Ref', () => {
         expect(ref.turtle).not.toHaveProperty('name');
         expect(ref.turtle).not.toHaveProperty('uuid');
       });
+    });
+
+    it('should not omit anything when omitReadonly is called, since refs have no metadata', () => {
+      const ref = new Ref<typeof SeaTurtle>({
+        seawaterSecurityNumber: '821',
+      });
+
+      const refWithoutReadonly = omitReadonly(ref);
+
+      // all properties should be preserved since Ref has metadata = []
+      if (!isRefByUnique({ of: SeaTurtle })(refWithoutReadonly))
+        throw new Error('expected ref to be by unique');
+      expect(refWithoutReadonly.seawaterSecurityNumber).toBe('821');
+      expect(refWithoutReadonly).toBeInstanceOf(Ref);
     });
   });
 });
