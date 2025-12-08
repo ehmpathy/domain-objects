@@ -1,5 +1,6 @@
 import { DomainEntity } from './DomainEntity';
 import { DomainLiteral } from './DomainLiteral';
+import { Ref } from './Ref';
 import { RefByUnique } from './RefByUnique';
 
 interface SeaTurtle {
@@ -204,7 +205,7 @@ describe('DomainRefByUnique', () => {
         });
 
         // prove it does not have any non unique key attributes anymore => it was narrowed
-        expect(ref.turtle).toBeInstanceOf(RefByUnique);
+        expect(ref.turtle).toBeInstanceOf(Ref);
         expect(ref.turtle).toHaveProperty('seawaterSecurityNumber', '821');
         expect(ref.turtle).not.toHaveProperty('name');
         expect(ref.turtle).not.toHaveProperty('uuid');
