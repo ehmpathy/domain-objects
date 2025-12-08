@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.4](https://github.com/ehmpathy/domain-objects/compare/v0.31.3...v0.31.4) (2025-12-08)
+
+
+### Bug Fixes
+
+* **refs:** expose Ref domain literal ([#98](https://github.com/ehmpathy/domain-objects/issues/98)) ([2d5dee2](https://github.com/ehmpathy/domain-objects/commit/2d5dee2b76473549d2d02bcdea26b472f15521a7))
+
 ## [0.31.3](https://github.com/ehmpathy/domain-objects/compare/v0.31.2...v0.31.3) (2025-12-03)
 
 
