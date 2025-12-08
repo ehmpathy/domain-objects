@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.7](https://github.com/ehmpathy/domain-objects/compare/v0.31.6...v0.31.7) (2025-12-08)
+
+
+### Bug Fixes
+
+* **refs:** refs dont have metadata ([#103](https://github.com/ehmpathy/domain-objects/issues/103)) ([ab2dcc2](https://github.com/ehmpathy/domain-objects/commit/ab2dcc2eb6b0de6338bacff2975e56fe5d717fe2))
+
 ## [0.31.6](https://github.com/ehmpathy/domain-objects/compare/v0.31.5...v0.31.6) (2025-12-08)
 
 
