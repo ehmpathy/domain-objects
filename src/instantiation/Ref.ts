@@ -6,7 +6,6 @@ import { refByUnique } from '../reference/refByUnique';
 import { DomainLiteral } from './DomainLiteral';
 import { isOfDomainEntity } from './inherit/isOfDomainEntity';
 import { isOfDomainEvent } from './inherit/isOfDomainEvent';
-import { RefByUnique } from './RefByUnique';
 
 /**
  * In Domain Driven Design, a Reference is a special type of Domain Literal that represents a reference to another Domain Object.
@@ -52,7 +51,7 @@ class RefBase<T extends DomainObjectShape> extends DomainLiteral<T> {
         typeof value === 'object' &&
         (isOfDomainEntity(value) || isOfDomainEvent(value))
       ) {
-        transformedProps[key] = RefByUnique.as(value);
+        transformedProps[key] = Ref.as(value);
       } else {
         transformedProps[key] = value;
       }
