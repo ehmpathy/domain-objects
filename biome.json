@@ -12,7 +12,8 @@
       "!**/coverage",
       "!**/node_modules",
       "!**/.artifact",
-      "!**/.generated/**"
+      "!**/.generated",
+      "!**/.test*"
     ]
   },
   "formatter": {
@@ -27,7 +28,13 @@
       "trailingCommas": "all"
     }
   },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {
@@ -36,13 +43,19 @@
         "noExcessiveCognitiveComplexity": "warn"
       },
       "correctness": {
-        "noUnusedImports": { "level": "error", "fix": "safe" },
+        "noUnusedImports": {
+          "level": "error",
+          "fix": "safe"
+        },
         "noUnusedVariables": "warn",
         "useExhaustiveDependencies": "off"
       },
       "style": {
         "noDefaultExport": "error",
-        "noNonNullAssertion": { "level": "warn", "fix": "none" },
+        "noNonNullAssertion": {
+          "level": "warn",
+          "fix": "none"
+        },
         "useImportType": "error",
         "noParameterAssign": "off"
       },
