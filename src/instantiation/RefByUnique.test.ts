@@ -1,3 +1,4 @@
+import { omitReadonly } from '../manipulation/omitReadonly';
 import { DomainEntity } from './DomainEntity';
 import { DomainLiteral } from './DomainLiteral';
 import { Ref } from './Ref';
@@ -228,6 +229,18 @@ describe('DomainRefByUnique', () => {
           '823',
         );
       });
+    });
+
+    it('should not omit anything when omitReadonly is called, since refs have no metadata', () => {
+      const ref = new RefByUnique<typeof SeaTurtle>({
+        seawaterSecurityNumber: '821',
+      });
+
+      const refWithoutReadonly = omitReadonly(ref);
+
+      // all properties should be preserved since RefByUnique has metadata = []
+      expect(refWithoutReadonly.seawaterSecurityNumber).toBe('821');
+      expect(refWithoutReadonly).toBeInstanceOf(RefByUnique);
     });
   });
 });
