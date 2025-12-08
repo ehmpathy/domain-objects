@@ -1,2 +1,6 @@
 # exclude package-lock from git diff; https://stackoverflow.com/a/72834452/3068233
 package-lock.json -diff
+
+# exclude package locks from git diff; https://stackoverflow.com/a/72834452/3068233
+pnpm-lock.json -diff
+package-lock.json -diff

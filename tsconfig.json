@@ -11,7 +11,9 @@
     "sourceMap": true,
     "outDir": "dist",
     "target": "es2020",
-    "incremental": true
+    "incremental": true,
+    "module": "commonjs",
+    "moduleResolution": "node"
   },
   "extends": [
     "@tsconfig/strictest/tsconfig.json",

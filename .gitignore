@@ -1,3 +1,4 @@
+*.local.json
 *.log
 *.tsbuildinfo
 .artifact
