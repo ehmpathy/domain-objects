@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.6](https://github.com/ehmpathy/domain-objects/compare/v0.31.5...v0.31.6) (2025-12-08)
+
+
+### Bug Fixes
+
+* **refs:** nested dobjs should be instantiated as refs ([#102](https://github.com/ehmpathy/domain-objects/issues/102)) ([93021de](https://github.com/ehmpathy/domain-objects/commit/93021de948b377d6457e365e21346fb15fa70247))
+
 ## [0.31.5](https://github.com/ehmpathy/domain-objects/compare/v0.31.4...v0.31.5) (2025-12-08)
 
 
