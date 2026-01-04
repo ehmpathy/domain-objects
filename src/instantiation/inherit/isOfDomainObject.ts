@@ -1,4 +1,7 @@
-import { DomainObject, MARK_AS_DOMAIN_OBJECT } from '../DomainObject';
+import {
+  DomainObject,
+  MARK_AS_DOMAIN_OBJECT,
+} from '@src/instantiation/DomainObject';
 
 /**
  * .what = checks if an object is an instance of DomainObject

@@ -1,7 +1,8 @@
 import { UnexpectedCodePathError } from 'helpful-errors';
 import { isPresent } from 'type-fns';
 
-import type { RefByPrimary } from '../instantiation/RefByPrimary';
+import type { RefByPrimary } from '@src/instantiation/RefByPrimary';
+
 import type { Ref } from './Ref.type';
 import type { DomainObjectShape, Refable } from './Refable';
 

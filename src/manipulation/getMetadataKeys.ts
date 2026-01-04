@@ -1,8 +1,9 @@
-import type { DomainEntity } from '../instantiation/DomainEntity';
-import type { DomainObject } from '../instantiation/DomainObject';
-import { isOfDomainEntity } from '../instantiation/inherit/isOfDomainEntity';
-import { isOfDomainEvent } from '../instantiation/inherit/isOfDomainEvent';
-import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
+import type { DomainEntity } from '@src/instantiation/DomainEntity';
+import type { DomainObject } from '@src/instantiation/DomainObject';
+import { isOfDomainEntity } from '@src/instantiation/inherit/isOfDomainEntity';
+import { isOfDomainEvent } from '@src/instantiation/inherit/isOfDomainEvent';
+import { isOfDomainObject } from '@src/instantiation/inherit/isOfDomainObject';
+
 import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 
 const DEFAULT_METADATA_KEYS = [

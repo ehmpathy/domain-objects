@@ -1,4 +1,7 @@
-import { DomainLiteral, MARK_AS_DOMAIN_LITERAL } from '../DomainLiteral';
+import {
+  DomainLiteral,
+  MARK_AS_DOMAIN_LITERAL,
+} from '@src/instantiation/DomainLiteral';
 
 /**
  * .what = checks if an object is an instance of DomainLiteral

@@ -1,5 +1,6 @@
-import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainLiteral } from '../instantiation/DomainLiteral';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+import { DomainLiteral } from '@src/instantiation/DomainLiteral';
+
 import type { HasReadonly } from './HasReadonly.type';
 
 describe('HasReadonly', () => {

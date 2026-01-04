@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-redeclare */
 import { BadRequestError } from 'helpful-errors';
-import type { DomainObjectShape, Refable } from '../reference/Refable';
-import type { RefKeysPrimary } from '../reference/RefKeysPrimary';
-import { refByPrimary } from '../reference/refByPrimary';
+
+import type { DomainObjectShape, Refable } from '@src/reference/Refable';
+import type { RefKeysPrimary } from '@src/reference/RefKeysPrimary';
+import { refByPrimary } from '@src/reference/refByPrimary';
+
 import { DomainLiteral } from './DomainLiteral';
 import { isOfDomainEntity } from './inherit/isOfDomainEntity';
 import { isOfDomainEvent } from './inherit/isOfDomainEvent';

@@ -14,3 +14,10 @@ ignores:
   - esbuild-register
   - "@swc/core"
   - "@swc/jest"
+  - "@src/*"
+  - "@src/.*"
+  - rhachet-roles-bhrain
+  - rhachet-roles-bhuild
+  - rhachet-roles-ehmpathy
+  - tsc-alias
+  - yalc

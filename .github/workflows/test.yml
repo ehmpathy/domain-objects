@@ -4,7 +4,7 @@ on:
   workflow_call:
   push:
     branches-ignore:
-      - 'main' # exclude main branch, since deploy workflow triggers on main, and calls the test workflow inside of it already
+      - main # exclude main branch, since deploy workflow triggers on main, and calls the test workflow inside of it already
     tags-ignore:
       - v* # exclude tags, since deploy workflow triggers on tags, and calls the test workflow inside of it already
 
@@ -15,3 +15,6 @@ concurrency:
 jobs:
   suite:
     uses: ./.github/workflows/.test.yml
+    with:
+      creds-aws-region: us-east-1
+      creds-aws-role-arn: ${{ vars.CREDS_CICD_AWS_DEV_OIDC_ROLE_ARN }} # use aws auth via oidc, if this repo supplies it

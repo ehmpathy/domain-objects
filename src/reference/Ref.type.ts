@@ -1,5 +1,6 @@
-import type { RefByPrimary } from '../instantiation/RefByPrimary';
-import type { RefByUnique } from '../instantiation/RefByUnique';
+import type { RefByPrimary } from '@src/instantiation/RefByPrimary';
+import type { RefByUnique } from '@src/instantiation/RefByUnique';
+
 import type { DomainObjectShape, Refable } from './Refable';
 
 /**

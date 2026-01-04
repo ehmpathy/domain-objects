@@ -1,5 +1,5 @@
-import type { DomainEntity } from '../instantiation/DomainEntity';
-import type { DomainEvent } from '../instantiation/DomainEvent';
+import type { DomainEntity } from '@src/instantiation/DomainEntity';
+import type { DomainEvent } from '@src/instantiation/DomainEvent';
 
 export type DomainObjectShape = Record<string, any>;
 

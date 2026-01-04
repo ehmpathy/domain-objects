@@ -1,7 +1,8 @@
 import Joi from 'joi';
 
-import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainLiteral } from '../instantiation/DomainLiteral';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+import { DomainLiteral } from '@src/instantiation/DomainLiteral';
+
 import { DomainEntityUniqueKeysMustBeDefinedError } from './DomainEntityUniqueKeysMustBeDefinedError';
 import { omitMetadata } from './omitMetadata';
 

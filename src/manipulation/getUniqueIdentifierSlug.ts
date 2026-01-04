@@ -1,7 +1,8 @@
 import { getHash } from 'uuid-fns';
 
-import type { DomainEntity } from '../instantiation/DomainEntity';
-import type { DomainLiteral } from '../instantiation/DomainLiteral';
+import type { DomainEntity } from '@src/instantiation/DomainEntity';
+import type { DomainLiteral } from '@src/instantiation/DomainLiteral';
+
 import { getUniqueIdentifier } from './getUniqueIdentifier';
 
 /**

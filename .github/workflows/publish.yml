@@ -12,9 +12,10 @@ concurrency:
 jobs:
   test:
     uses: ./.github/workflows/.test.yml
+    with:
+      creds-aws-region: us-east-1
+      creds-aws-role-arn: ${{ vars.CREDS_CICD_AWS_DEV_OIDC_ROLE_ARN }} # use aws auth via oidc, if this repo supplies it
 
   publish:
     uses: ./.github/workflows/.publish-npm.yml
     needs: [test]
-    secrets:
-      npm-auth-token: ${{ secrets.NPM_TOKEN }}

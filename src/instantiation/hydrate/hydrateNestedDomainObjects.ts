@@ -1,5 +1,5 @@
-import { DomainObject } from '../DomainObject';
-import { isOfDomainObject } from '../inherit/isOfDomainObject';
+import { DomainObject } from '@src/instantiation/DomainObject';
+import { isOfDomainObject } from '@src/instantiation/inherit/isOfDomainObject';
 
 const isArray = <T>(val: T | Array<T>): val is Array<T> => Array.isArray(val);
 

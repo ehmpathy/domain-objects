@@ -1,12 +1,12 @@
 import { BadRequestError, UnexpectedCodePathError } from 'helpful-errors';
 
-import type { DomainEntity } from '../../instantiation/DomainEntity';
-import type { DomainObject } from '../../instantiation/DomainObject';
-import { isOfDomainEntity } from '../../instantiation/inherit/isOfDomainEntity';
-import { isOfDomainObject } from '../../instantiation/inherit/isOfDomainObject';
-import { getUniqueIdentifier } from '../getUniqueIdentifier';
-import { omitMetadata } from '../omitMetadata';
-import { serialize } from '../serde/serialize';
+import type { DomainEntity } from '@src/instantiation/DomainEntity';
+import type { DomainObject } from '@src/instantiation/DomainObject';
+import { isOfDomainEntity } from '@src/instantiation/inherit/isOfDomainEntity';
+import { isOfDomainObject } from '@src/instantiation/inherit/isOfDomainObject';
+import { getUniqueIdentifier } from '@src/manipulation/getUniqueIdentifier';
+import { omitMetadata } from '@src/manipulation/omitMetadata';
+import { serialize } from '@src/manipulation/serde/serialize';
 
 // define how to get the dedupe identity key for any object
 const toDedupeIdentity = <T>(obj: T) =>

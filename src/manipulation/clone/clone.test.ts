@@ -1,6 +1,7 @@
 import { given, then } from 'test-fns';
 
-import { DomainObject } from '../../instantiation/DomainObject';
+import { DomainObject } from '@src/instantiation/DomainObject';
+
 import { clone } from './clone';
 
 describe('clone', () => {

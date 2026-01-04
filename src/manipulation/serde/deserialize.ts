@@ -1,5 +1,5 @@
-import type { DomainObject } from '../..';
-import type { DomainObjectInstantiationOptions } from '../../instantiation/DomainObject';
+import type { DomainObjectInstantiationOptions } from '@src/instantiation/DomainObject';
+import type { DomainObject } from '@src/manipulation/..';
 
 export class DeserializationMissingDomainObjectClassError extends Error {
   constructor({ className }: { className: string }) {

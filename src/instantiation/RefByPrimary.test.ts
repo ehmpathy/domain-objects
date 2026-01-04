@@ -1,6 +1,7 @@
 import type { HasMetadata, OmitMetadata } from 'type-fns';
 
-import { omitReadonly } from '../manipulation/omitReadonly';
+import { omitReadonly } from '@src/manipulation/omitReadonly';
+
 import { DomainEntity } from './DomainEntity';
 import { DomainLiteral } from './DomainLiteral';
 import { RefByPrimary } from './RefByPrimary';

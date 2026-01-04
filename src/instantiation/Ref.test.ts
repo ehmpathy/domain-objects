@@ -1,6 +1,7 @@
-import { omitReadonly } from '../manipulation/omitReadonly';
-import { isRefByPrimary } from '../reference/isRefByPrimary';
-import { isRefByUnique } from '../reference/isRefByUnique';
+import { omitReadonly } from '@src/manipulation/omitReadonly';
+import { isRefByPrimary } from '@src/reference/isRefByPrimary';
+import { isRefByUnique } from '@src/reference/isRefByUnique';
+
 import { DomainEntity } from './DomainEntity';
 import { DomainLiteral } from './DomainLiteral';
 import { Ref } from './Ref';

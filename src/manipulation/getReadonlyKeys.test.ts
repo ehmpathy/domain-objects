@@ -1,7 +1,8 @@
-import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainEvent } from '../instantiation/DomainEvent';
-import { DomainLiteral } from '../instantiation/DomainLiteral';
-import { DomainObject } from '../instantiation/DomainObject';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+import { DomainEvent } from '@src/instantiation/DomainEvent';
+import { DomainLiteral } from '@src/instantiation/DomainLiteral';
+import { DomainObject } from '@src/instantiation/DomainObject';
+
 import { getReadonlyKeys } from './getReadonlyKeys';
 
 // Note: DomainEvent does not support explicit readonly keys because events are immutable by nature.

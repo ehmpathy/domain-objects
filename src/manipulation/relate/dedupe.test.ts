@@ -1,7 +1,8 @@
 import { getError } from 'test-fns';
 
-import { DomainEntity } from '../../instantiation/DomainEntity';
-import { DomainLiteral } from '../../instantiation/DomainLiteral';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+import { DomainLiteral } from '@src/instantiation/DomainLiteral';
+
 import { dedupe } from './dedupe';
 
 describe('dedupe', () => {

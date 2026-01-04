@@ -1,9 +1,10 @@
 import { UnexpectedCodePathError } from 'helpful-errors';
 import { omit } from 'type-fns';
 
-import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
-import type { DomainObject } from '../instantiation/DomainObject';
-import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
+import { assertDomainObjectIsSafeToManipulate } from '@src/constraints/assertDomainObjectIsSafeToManipulate';
+import type { DomainObject } from '@src/instantiation/DomainObject';
+import { isOfDomainObject } from '@src/instantiation/inherit/isOfDomainObject';
+
 import { getMetadataKeys } from './getMetadataKeys';
 
 /**

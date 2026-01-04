@@ -1,7 +1,8 @@
 import type { HasMetadata } from 'type-fns';
 
-import { DomainEntity } from '../instantiation/DomainEntity';
-import type { RefByPrimary } from '../instantiation/RefByPrimary';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+import type { RefByPrimary } from '@src/instantiation/RefByPrimary';
+
 import { refByPrimary } from './refByPrimary';
 
 describe('refByPrimary', () => {

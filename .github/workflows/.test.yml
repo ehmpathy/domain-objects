@@ -3,20 +3,19 @@ name: .test
 on:
   workflow_call:
     inputs:
-      aws-region:
+      creds-aws-role-arn:
+        description: "creds for aws, specifies the role to assume via oidc. if not provided, aws auth is skipped"
+        required: false
         type: string
-        description: the aws region within which we should run the tests
+      creds-aws-region:
+        description: "creds for aws, specifies the region. defaults to us-east-1"
         required: false
-    secrets:
-      aws-account-id:
-        description: the id of the account the credentials are expected to access
-        required: false
-      aws-access-key-id:
-        required: false
-        description: required credentials to authenticate with aws the aws account against which to run the tests
-      aws-secret-access-key:
-        required: false
-        description: required credentials to authenticate with aws the aws account against which to run the tests
+        type: string
+        default: "us-east-1"
+
+permissions:
+  id-token: write # required for oidc
+  contents: read
 
 jobs:
   # install the dependencies
@@ -152,21 +151,12 @@ jobs:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
 
-      - name: configure aws credentials
-        if: "${{ inputs.aws-region != '' }}"
-        uses: aws-actions/configure-aws-credentials@v1
-        id: credentials
+      - name: get aws auth, if creds supplied
+        if: ${{ inputs.creds-aws-role-arn }}
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.aws-access-key-id }}
-          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
-          aws-region: ${{ inputs.aws-region }}
-
-      - name: confirm aws credentials
-        if: "${{ inputs.aws-region != '' }}"
-        run: |
-          [[ ${{steps.credentials.outputs.aws-account-id}} != ${{ secrets.aws-account-id }} ]] \
-            && echo 'wrong aws account' && exit 1 \
-            || echo 'correct aws account';
+          role-to-assume: ${{ inputs.creds-aws-role-arn }}
+          aws-region: ${{ inputs.creds-aws-region }}
 
       - name: start:testdb
         run: npm run start:testdb --if-present
@@ -195,21 +185,12 @@ jobs:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
 
-      - name: configure aws credentials
-        if: "${{ inputs.aws-region != '' }}"
-        uses: aws-actions/configure-aws-credentials@v1
-        id: credentials
+      - name: get aws auth, if creds supplied
+        if: ${{ inputs.creds-aws-role-arn }}
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.aws-access-key-id }}
-          aws-secret-access-key: ${{ secrets.aws-secret-access-key }}
-          aws-region: ${{ inputs.aws-region }}
-
-      - name: confirm aws credentials
-        if: "${{ inputs.aws-region != '' }}"
-        run: |
-          [[ ${{steps.credentials.outputs.aws-account-id}} != ${{ secrets.aws-account-id }} ]] \
-            && echo 'wrong aws account' && exit 1 \
-            || echo 'correct aws account';
+          role-to-assume: ${{ inputs.creds-aws-role-arn }}
+          aws-region: ${{ inputs.creds-aws-region }}
 
       - name: start:testdb
         run: npm run start:testdb --if-present
@@ -218,4 +199,4 @@ jobs:
         run: npm run start:livedb:dev --if-present
 
       - name: test:acceptance:locally
-        run: npm run test:acceptance:locally
+        run: THOROUGH=true npm run test:acceptance --if-present

@@ -1,5 +1,5 @@
-import type { DomainObject } from '../instantiation/DomainObject';
-import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
+import type { DomainObject } from '@src/instantiation/DomainObject';
+import { isOfDomainObject } from '@src/instantiation/inherit/isOfDomainObject';
 
 export class DomainObjectNotSafeToManipulateError extends Error {
   constructor({

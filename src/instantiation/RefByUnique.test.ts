@@ -1,4 +1,5 @@
-import { omitReadonly } from '../manipulation/omitReadonly';
+import { omitReadonly } from '@src/manipulation/omitReadonly';
+
 import { DomainEntity } from './DomainEntity';
 import { DomainLiteral } from './DomainLiteral';
 import { Ref } from './Ref';

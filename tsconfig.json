@@ -13,7 +13,16 @@
     "target": "es2020",
     "incremental": true,
     "module": "commonjs",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "*"
+      ],
+      "@src/*": [
+        "src/*"
+      ]
+    }
   },
   "extends": [
     "@tsconfig/strictest/tsconfig.json",

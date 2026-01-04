@@ -1,6 +1,7 @@
 import { BadRequestError, UnexpectedCodePathError } from 'helpful-errors';
 
-import type { RefByPrimary } from '../instantiation/RefByPrimary';
+import type { RefByPrimary } from '@src/instantiation/RefByPrimary';
+
 import type { DomainObjectShape, Refable } from './Refable';
 
 /**

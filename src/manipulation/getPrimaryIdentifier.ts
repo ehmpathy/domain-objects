@@ -1,14 +1,15 @@
 import { BadRequestError, UnexpectedCodePathError } from 'helpful-errors';
 import { pick } from 'type-fns';
 
-import { assertDomainObjectIsSafeToManipulate } from '../constraints/assertDomainObjectIsSafeToManipulate';
-import type { DomainEntity } from '../instantiation/DomainEntity';
-import type { DomainEvent } from '../instantiation/DomainEvent';
-import type { DomainLiteral } from '../instantiation/DomainLiteral';
-import { isOfDomainEntity } from '../instantiation/inherit/isOfDomainEntity';
-import { isOfDomainEvent } from '../instantiation/inherit/isOfDomainEvent';
-import { isOfDomainLiteral } from '../instantiation/inherit/isOfDomainLiteral';
-import { isOfDomainObject } from '../instantiation/inherit/isOfDomainObject';
+import { assertDomainObjectIsSafeToManipulate } from '@src/constraints/assertDomainObjectIsSafeToManipulate';
+import type { DomainEntity } from '@src/instantiation/DomainEntity';
+import type { DomainEvent } from '@src/instantiation/DomainEvent';
+import type { DomainLiteral } from '@src/instantiation/DomainLiteral';
+import { isOfDomainEntity } from '@src/instantiation/inherit/isOfDomainEntity';
+import { isOfDomainEvent } from '@src/instantiation/inherit/isOfDomainEvent';
+import { isOfDomainLiteral } from '@src/instantiation/inherit/isOfDomainLiteral';
+import { isOfDomainObject } from '@src/instantiation/inherit/isOfDomainObject';
+
 import { DomainEntityPrimaryKeysMustBeDefinedError } from './DomainEntityPrimaryKeysMustBeDefinedError';
 
 /**
