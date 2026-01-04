@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.8](https://github.com/ehmpathy/domain-objects/compare/v0.31.7...v0.31.8) (2026-01-04)
+
+
+### Bug Fixes
+
+* **deps:** prune unneeded prod deps ([#106](https://github.com/ehmpathy/domain-objects/issues/106)) ([9315b54](https://github.com/ehmpathy/domain-objects/commit/9315b54272e6053255ac0d29de2a80fcaa9abb2a))
+
 ## [0.31.7](https://github.com/ehmpathy/domain-objects/compare/v0.31.6...v0.31.7) (2025-12-08)
 
 
