@@ -9,20 +9,6 @@ jobs:
   please-release:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # need full history for tags
-
-      - name: check tags
-        id: check-tags
-        run: |
-          if git tag | grep -q .; then
-            echo "has-tags=true" >> $GITHUB_OUTPUT
-          else
-            echo "has-tags=false" >> $GITHUB_OUTPUT
-            echo "No tags found - will start at v0.1.0"
-          fi
-
       - name: get github token
         id: github-token
         uses: actions/create-github-app-token@v2
@@ -32,29 +18,15 @@ jobs:
           app-id: ${{ vars.RHELEASE_APP_ID }}
           private-key: ${{ secrets.RHELEASE_APP_PRIVATE_KEY }}
 
-      - name: upsert the tag or pr
-        id: release
-        uses: google-github-actions/release-please-action@v3.7.6 # https://github.com/googleapis/release-please-action/issues/840
+      - uses: actions/checkout@v4
         with:
-          token: ${{ steps.github-token.outputs.token }}
-          release-type: node
-          release-as: ${{ steps.check-tags.outputs.has-tags == 'false' && '0.1.0' || null }} # ensures new packages start at a sane choice of v0, instead of their default of v1
-          pull-request-title-pattern: "chore(release): v${version} 🎉"
-          changelog-path: changelog.md
+          fetch-depth: 0
+          token: ${{ steps.github-token.outputs.token }} # enables git push with app token
 
-      - name: upvibe the pr, if pr
-        if: ${{ steps.release.outputs.pr }}
-        run: |
-          PR="${{ fromJson(steps.release.outputs.pr).number }}"
-
-          body="$(gh pr view "$PR" --json body -q .body)"
-
-          updated="$(printf "%s" "$body" \
-            | sed '1s/^:robot: I have created a release \*beep\* \*boop\*$/🐢 noice! ready to let these changes ride?/' \
-            | sed 's/^### Features$/### features/' \
-            | sed 's/^### Bug Fixes$/### fixes/' \
-          )"
-
-          gh pr edit "$PR" --body "$updated"
-        env:
-          GH_TOKEN: ${{ steps.github-token.outputs.token }}
+      - name: please release
+        uses: ./.github/actions/please-release
+        with:
+          github-token: ${{ steps.github-token.outputs.token }}
+          commit-message: ${{ github.event.head_commit.message }}
+          commit-sha: ${{ github.sha }}
+          repository: ${{ github.repository }}

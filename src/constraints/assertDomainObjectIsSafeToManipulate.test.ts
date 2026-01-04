@@ -1,6 +1,7 @@
 import { getUuid as uuid } from 'uuid-fns';
 
-import { DomainObject } from '../instantiation/DomainObject';
+import { DomainObject } from '@src/instantiation/DomainObject';
+
 import { assertDomainObjectIsSafeToManipulate } from './assertDomainObjectIsSafeToManipulate';
 
 describe('assertDomainObjectIsSafeToManipulate', () => {

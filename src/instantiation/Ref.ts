@@ -1,8 +1,9 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: in this file, we depend on `any` to make it generic enough to reuse */
 
-import type { Ref as RefType } from '../reference/Ref.type';
-import type { DomainObjectShape, Refable } from '../reference/Refable';
-import { refByUnique } from '../reference/refByUnique';
+import type { Ref as RefType } from '@src/reference/Ref.type';
+import type { DomainObjectShape, Refable } from '@src/reference/Refable';
+import { refByUnique } from '@src/reference/refByUnique';
+
 import { DomainLiteral } from './DomainLiteral';
 import { isOfDomainEntity } from './inherit/isOfDomainEntity';
 import { isOfDomainEvent } from './inherit/isOfDomainEvent';

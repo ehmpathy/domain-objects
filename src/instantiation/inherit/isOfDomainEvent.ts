@@ -1,4 +1,7 @@
-import { DomainEvent, MARK_AS_DOMAIN_EVENT } from '../DomainEvent';
+import {
+  DomainEvent,
+  MARK_AS_DOMAIN_EVENT,
+} from '@src/instantiation/DomainEvent';
 
 /**
  * .what = checks if an object is an instance of DomainEvent

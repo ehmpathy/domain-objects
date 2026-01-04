@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-redeclare */
 
-import type { DomainObjectShape, Refable } from '../reference/Refable';
-import type { RefKeysUnique } from '../reference/RefKeysUnique';
-import { refByUnique } from '../reference/refByUnique';
+import type { DomainObjectShape, Refable } from '@src/reference/Refable';
+import type { RefKeysUnique } from '@src/reference/RefKeysUnique';
+import { refByUnique } from '@src/reference/refByUnique';
+
 import { DomainLiteral } from './DomainLiteral';
 import { isOfDomainEntity } from './inherit/isOfDomainEntity';
 import { isOfDomainEvent } from './inherit/isOfDomainEvent';

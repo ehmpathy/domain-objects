@@ -1,8 +1,9 @@
 import Joi from 'joi';
 
-import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainEvent } from '../instantiation/DomainEvent';
-import { DomainLiteral } from '../instantiation/DomainLiteral';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+import { DomainEvent } from '@src/instantiation/DomainEvent';
+import { DomainLiteral } from '@src/instantiation/DomainLiteral';
+
 import { omitReadonly } from './omitReadonly';
 
 describe('omitReadonly', () => {

@@ -1,5 +1,6 @@
-import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainObject } from '../instantiation/DomainObject';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+import { DomainObject } from '@src/instantiation/DomainObject';
+
 import { getMetadataKeys } from './getMetadataKeys';
 
 describe('getMetadataKeys', () => {

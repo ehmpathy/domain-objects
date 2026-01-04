@@ -1,6 +1,7 @@
-import { DomainEntity } from '../instantiation/DomainEntity';
-import type { RefByPrimary } from '../instantiation/RefByPrimary';
-import type { RefByUnique } from '../instantiation/RefByUnique';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+import type { RefByPrimary } from '@src/instantiation/RefByPrimary';
+import type { RefByUnique } from '@src/instantiation/RefByUnique';
+
 import { isRefByPrimary } from './isRefByPrimary';
 
 describe('isRefByPrimary', () => {

@@ -1,4 +1,4 @@
-import type { DomainObject } from '../../instantiation/DomainObject';
+import type { DomainObject } from '@src/instantiation/DomainObject';
 
 // todo: expose via type-fns
 type DeepPartial<T> = {

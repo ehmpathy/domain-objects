@@ -1,7 +1,8 @@
 import { AssureIsOfTypeRejectionError } from 'type-fns';
 
-import { DomainEntity } from '../instantiation/DomainEntity';
-import { DomainLiteral } from '../instantiation/DomainLiteral';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+import { DomainLiteral } from '@src/instantiation/DomainLiteral';
+
 import { DomainObjectMetadataMustBeDefinedError } from './DomainObjectMetadataMustBeDefinedError';
 import { hasReadonly } from './hasReadonly';
 

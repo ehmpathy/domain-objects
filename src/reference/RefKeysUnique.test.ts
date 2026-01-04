@@ -1,4 +1,5 @@
-import { DomainEntity } from '../instantiation/DomainEntity';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+
 import type { RefKeysUnique } from './RefKeysUnique';
 
 describe('RefKeysUnique', () => {

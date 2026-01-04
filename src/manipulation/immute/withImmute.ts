@@ -1,4 +1,4 @@
-import { clone } from '../clone/clone';
+import { clone } from '@src/manipulation/clone/clone';
 
 /**
  * .what = wrappers which add immutability mechs on dobj instances

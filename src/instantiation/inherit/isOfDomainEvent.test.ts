@@ -1,5 +1,6 @@
-import { DomainEntity } from '../DomainEntity';
-import { DomainEvent } from '../DomainEvent';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+import { DomainEvent } from '@src/instantiation/DomainEvent';
+
 import { isOfDomainEvent } from './isOfDomainEvent';
 
 describe('isOfDomainEvent', () => {

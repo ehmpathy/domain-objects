@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 /* eslint-disable no-underscore-dangle */
-import { assertDomainObjectIsSafeToManipulate } from '../../constraints/assertDomainObjectIsSafeToManipulate';
-import { isOfDomainEntity } from '../../instantiation/inherit/isOfDomainEntity';
-import { isOfDomainLiteral } from '../../instantiation/inherit/isOfDomainLiteral';
-import { isOfDomainObject } from '../../instantiation/inherit/isOfDomainObject';
-import { getUniqueIdentifier } from '../getUniqueIdentifier';
+import { assertDomainObjectIsSafeToManipulate } from '@src/constraints/assertDomainObjectIsSafeToManipulate';
+import { isOfDomainEntity } from '@src/instantiation/inherit/isOfDomainEntity';
+import { isOfDomainLiteral } from '@src/instantiation/inherit/isOfDomainLiteral';
+import { isOfDomainObject } from '@src/instantiation/inherit/isOfDomainObject';
+import { getUniqueIdentifier } from '@src/manipulation/getUniqueIdentifier';
 
 interface SerializeOptions {
   /**

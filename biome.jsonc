@@ -8,6 +8,7 @@
   "files": {
     "includes": [
       "**/src/**/*.ts",
+      "**/provision/**/*.ts",
       "!**/dist",
       "!**/coverage",
       "!**/node_modules",
@@ -31,7 +32,20 @@
   "assist": {
     "actions": {
       "source": {
-        "organizeImports": "on"
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              ":SIDE_EFFECT:",
+              ":BLANK_LINE:",
+              [":PACKAGE:", "!@src", "!@src/**"],
+              ":BLANK_LINE:",
+              ["@src", "@src/**"],
+              ":BLANK_LINE:",
+              ":RELATIVE:"
+            ]
+          }
+        }
       }
     }
   },
@@ -65,7 +79,8 @@
         "noEmptyBlockStatements": "off",
         "noUnsafeDeclarationMerging": "off",
         "useIterableCallbackReturn": "warn",
-        "noDuplicateTestHooks": "off"
+        "noDuplicateTestHooks": "off",
+        "noThenProperty": "warn"
       },
       "nursery": {
         "noFloatingPromises": "error",

@@ -1,7 +1,8 @@
 import { getUuid as uuid } from 'uuid-fns';
 
-import { DomainObjectNotSafeToManipulateError } from '../constraints/assertDomainObjectIsSafeToManipulate';
-import { DomainEntity } from '../instantiation/DomainEntity';
+import { DomainObjectNotSafeToManipulateError } from '@src/constraints/assertDomainObjectIsSafeToManipulate';
+import { DomainEntity } from '@src/instantiation/DomainEntity';
+
 import { DomainEntityUpdatablePropertiesMustBeDefinedError } from './DomainEntityUpdatablePropertiesMustBeDefinedError';
 import { getUpdatableProperties } from './getUpdatableProperties';
 
