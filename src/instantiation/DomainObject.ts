@@ -169,7 +169,7 @@ export class DomainObject<T extends DomainObjectShape> {
     ) => TInstance,
     props: TInstance,
   ): WithImmute<TInstance> {
-    const instance = new this(props);
+    const instance = new DomainObject(props);
     return withImmute(instance);
   }
 
