@@ -1,0 +1,24 @@
+bootup your mechanic's role via `npx rhachet roles boot --repo ehmpathy --role mechanic`
+
+then, start or continue to execute
+- phase0 to phaseN
+of roadmap
+- .behavior/v2026_04_08.fix-deserialize/4.1.roadmap.v1.i1.md
+
+ref:
+- .behavior/v2026_04_08.fix-deserialize/0.wish.md
+- .behavior/v2026_04_08.fix-deserialize/1.vision.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/2.1.criteria.blackbox.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/2.3.criteria.blueprint.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.2.distill.domain.*.v1.i1.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.2.distill.repros.experience.*.v1.i1.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.3.0.blueprint.factory.v1.i1.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.3.1.blueprint.product.v1.i1.md
+
+
+---
+
+track your progress
+
+emit todos and check them off into
+- .behavior/v2026_04_08.fix-deserialize/5.1.execution.phase0_to_phaseN.v1.i1.md

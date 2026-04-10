@@ -1,9 +1,124 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`deserialize arrays should be able to deserialize arrays 1`] = `
+[
+  "2",
+  "four",
+  1,
+  3,
+]
+`;
+
+exports[`deserialize arrays should deserialize arrays even if they have objects 1`] = `
+[
+  "banana",
+  821,
+  {
+    "id": 0,
+    "meaning": null,
+  },
+  {
+    "id": 1,
+    "meaning": 42,
+    "value": 821,
+  },
+]
+`;
+
+exports[`deserialize basic types should deserialize nulls 1`] = `null`;
+
+exports[`deserialize basic types should deserialize numbers 1`] = `821`;
+
+exports[`deserialize basic types should deserialize strings 1`] = `"hello!"`;
+
+exports[`deserialize domain objects recursively deserialize a domain object which has a nested domain-object property instantiable with several options of domain objects 1`] = `
+Captain {
+  "agent": Robot {
+    "name": "Bender",
+    "serialNumber": "821",
+  },
+  "ship": Spaceship {
+    "fuelQuantity": 7000,
+    "passengers": 42,
+    "serialNumber": "__SHIP_A__",
+  },
+}
+`;
+
+exports[`deserialize domain objects recursively deserialize an array of domain objects 1`] = `
+[
+  Spaceship {
+    "fuelQuantity": 7000,
+    "passengers": 42,
+    "serialNumber": "__SHIP_A__",
+  },
+  Spaceship {
+    "fuelQuantity": 9001,
+    "passengers": 21,
+    "serialNumber": "__SHIP_B__",
+  },
+]
+`;
+
+exports[`deserialize domain objects recursively deserialize domain objects 1`] = `
+Spaceport {
+  "address": Address {
+    "continent": "North America",
+    "galaxy": "Milky Way",
+    "planet": "Earth",
+    "solarSystem": "Sun",
+  },
+  "spaceships": [
+    Spaceship {
+      "fuelQuantity": 7000,
+      "passengers": 42,
+      "serialNumber": "__SHIP_A__",
+    },
+    Spaceship {
+      "fuelQuantity": 9001,
+      "passengers": 21,
+      "serialNumber": "__SHIP_B__",
+    },
+  ],
+  "uuid": "__SPACEPORT_UUID__",
+}
+`;
+
+exports[`deserialize domain objects should deserialize domain objects 1`] = `
+Spaceship {
+  "fuelQuantity": 9001,
+  "passengers": 21,
+  "serialNumber": "__UUID__",
+}
+`;
+
+exports[`deserialize domain objects should throw a JSON parse error when given invalid JSON 1`] = `"Expected property name or '}' in JSON at position 2 (line 1 column 3)"`;
+
 exports[`deserialize domain objects should throw a helpful error if attempted to deserialize a domain object without its constructor being provided in the context 1`] = `
 "
 DomainObject 'Spaceship' was referenced in the string being deserialized but was missing from the context given to the deserialize method.
 
 Please make sure all DomainObjects serialized in the string have their classes defined in the context given to the deserialize method, using the 'with' property.
     "
+`;
+
+exports[`deserialize objects should be able to serialize an object with all sorts of types 1`] = `
+{
+  "application": {
+    "type": "PAINTING",
+  },
+  "color": "blue",
+  "cost": 821,
+  "orders": [
+    {
+      "id": 0,
+      "meaning": null,
+    },
+    {
+      "id": 1,
+      "meaning": 42,
+      "value": 821,
+    },
+  ],
+}
 `;

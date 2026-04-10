@@ -35,7 +35,7 @@ export type {
   HasReadonly,
 } from './manipulation/HasReadonly.type';
 export { hasReadonly } from './manipulation/hasReadonly';
-export { withImmute } from './manipulation/immute/withImmute';
+export { type WithImmute, withImmute } from './manipulation/immute/withImmute';
 export {
   omitMetadata,
   omitMetadata as omitMetadataValues,
