@@ -1,5 +1,6 @@
 import type { DomainObjectInstantiationOptions } from '@src/instantiation/DomainObject';
 import type { DomainObject } from '@src/manipulation/..';
+import type { WithImmute } from '@src/manipulation/immute/withImmute';
 
 export class DeserializationMissingDomainObjectClassError extends Error {
   constructor({ className }: { className: string }) {
@@ -25,12 +26,12 @@ export const deserialize = <T>(
     with?: DomainObject<any>[];
     // cache?: SimpleInMemoryCache<T> | false;
   } & DomainObjectInstantiationOptions = {},
-): T => {
+): WithImmute<T> => {
   // parse the string
   const parsed = JSON.parse(serialized);
 
   // recursively traverse the parsed value to hydrate all domain objects
-  return toHydrated(parsed, { with: context.with ?? [] });
+  return toHydrated(parsed, { with: context.with ?? [], skip: context.skip });
 };
 // todo: restore inmem cache once we have a universal hash lib (currently, fails on web and in react-native)
 //  withSimpleCaching(
@@ -102,8 +103,9 @@ const toHydratedObject = (
         className: domainObjectClassName,
       });
 
-    // hydrate the domain object, now that it was given.
-    return new DomainObjectConstructor(obj, { skip: context.skip }); // (note: domain objects hydrate their nested domain-object properties themselves, so we can just return the result here :smile:)
+    // use .build() which applies withImmute
+    // nested domain objects also get .clone() via hydrateNestedDomainObjects with .build()
+    return DomainObjectConstructor.build(obj, { skip: context.skip });
   }
 
   // since this was not a domain object, recursively traverse each key

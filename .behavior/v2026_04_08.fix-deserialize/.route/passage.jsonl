@@ -1,0 +1,30 @@
+{"stone":"1.vision","status":"blocked","blocker":"review.self","reason":"review.self required: has-questioned-requirements"}
+{"stone":"1.vision","status":"blocked","blocker":"approval","reason":"wait for human approval"}
+{"stone":"1.vision","status":"approved"}
+{"stone":"1.vision","status":"passed"}
+{"stone":"2.1.criteria.blackbox","status":"passed"}
+{"stone":"2.2.criteria.blackbox.matrix","status":"passed"}
+{"stone":"3.1.3.research.internal.product.code.prod._.v1","status":"passed"}
+{"stone":"3.1.3.research.internal.product.code.test._.v1","status":"passed"}
+{"stone":"3.3.1.blueprint.product.v1","status":"blocked","blocker":"review.self","reason":"review.self required: has-research-traceability"}
+{"stone":"3.3.1.blueprint.product.v1","status":"blocked","blocker":"approval","reason":"wait for human approval"}
+{"stone":"3.3.1.blueprint.product.v1","status":"approved"}
+{"stone":"3.3.1.blueprint.product.v1","status":"passed"}
+{"stone":"4.1.roadmap.v1","status":"passed"}
+{"stone":"5.1.execution.phase0_to_phaseN.v1","status":"blocked","blocker":"review.self","reason":"review.self required: has-pruned-yagni"}
+{"stone":"5.1.execution.phase0_to_phaseN.v1","status":"passed"}
+{"stone":"5.3.verification.v1","status":"blocked","blocker":"review.self","reason":"review.self required: has-behavior-coverage"}
+{"stone":"5.3.verification.v1","status":"blocked","blocker":"review.self","reason":"review.self required: has-contract-output-variants-snapped"}
+{"stone":"5.3.verification.v1","status":"passed"}
+{"stone":"4.1.roadmap.v1","status":"rewound"}
+{"stone":"5.1.execution.phase0_to_phaseN.v1","status":"rewound"}
+{"stone":"5.3.verification.v1","status":"rewound"}
+{"stone":"4.1.roadmap.v1","status":"passed"}
+{"stone":"5.1.execution.phase0_to_phaseN.v1","status":"blocked","blocker":"review.self","reason":"review.self required: has-pruned-yagni"}
+{"stone":"5.1.execution.phase0_to_phaseN.v1","status":"blocked","blocker":"review.self","reason":"review.self required: behavior-declaration-coverage"}
+{"stone":"5.1.execution.phase0_to_phaseN.v1","status":"passed"}
+{"stone":"5.1.execution.phase0_to_phaseN.v1","status":"passed"}
+{"stone":"5.3.verification.v1","status":"blocked","blocker":"review.self","reason":"review.self required: has-behavior-coverage"}
+{"stone":"5.3.verification.v1","status":"blocked","blocker":"review.peer","reason":"blockers exceed threshold (2 > 0)"}
+{"stone":"5.3.verification.v1","status":"blocked","blocker":"review.peer","reason":"blockers exceed threshold (1 > 0)"}
+{"stone":"5.3.verification.v1","status":"passed"}

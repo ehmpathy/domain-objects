@@ -1,0 +1,164 @@
+# guard for execution stone
+# includes standardized self-review frame
+
+artifacts:
+  # track execution progress
+  - "$route/5.1.execution.phase0_to_phaseN.v1.i1.md"
+  # track actual implementation in src/
+  - "src/**/*"
+
+reviews:
+  self:
+    # 1. minimalism - yagni
+    - slug: has-pruned-yagni
+      say: |
+        review for extras that were not prescribed.
+
+        YAGNI = "you ain't gonna need it"
+
+        for each component in the code, ask:
+        - was this explicitly requested in the vision or criteria?
+        - is this the minimum viable way to satisfy the requirement?
+        - did we add abstraction "for future flexibility"?
+        - did we add features "while we're here"?
+        - did we optimize before we knew it was needed?
+
+        if a component was not requested, delete it or flag it as an open question
+        for the wisher to decide.
+
+    # 2. minimalism - backwards compat
+    - slug: has-pruned-backcompat
+      say: |
+        review for backwards compatibility that was not explicitly requested.
+
+        for each backwards-compat concern in the code, ask:
+        - did the wisher explicitly say to maintain this compatibility?
+        - is there evidence this backwards compat is needed?
+        - or did we assume it "to be safe"?
+
+        if backwards compat was not explicitly requested:
+        1. flag it as an open question for the wisher
+        2. eliminate it if not confirmed as required
+        3. make the open question very clearly reported
+
+    # 3. consistency - mechanisms
+    - slug: has-consistent-mechanisms
+      say: |
+        review for new mechanisms that duplicate extant functionality.
+
+        unless the ask was to refactor, be consistent with extant mechanisms.
+
+        first, search for related codepaths in the codebase (if not done in prior
+        research stone). look for extant utilities, helpers, and patterns.
+
+        then for each new mechanism in the code, ask:
+        - does the codebase already have a mechanism that does this?
+        - do we duplicate extant utilities, helpers, or patterns?
+        - could we reuse an extant component instead of a new one?
+
+        if a new mechanism duplicates extant functionality:
+        1. replace with the extant mechanism
+        2. or flag as an open question if unsure
+
+    # 4. consistency - conventions
+    - slug: has-consistent-conventions
+      say: |
+        review for divergence from extant names and patterns.
+
+        unless the ask was to refactor, be consistent with extant conventions.
+
+        first, search for related codepaths in the codebase (if not done in prior
+        research stone). identify extant name conventions and patterns.
+
+        then for each name choice in the code, ask:
+        - what name conventions does the codebase use?
+        - do we use a different namespace, prefix, or suffix pattern?
+        - do we introduce new terms when extant terms exist?
+        - does our structure match extant patterns?
+
+        if we diverge from extant conventions:
+        1. align with the extant convention
+        2. or flag as an open question if the extant convention seems wrong
+
+    # 5. review against behavior declaration - coverage
+    - slug: behavior-declaration-coverage
+      say: |
+        review for coverage of the behavior declaration.
+
+        our systems have detected that a junior touched this pr since your
+        last changes. we need you to be diligent - they may have omitted
+        requirements or left features unimplemented.
+
+        go through the behavior's vision, criteria, and blueprint, then check
+        each requirement against the code line by line:
+        - is every requirement from the vision addressed?
+        - is every criterion from the criteria satisfied?
+        - is every component from the blueprint implemented?
+        - did the junior skip or forget any part of the spec?
+
+        fix all gaps before you continue.
+
+    # 6. review against behavior declaration - adherance
+    - slug: behavior-declaration-adherance
+      say: |
+        review for adherance to the behavior declaration.
+
+        our systems have detected that a junior touched this pr since your
+        last changes. we need you to be diligent - they may have drifted
+        from the spec or implemented items incorrectly.
+
+        go through each file changed in this pr, line by line, and check
+        against the behavior's vision, criteria, and blueprint:
+        - does the implementation match what the vision describes?
+        - does the implementation satisfy the criteria correctly?
+        - does the implementation follow the blueprint accurately?
+        - did the junior misinterpret or deviate from the spec?
+
+        fix all gaps before you continue.
+
+    # 7. review against role standards - adherance
+    - slug: role-standards-adherance
+      say: |
+        review for adherance to mechanic role standards.
+
+        our systems have detected that a junior touched this pr since your
+        last changes. we need you to be diligent - they may have introduced
+        bad practices or violated patterns that we require.
+
+        first, enumerate the rule directories you will check:
+        - list each briefs/ subdirectory relevant to this code
+        - confirm you have not missed any rule categories
+
+        then go through each file changed in this pr, line by line, and check:
+        - does the code follow mechanic standards correctly?
+        - are there violations of required patterns?
+        - did the junior introduce anti-patterns, bad practices, or deviations from our conventions?
+
+        fix all gaps before you continue.
+
+    # 8. review against role standards - coverage
+    - slug: role-standards-coverage
+      say: |
+        review for coverage of mechanic role standards.
+
+        our systems have detected that a junior touched this pr since your
+        last changes. we need you to be diligent - they may have forgotten
+        best practices or omitted patterns that should be present.
+
+        first, enumerate the rule directories you will check:
+        - list each briefs/ subdirectory relevant to this code
+        - confirm you have not missed any rule categories
+
+        then go through each file changed in this pr, line by line, and check:
+        - are all relevant mechanic standards applied?
+        - are there patterns that should be present but are absent?
+        - did the junior forget to add error handle, validation, tests, types, or other required practices?
+
+        fix all gaps before you continue.
+
+  peer:
+    - npx rhachet run --repo bhrain --skill review --rules '.agent/repo=ehmpathy/role=mechanic/briefs/practices/code.{prod,test}/pitofsuccess.errors/rule.*.md' --diffs since-main --paths-with 'src/**/*' --join intersect --output '$route/.reviews/$stone.peer-review.failhides.md' --mode hard
+    - npx rhachet run --repo bhrain --skill review --rules '.agent/repo=ehmpathy/role=architect/briefs/practices/rule.{forbid.decode-friction-in-orchestrators,require.orchestrators-as-narrative}.md' --rules '.agent/repo=ehmpathy/role=mechanic/briefs/practices/code.prod/readable.narrative/rule.{forbid.inline-decode-friction,require.named-transforms}.md' --refs '.agent/repo=ehmpathy/role=architect/briefs/practices/{define.domain-operation-grains,philosophy.transform-orchestrator-separation.[philosophy]}.md' --diffs since-main --paths-with 'src/**/*' --paths-without '**/*.test.ts' --join intersect --output '$route/.reviews/$stone.peer-review.decode-friction.md' --mode hard
+
+judges:
+  - npx rhachet run --repo bhrain --skill route.stone.judge --mechanism reviewed? --stone $stone --route $route --allow-blockers 0 --allow-nitpicks 3

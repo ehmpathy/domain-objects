@@ -1,0 +1,47 @@
+distill the blackbox criteria in .behavior/v2026_04_08.fix-deserialize/2.1.criteria.blackbox.md into a coverage matrix
+
+emit into .behavior/v2026_04_08.fix-deserialize/2.2.criteria.blackbox.matrix.md
+
+---
+
+create a matrix table for each related set of usecases
+
+## process
+
+1. **extract dimensions** — identify the independent variables that vary across usecases
+2. **enumerate combinations** — list all dimension value combinations
+3. **map outcomes** — for each combination, record the expected outcome from blackbox criteria
+4. **flag gaps** — if any combination lacks a specified outcome, call it out
+5. **flag decomposition opportunities** — if too many dimensions, suggest narrower behavioral boundaries
+
+## structure
+
+| ind: var 1 | ind: var 2 | ... | dep: var 1 | dep: var 2 | ... |
+|-------------------|-------------------|-----|-----------------|-----------------|-----|
+| condition A       | condition X       | ... | outcome 1       | outcome 2       | ... |
+| condition A       | condition Y       | ... | outcome 1       | outcome 2       | ... |
+| condition B       | condition X       | ... | outcome 1       | outcome 2       | ... |
+
+explicitly label the ind(ependent) vs dep(endent) varialbes in the table header, as well
+
+## terminology
+
+- independent variables: the inputs/conditions that vary between subcases
+- dependent variables: the expected outcomes for each combination (can be multiple per row)
+
+## why
+
+- visualize all combinations at a glance
+- spot gaps via symmetric analysis — if a row is absent, ask why
+- verify the blackbox criteria covers all meaningful permutations
+
+## decomposition signal
+
+if there are too many independent variables (matrix explodes) — this signals the usecase is too broad
+
+callout opportunities to decompose into smaller behavioral boundaries when:
+- the matrix has 4+ independent dimensions
+- combinations exceed what's reasonable to enumerate
+- unrelated concerns are bundled together
+
+a narrower scope = a clearer matrix = a more maintainable and recomposable system

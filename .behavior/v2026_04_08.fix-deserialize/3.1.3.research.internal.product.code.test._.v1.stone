@@ -1,0 +1,31 @@
+research the test codepath patterns available in order to fulfill
+- this wish .behavior/v2026_04_08.fix-deserialize/0.wish.md
+- this vision .behavior/v2026_04_08.fix-deserialize/1.vision.md (if declared)
+- this criteria .behavior/v2026_04_08.fix-deserialize/2.1.criteria.blackbox.md (if declared)
+- this criteria .behavior/v2026_04_08.fix-deserialize/2.3.criteria.blueprint.md (if declared)
+
+specifically
+- what are the current key patterns in this repo, that are relevant?
+- how do they relate to the wish?
+- which ones will we reuse? which ones will we extend? which ones will we replace?
+  - mark with
+    - [REUSE]
+    - [EXTEND]
+    - [REPLACE]
+
+---
+
+focus exclusively on the test codepath patterns. ignore production codepath patterns
+
+note, this includes any infra that test codepaths depend on
+
+---
+
+enumerate each pattern
+- cite every claim
+- number each citation
+- clone exact quotes from each citation
+
+---
+
+emit into .behavior/v2026_04_08.fix-deserialize/3.1.3.research.internal.product.code.test._.v1.i1.md

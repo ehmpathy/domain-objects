@@ -1,0 +1,134 @@
+propose a blueprint for how we will implement the wish
+- in .behavior/v2026_04_08.fix-deserialize/0.wish.md
+- with .behavior/v2026_04_08.fix-deserialize/3.2.distill.domain.*.v1.i1.md (if declared)
+- with .behavior/v2026_04_08.fix-deserialize/3.2.distill.repros.experience.*.v1.i1.md (if declared)
+
+.why = blueprint the code changes needed to deliver the product.
+- the product is the deliverable (spec + impl)
+- explicit blueprint declares what the execution will adhere to
+
+follow the patterns already present in this repo.
+
+---
+
+## summary
+
+state what will be built.
+
+---
+
+## filediff tree
+
+include a treestruct of filediffs.
+
+**legend:**
+- `[+] create` — file to create
+- `[~] update` — file to update
+- `[-] delete` — file to delete
+
+---
+
+## codepath tree
+
+include a treestruct of codepaths.
+
+**legend:**
+- `[+]` create — codepath to create
+- `[~]` update — codepath to update
+- `[○]` retain — codepath to retain
+- `[-]` delete — codepath to delete
+- `[←]` reuse — codepath to reuse from elsewhere
+- `[→]` eject — codepath to decompose for reuse
+
+---
+
+## test coverage
+
+test coverage is a MANDATORY requirement, equal weight to implementation.
+a blueprint without thorough test coverage is incomplete.
+
+### coverage by layer
+
+| layer | scope | test type |
+|-------|-------|-----------|
+| transformers | pure computation, format conversion | unit tests |
+| communicators | sdks, daos, service clients (i/o boundary) | integration tests |
+| orchestrators | composition of transformers + communicators | integration tests |
+| contracts | cli, api, sdk entry points | integration + acceptance tests |
+
+### coverage by case
+
+for each codepath, declare coverage across:
+
+| case type | what it covers |
+|-----------|----------------|
+| positive | expected inputs produce expected outputs |
+| negative | invalid inputs produce expected errors |
+| happy path | typical successful flow |
+| edge cases | boundary conditions, empty inputs, max limits |
+
+### snapshots
+
+acceptance tests MUST snapshot contract stdouts — exhaustive for positive and negative cases:
+- cli stdout/stderr formats (success + all error paths)
+- api response shapes (success + all error responses)
+- sdk return types (success + all thrown errors)
+
+snapshots enable visual review in PRs — verify outputs look correct.
+
+### test tree
+
+include a treestruct of test coverage for each codepath:
+
+```
+src/domain.operations/myTransformer/
+├── myTransformer.ts
+└── myTransformer.test.ts              # unit: transformer (pure)
+
+src/domain.operations/myCommunicator/
+├── myCommunicator.ts
+└── myCommunicator.integration.test.ts # integration: communicator (i/o)
+
+src/domain.operations/myOrchestrator/
+├── myOrchestrator.ts
+└── myOrchestrator.integration.test.ts # integration: orchestrator
+
+src/contract/cli/myCommand.ts
+└── myCommand.integration.test.ts      # integration: contract (also an orchestrator)
+
+blackbox/cli/myCommand.acceptance.test.ts  # acceptance: contract (blackbox)
+```
+
+**legend:**
+- `[+]` create — test to create
+- `[~]` update — test to update
+- `[○]` retain — test to retain
+
+---
+
+remember, the purpose of the blueprint is to declare what the execution will adhere to.
+
+we want to see:
+- what contracts will be used
+- how domain.objects and domain.operations are decomposed and recomposed
+- what the codepaths are, their ease of maintenance and readability
+
+---
+
+reference
+- .behavior/v2026_04_08.fix-deserialize/0.wish.md
+- .behavior/v2026_04_08.fix-deserialize/1.vision.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/2.1.criteria.blackbox.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/2.3.criteria.blueprint.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.1.1.research.external.product.access.*.v1.i1.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.1.1.research.external.product.claims.*.v1.i1.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.1.1.research.external.product.domain.*.v1.i1.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.1.3.research.internal.product.code.prod.*.v1.i1.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.1.3.research.internal.product.code.test.*.v1.i1.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.2.distill.domain.*.v1.i1.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.2.distill.repros.experience.*.v1.i1.md (if declared)
+- .behavior/v2026_04_08.fix-deserialize/3.3.0.blueprint.factory.v1.i1.md (if declared)
+
+---
+
+emit into .behavior/v2026_04_08.fix-deserialize/3.3.1.blueprint.product.v1.i1.md

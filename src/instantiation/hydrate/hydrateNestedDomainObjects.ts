@@ -74,7 +74,7 @@ export const hydrateNestedDomainObjects = ({
 
       // try and instantiate it by leveraging the fact that there's only one option, if possible
       if (DeclaredNestedDomainObjectClassOptions.length === 1)
-        return new DeclaredNestedDomainObjectClassOptions[0]!(prop); // this case is easy, since there's only one option
+        return DeclaredNestedDomainObjectClassOptions[0]!.build(prop); // this case is easy, since there's only one option
 
       // otherwise, we must rely on the `_dobj` prop having been set by the `serialize` function or manually
       const declaredClassNameOfProp = prop._dobj;
@@ -127,7 +127,7 @@ Please check the declared nested domain object options for ${domainObjectName}.$
             declaredNestedClassNameOptionsForProp,
           },
         );
-      return new CorrectNestedDomainObject(prop);
+      return CorrectNestedDomainObject.build(prop);
     };
 
     // instantiate the prop into the nested DomainObject specified, if not already instantiated

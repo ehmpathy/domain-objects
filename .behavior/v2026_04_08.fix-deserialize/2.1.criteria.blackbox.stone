@@ -1,0 +1,61 @@
+declare the blackbox criteria required to fulfill
+- this wish .behavior/v2026_04_08.fix-deserialize/0.wish.md
+- this vision .behavior/v2026_04_08.fix-deserialize/1.vision.md (if declared)
+
+via bdd declarations, per your briefs
+
+emit into .behavior/v2026_04_08.fix-deserialize/2.1.criteria.blackbox.md
+
+---
+
+blackbox criteria = experience boundaries (no implementation details)
+
+## episode experience
+
+a sequence of exchanges — the narrative flow
+
+- what workflows do users go through?
+- what do they see, do, and receive at each step?
+- what are the critical paths through the episode?
+- what are the edge cases in the narrative?
+
+## exchange experience
+
+atomic — a single input→output contract
+
+- what inputs does the system accept?
+- what outputs does the system return?
+- what errors does the system surface?
+- what are the boundary conditions?
+
+---
+
+DO NOT include:
+- mechanism details (what contracts/components exist)
+- implementation details (how things are built)
+
+note: blackbox is NOT "why to build" — that's the wish
+      blackbox is "what experience must be delivered" to fulfill the wish
+
+---
+
+## template
+
+```
+# usecase.1 = ...
+given()
+  when()
+    then()
+      sothat()
+    then()
+    then()
+      sothat()
+  when()
+    then()
+
+given()
+  ...
+
+# usecase.2 = ...
+...
+```
