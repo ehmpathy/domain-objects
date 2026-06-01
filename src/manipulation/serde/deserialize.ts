@@ -1,5 +1,7 @@
-import type { DomainObjectInstantiationOptions } from '@src/instantiation/DomainObject';
-import type { DomainObject } from '@src/manipulation/..';
+import type {
+  DomainObject,
+  DomainObjectInstantiationOptions,
+} from '@src/instantiation/DomainObject';
 import type { WithImmute } from '@src/manipulation/immute/withImmute';
 
 export class DeserializationMissingDomainObjectClassError extends Error {

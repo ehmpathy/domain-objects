@@ -54,7 +54,11 @@
     "rules": {
       "recommended": true,
       "complexity": {
-        "noExcessiveCognitiveComplexity": "warn"
+        "noExcessiveCognitiveComplexity": "warn",
+        "noThisInStatic": {
+          "level": "warn", // warn w/o autofix, since some usecases like polymorphism require `this` in static methods
+          "fix": "none"
+        }
       },
       "correctness": {
         "noUnusedImports": {

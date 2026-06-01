@@ -1,0 +1,7 @@
+# dpdm exclude patterns
+# each entry is joined with | to form a single regex
+exclude:
+  # joi has 7 internal circular dependencies baked into its architecture
+  # joi is a devDependency only (used for schema validation tests)
+  # so these cycles wont ship to consumers
+  - joi

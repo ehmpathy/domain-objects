@@ -1,4 +1,4 @@
-import type { DomainObject } from '@src/instantiation/DomainObject';
+import type { DomainObjectShape } from '@src/instantiation/DomainObjectShape';
 
 // todo: expose via type-fns
 type DeepPartial<T> = {
@@ -13,7 +13,7 @@ type DeepPartial<T> = {
  * .what = deep clones domain objects safely
  * .why = preserves instance types, methods, and nested structures
  */
-export const clone = <T extends DomainObject<any>>(
+export const clone = <T extends DomainObjectShape>(
   dobj: T,
   updates: DeepPartial<T> = {},
 ): T => {

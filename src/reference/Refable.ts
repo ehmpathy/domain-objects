@@ -1,7 +1,8 @@
 import type { DomainEntity } from '@src/instantiation/DomainEntity';
 import type { DomainEvent } from '@src/instantiation/DomainEvent';
+import type { DomainObjectShape } from '@src/instantiation/DomainObjectShape';
 
-export type DomainObjectShape = Record<string, any>;
+export type { DomainObjectShape } from '@src/instantiation/DomainObjectShape';
 
 export interface Refable<
   TShape extends DomainObjectShape,

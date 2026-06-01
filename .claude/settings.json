@@ -22,8 +22,6 @@
       "Bash(jq)",
       "Bash(echo:*)",
       "Bash(printf:*)",
-      "Bash(git mv:*)",
-      "Bash(git rm:*)",
       "Bash(git log:*)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
@@ -38,6 +36,21 @@
       "Bash(rhx git.release:*)",
       "Bash(npx rhachet run --skill git.repo.test:*)",
       "Bash(rhx git.repo.test:*)",
+      "Bash(rhx git.repo.test --what types)",
+      "Bash(rhx git.repo.test --what format)",
+      "Bash(rhx git.repo.test --what lint)",
+      "Bash(rhx git.repo.test --what unit)",
+      "Bash(rhx git.repo.test --what integration)",
+      "Bash(rhx git.repo.test --what acceptance)",
+      "Bash(rhx git.repo.test --what unit --scope 'name://getUserById')",
+      "Bash(rhx git.repo.test --what integration --scope 'name://invoice')",
+      "Bash(rhx git.repo.test --what unit --scope 'path://src/domain.operations/customer')",
+      "Bash(rhx git.repo.test --what unit --scope getUserById)",
+      "Bash(rhx git.repo.test --what integration --scope invoice)",
+      "Bash(rhx git.repo.test --what unit --scope src/domain.operations/customer)",
+      "Bash(rhx git.repo.test --what unit --resnap)",
+      "Bash(rhx git.repo.test --what integration --resnap)",
+      "Bash(rhx git.repo.test --what unit --scope getUserById --resnap)",
       "Bash(npx rhachet run --skill sedreplace:*)",
       "Bash(npx rhachet run --skill sedreplace --old 'oldName' --new 'newName' --glob 'src/**/*.ts')",
       "Bash(npx rhachet run --skill sedreplace --old 'oldName' --new 'newName' --glob 'src/**/*.ts' --mode apply)",
@@ -150,34 +163,6 @@
       "Bash(npm run build:*)",
       "Bash(npm run build:compile)",
       "Bash(npm run start:testdb:*)",
-      "Bash(npm run test:*)",
-      "Bash(npm run test:types:*)",
-      "Bash(npm run test:format:*)",
-      "Bash(npm run test:lint:*)",
-      "Bash(npm run test:unit:*)",
-      "Bash(npm run test:integration:*)",
-      "Bash(npm run test:acceptance:*)",
-      "Bash(npm run test:acceptance:locally:*)",
-      "Bash(npm run test:unit -- path/to/file/example.ts)",
-      "Bash(npm run test:integration -- path/to/file/example.ts)",
-      "Bash(npm run test:acceptance -- path/to/file/example.ts)",
-      "Bash(npm run test:acceptance:locally -- path/to/file/example.ts)",
-      "Bash(THOROUGH=true npm run test:*)",
-      "Bash(THOROUGH=true npm run test:types:*)",
-      "Bash(THOROUGH=true npm run test:format:*)",
-      "Bash(THOROUGH=true npm run test:lint:*)",
-      "Bash(THOROUGH=true npm run test:unit:*)",
-      "Bash(THOROUGH=true npm run test:integration:*)",
-      "Bash(THOROUGH=true npm run test:acceptance:*)",
-      "Bash(THOROUGH=true npm run test:acceptance:locally:*)",
-      "Bash(RESNAP=true npm run test:unit:*)",
-      "Bash(RESNAP=true npm run test:integration:*)",
-      "Bash(RESNAP=true npm run test:acceptance:*)",
-      "Bash(RESNAP=true npm run test:acceptance:locally:*)",
-      "Bash(RESNAP=true THOROUGH=true npm run test:unit:*)",
-      "Bash(RESNAP=true THOROUGH=true npm run test:integration:*)",
-      "Bash(RESNAP=true THOROUGH=true npm run test:acceptance:*)",
-      "Bash(RESNAP=true THOROUGH=true npm run test:acceptance:locally:*)",
       "Bash(npx jest --listTests:*)",
       "Bash(npm run fix:*)",
       "Bash(npm run fix:format:*)",
@@ -304,12 +289,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "./node_modules/.bin/rhx route.drive --mode hook",
-            "timeout": 5,
-            "author": "repo=bhrain/role=driver"
-          },
-          {
-            "type": "command",
             "command": "./node_modules/.bin/rhachet run --repo bhuild --role behaver --init claude.hooks/sessionstart.boot-behavior",
             "timeout": 10,
             "author": "repo=bhuild/role=behaver"
@@ -343,6 +322,54 @@
             "command": "./node_modules/.bin/rhachet roles boot --repo ehmpathy --role mechanic",
             "timeout": 60,
             "author": "repo=ehmpathy/role=mechanic"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet roles boot --role driver",
+            "timeout": 30,
+            "author": "repo=bhrain/role=driver"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhx route.drive --when hook.onBoot",
+            "timeout": 5,
+            "author": "repo=bhrain/role=driver"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet roles boot --role librarian",
+            "timeout": 30,
+            "author": "repo=bhrain/role=librarian"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet roles boot --role reflector",
+            "timeout": 30,
+            "author": "repo=bhrain/role=reflector"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet roles boot --role reviewer",
+            "timeout": 30,
+            "author": "repo=bhrain/role=reviewer"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet roles boot --role behaver",
+            "timeout": 10,
+            "author": "repo=bhuild/role=behaver"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet roles boot --role dispatcher",
+            "timeout": 10,
+            "author": "repo=bhuild/role=dispatcher"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet roles boot --role dreamer",
+            "timeout": 10,
+            "author": "repo=bhuild/role=dreamer"
           }
         ]
       },
@@ -419,6 +446,12 @@
             "command": "./node_modules/.bin/rhachet run --repo ehmpathy --role mechanic --init claude.hooks/pretooluse.check-permissions",
             "timeout": 5,
             "author": "repo=ehmpathy/role=mechanic"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet run --repo ehmpathy --role mechanic --init claude.hooks/pretooluse.forbid-test-background",
+            "timeout": 5,
+            "author": "repo=ehmpathy/role=mechanic"
           }
         ]
       },
@@ -462,15 +495,9 @@
         "hooks": [
           {
             "type": "command",
-            "command": "./node_modules/.bin/rhx route.drive --mode hook",
+            "command": "./node_modules/.bin/rhx route.drive --when hook.onStop",
             "timeout": 5,
             "author": "repo=bhrain/role=driver"
-          },
-          {
-            "type": "command",
-            "command": "./node_modules/.bin/rhx git.repo.test --what lint",
-            "timeout": 60,
-            "author": "repo=ehmpathy/role=mechanic"
           }
         ]
       }

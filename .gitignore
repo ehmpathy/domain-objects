@@ -3,7 +3,9 @@
 *.log
 *.tsbuildinfo
 .artifact
+.cache/
 .env
+.log/slowtest/
 .serverless
 .temp
 .terraform
@@ -13,3 +15,5 @@
 coverage
 dist
 node_modules
+!.test*/**/node_modules
+!.test*/**/node_modules/**

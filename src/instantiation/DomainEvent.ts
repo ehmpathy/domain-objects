@@ -1,8 +1,8 @@
 import { DomainObject } from './DomainObject';
+import { MARK_AS_DOMAIN_EVENT } from './markers';
 import { VERSION } from './version';
 
-// marker symbol (cross-version, global registry)
-export const MARK_AS_DOMAIN_EVENT = Symbol.for('domain-objects/DomainEvent');
+export { MARK_AS_DOMAIN_EVENT } from './markers';
 
 /**
  * In Domain Driven Design, an Event is a type of Domain Object for which:

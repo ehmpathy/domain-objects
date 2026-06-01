@@ -17,6 +17,28 @@ describe('isOfDomainObject', () => {
     expect(isOfDomainObject(car)).toBe(true);
   });
 
+  it('should return true for DomainObject classes', () => {
+    interface Car {
+      make: string;
+      model: string;
+    }
+    class Car extends DomainObject<Car> implements Car {}
+
+    expect(isOfDomainObject(Car)).toBe(true);
+    expect(isOfDomainObject(DomainObject)).toBe(true);
+    expect(isOfDomainObject(DomainEntity)).toBe(true);
+    expect(isOfDomainObject(DomainLiteral)).toBe(true);
+    expect(isOfDomainObject(DomainEvent)).toBe(true);
+  });
+
+  it('should return false for plain classes', () => {
+    class PlainClass {
+      constructor(public value: string) {}
+    }
+
+    expect(isOfDomainObject(PlainClass)).toBe(false);
+  });
+
   it('should return true for DomainEntity instances', () => {
     interface User {
       uuid: string;
@@ -88,5 +110,37 @@ describe('isOfDomainObject', () => {
 
     const legacy = new LegacyDomainObject('test');
     expect(isOfDomainObject(legacy)).toBe(true);
+  });
+
+  it('should detect deeply nested DomainEntity subclasses', () => {
+    interface DeepEntity {
+      uuid: string;
+    }
+    class DeepEntity extends DomainEntity<DeepEntity> implements DeepEntity {
+      public static unique = ['uuid'] as const;
+    }
+    class DeeperEntity extends DeepEntity {}
+    class DeepestEntity extends DeeperEntity {}
+
+    expect(isOfDomainObject(new DeepEntity({ uuid: '1' }))).toBe(true);
+    expect(isOfDomainObject(new DeeperEntity({ uuid: '2' }))).toBe(true);
+    expect(isOfDomainObject(new DeepestEntity({ uuid: '3' }))).toBe(true);
+  });
+
+  it('should work via static property inheritance (no prototype walk needed)', () => {
+    // prove that JS static property lookup follows the prototype chain automatically
+    // so we dont need to manually walk it
+    interface GrandParent {
+      name: string;
+    }
+    class GrandParent extends DomainObject<GrandParent> implements GrandParent {}
+    class Parent extends GrandParent {}
+    class Child extends Parent {}
+    class GrandChild extends Child {}
+
+    expect(isOfDomainObject(new GrandParent({ name: 'a' }))).toBe(true);
+    expect(isOfDomainObject(new Parent({ name: 'b' }))).toBe(true);
+    expect(isOfDomainObject(new Child({ name: 'c' }))).toBe(true);
+    expect(isOfDomainObject(new GrandChild({ name: 'd' }))).toBe(true);
   });
 });

@@ -2,7 +2,7 @@
 import { BadRequestError } from 'helpful-errors';
 
 import type { DomainObjectShape, Refable } from '@src/reference/Refable';
-import type { RefKeysPrimary } from '@src/reference/RefKeysPrimary';
+import type { RefByPrimary as RefByPrimaryType } from '@src/reference/RefByPrimary.type';
 import { refByPrimary } from '@src/reference/refByPrimary';
 
 import { DomainLiteral } from './DomainLiteral';
@@ -31,7 +31,7 @@ export type RefByPrimary<
   TShape extends DomainObjectShape = any, // todo: update DomainObjectShape -> DomainReferenceableInstance to enable extraction of primary and unique keys via types, when typescript supports constructor inference from instances
   TPrimary extends readonly string[] = any,
   TUnique extends readonly string[] = any,
-> = Required<Pick<InstanceType<TDobj>, RefKeysPrimary<TDobj>[number]>>;
+> = RefByPrimaryType<TDobj, TShape, TPrimary, TUnique>;
 
 // extend the domain literal into a custom class, so that we can rename it into RefByUnique, without mutating the global DomainLiteral class
 class RefByPrimaryBase<T extends DomainObjectShape> extends DomainLiteral<T> {

@@ -1,22 +1,16 @@
-import {
-  DomainObject,
-  MARK_AS_DOMAIN_OBJECT,
-} from '@src/instantiation/DomainObject';
+import { MARK_AS_DOMAIN_OBJECT } from '@src/instantiation/markers';
 
 /**
- * .what = checks if an object is an instance of DomainObject
- * .why = supports cross version compatability evaluation
+ * .what = checks if input is a DomainObject (class or instance)
+ * .why = supports cross version compatibility evaluation
+ * .note = uses marker symbol for cycle-free detection
+ * .note = static property lookup follows prototype chain automatically in JS
  */
-export const isOfDomainObject = (obj: unknown): boolean => {
-  // Check direct instanceof first (fast path for same-version)
-  if (obj instanceof DomainObject) return true;
-
-  // Check for the marker symbol in the prototype chain (cross-version support)
-  let proto = (obj as any)?.constructor;
-  while (proto) {
-    if (proto[MARK_AS_DOMAIN_OBJECT]) return true;
-    proto = Object.getPrototypeOf(proto);
+export const isOfDomainObject = (input: unknown): boolean => {
+  if (typeof input === 'function') {
+    // class: check marker directly
+    return (input as any)?.[MARK_AS_DOMAIN_OBJECT] !== undefined;
   }
-
-  return false;
+  // instance: check via constructor
+  return (input as any)?.constructor?.[MARK_AS_DOMAIN_OBJECT] !== undefined;
 };

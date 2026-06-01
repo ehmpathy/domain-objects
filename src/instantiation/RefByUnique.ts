@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-redeclare */
 
 import type { DomainObjectShape, Refable } from '@src/reference/Refable';
-import type { RefKeysUnique } from '@src/reference/RefKeysUnique';
+import type { RefByUnique as RefByUniqueType } from '@src/reference/RefByUnique.type';
 import { refByUnique } from '@src/reference/refByUnique';
 
 import { DomainLiteral } from './DomainLiteral';
@@ -31,7 +31,7 @@ export type RefByUnique<
   TShape extends DomainObjectShape = any, // todo: update DomainObjectShape -> DomainReferenceableInstance to enable extraction of primary and unique keys via types, when typescript supports constructor inference from instances
   TPrimary extends readonly string[] = any,
   TUnique extends readonly string[] = any,
-> = Pick<InstanceType<TDobj>, RefKeysUnique<TDobj>[number]>;
+> = RefByUniqueType<TDobj, TShape, TPrimary, TUnique>;
 
 // extend the domain literal into a custom class, so that we can rename it into RefByUnique, without mutating the global DomainLiteral class
 class RefByUniqueBase<T extends DomainObjectShape> extends DomainLiteral<T> {
