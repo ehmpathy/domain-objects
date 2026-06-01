@@ -1,8 +1,8 @@
 import { DomainObject } from './DomainObject';
+import { MARK_AS_DOMAIN_ENTITY } from './markers';
 import { VERSION } from './version';
 
-// marker symbol (cross-version, global registry)
-export const MARK_AS_DOMAIN_ENTITY = Symbol.for('domain-objects/DomainEntity');
+export { MARK_AS_DOMAIN_ENTITY } from './markers';
 
 /**
  * In Domain Driven Design, an Entity is a type of Domain Object for which:

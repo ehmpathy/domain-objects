@@ -1,4 +1,4 @@
-import { DomainObject } from '@src/instantiation/DomainObject';
+import type { DomainObjectConstructor } from '@src/instantiation/DomainObjectConstructor';
 import { isOfDomainObject } from '@src/instantiation/inherit/isOfDomainObject';
 
 const isArray = <T>(val: T | Array<T>): val is Array<T> => Array.isArray(val);
@@ -22,7 +22,7 @@ export const hydrateNestedDomainObjects = ({
   domainObjectName,
 }: {
   props: Record<string, any>;
-  nested: Record<string, typeof DomainObject | (typeof DomainObject)[]>;
+  nested: Record<string, DomainObjectConstructor | DomainObjectConstructor[]>;
   domainObjectName: string;
 }): Record<string, any> => {
   // create a new object, so as to not mutate original props
@@ -35,15 +35,12 @@ export const hydrateNestedDomainObjects = ({
   Object.keys(nested).forEach((key) => {
     // check that the value of "nested" was defined as a DomainObject or an array of DomainObject choices
     const declaredNestedDomainObjectValue = nested[key]!;
-    const DeclaredNestedDomainObjectClassOptions: (typeof DomainObject)[] =
+    const DeclaredNestedDomainObjectClassOptions: DomainObjectConstructor[] =
       isArray(declaredNestedDomainObjectValue)
         ? declaredNestedDomainObjectValue
         : [declaredNestedDomainObjectValue];
     const eachIsDomainObjectBased =
-      DeclaredNestedDomainObjectClassOptions.every(
-        (NestedDomainObject) =>
-          NestedDomainObject.prototype instanceof DomainObject, // https://stackoverflow.com/a/14486171/3068233
-      );
+      DeclaredNestedDomainObjectClassOptions.every(isOfDomainObject);
     if (!eachIsDomainObjectBased)
       throw new NestedDomainObjectHydrationError(
         `each value of each ${domainObjectName}.nested.${key} must be a single typeof DomainObject or an array of options of typeof DomainObject`,

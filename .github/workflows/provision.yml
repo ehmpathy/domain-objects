@@ -20,7 +20,7 @@ jobs:
     with:
       wish-path: provision/github.repo/resources.ts
       github-environment: prod
-      creds-github-app-owner: ehmpathy
+      creds-github-app-owner: ${{ github.repository_owner }}
       creds-github-app-id: ${{ vars.DECLASTRUCT_GITHUB_CONFORMER_APP_ID }}
     secrets:
       creds-github-app-private-key: ${{ secrets.DECLASTRUCT_GITHUB_CONFORMER_APP_PRIVATE_KEY }}

@@ -2,14 +2,15 @@ import {
   type WithImmute,
   withImmute,
 } from '@src/manipulation/immute/withImmute';
-import type { DomainObjectShape } from '@src/reference/Refable';
 
+import type { DomainObjectShape } from './DomainObjectShape';
 import { hydrateNestedDomainObjects } from './hydrate/hydrateNestedDomainObjects';
+import { MARK_AS_DOMAIN_OBJECT } from './markers';
 import { type SchemaOptions, validate } from './validate/validate';
 import { VERSION } from './version';
 
-// marker symbol (cross-version, global registry)
-export const MARK_AS_DOMAIN_OBJECT = Symbol.for('domain-objects/DomainObject');
+export type { DomainObjectShape } from './DomainObjectShape';
+export { MARK_AS_DOMAIN_OBJECT } from './markers';
 
 export interface DomainObjectInstantiationOptions {
   /**

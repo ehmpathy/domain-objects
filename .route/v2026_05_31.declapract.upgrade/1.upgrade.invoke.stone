@@ -1,0 +1,73 @@
+# 1.upgrade.invoke
+
+## purpose
+
+run the declapract upgrade and document any infrastructure defects.
+
+## instructions
+
+run the upgrade via skill:
+
+```sh
+rhx declapract.upgrade exec
+```
+
+## on failure
+
+if the upgrade fails, check the appendix for common failures before you escalate.
+
+if the failure is not in the appendix, document the defect in `1.upgrade.invoke.v1.i1.md` with:
+- what failed
+- error message
+- root cause (if identifiable)
+- handoff instructions for infrastructure team
+
+## on success
+
+emit `1.upgrade.invoke.v1.i1.md` with:
+- confirmation that upgrade completed
+- any warnings or notes
+
+---
+
+## appendix: common failures
+
+### absent variables
+
+if declapract throws an error about absent variables (e.g., "variable 'X' is required"):
+
+1. this is a resolvable constraint, not a blocker
+2. lookup recent repos in your org:
+   ```sh
+   rhx git.repo.get repos --repos 'ORG/*' | head -20
+   ```
+3. get declapract.use.yml from 3-5 recent repos until current config found:
+   ```sh
+   rhx git.repo.get lines --in ORG/REPO --paths 'declapract.use.yml'
+   ```
+4. match `useCase` field (e.g., npm-package, lambda-service) — different useCases have different variables
+5. copy only org-wide variables:
+   - `organizationName` — safe to copy (same across org)
+6. do NOT copy repo-specific variables:
+   - `projectName` — set to current repo name
+   - `infrastructureNamespaceId` — unique per repo/env
+   - `slackReleaseWebHook` — unique per repo/team
+7. re-run: `rhx declapract.upgrade exec`
+8. if 3-5 repos checked and none have current config, escalate to human
+
+### pnpm issues
+
+if pnpm-workspace.yml errors or pnpm version issues:
+
+1. set `packageManager` in package.json to `"pnpm@10.24.0"`
+2. if pnpm-workspace.yml exists but is uncommitted (check via `git status`), remove it
+3. re-run: `rhx declapract.upgrade exec`
+
+### dpdm cycle detection
+
+if lint fails due to dpdm circular dependency detection:
+
+1. **do NOT modify the `--exclude` pattern** — see brief `rule.forbid.dpdm-exclude-change`
+2. the pattern `--exclude '^$'` is intentional — it disables exclusions to catch all cycles
+3. fix the actual circular imports in the codebase instead
+4. if cycles exist in origin/main before your changes, document as pre-existent repo quirk

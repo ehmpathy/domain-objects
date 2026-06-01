@@ -13,7 +13,7 @@ jobs:
         id: github-token
         uses: actions/create-github-app-token@v2
         with:
-          owner: ehmpathy
+          owner: ${{ github.repository_owner }}
           repositories: ${{ github.event.repository.name }}
           app-id: ${{ vars.RHELEASE_APP_ID }}
           private-key: ${{ secrets.RHELEASE_APP_PRIVATE_KEY }}
