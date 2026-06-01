@@ -133,7 +133,9 @@ describe('isOfDomainObject', () => {
     interface GrandParent {
       name: string;
     }
-    class GrandParent extends DomainObject<GrandParent> implements GrandParent {}
+    class GrandParent
+      extends DomainObject<GrandParent>
+      implements GrandParent {}
     class Parent extends GrandParent {}
     class Child extends Parent {}
     class GrandChild extends Child {}
