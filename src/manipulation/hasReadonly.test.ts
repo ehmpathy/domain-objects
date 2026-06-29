@@ -259,4 +259,116 @@ describe('hasReadonly', () => {
       );
     });
   });
+
+  describe('nested readonly (dot-path)', () => {
+    interface AwsNetworkInterface {
+      publicIpEnabled: boolean;
+      privateIp?: string;
+    }
+    class AwsNetworkInterface
+      extends DomainLiteral<AwsNetworkInterface>
+      implements AwsNetworkInterface {}
+
+    interface AwsNetwork {
+      subnet: string;
+      interface: AwsNetworkInterface;
+    }
+    class AwsNetwork extends DomainLiteral<AwsNetwork> implements AwsNetwork {
+      public static nested = { interface: AwsNetworkInterface };
+    }
+
+    interface AwsEc2Instance {
+      arn?: string;
+      name: string;
+      network: AwsNetwork;
+    }
+    class AwsEc2Instance
+      extends DomainEntity<AwsEc2Instance>
+      implements AwsEc2Instance
+    {
+      public static unique = ['name'] as const;
+      public static metadata = ['arn'] as const;
+      public static readonly = ['network.interface.privateIp'] as const;
+      public static nested = { network: AwsNetwork };
+    }
+
+    it('should return true when the nested readonly path is defined', () => {
+      const resolved = new AwsEc2Instance({
+        arn: 'arn:aws:ec2:...',
+        name: 'web-1',
+        network: new AwsNetwork({
+          subnet: 'subnet-abc',
+          interface: new AwsNetworkInterface({
+            publicIpEnabled: true,
+            privateIp: '10.0.0.5',
+          }),
+        }),
+      });
+
+      expect(hasReadonly({ of: AwsEc2Instance })(resolved)).toBe(true);
+    });
+
+    it('should return false when the nested readonly path is undefined', () => {
+      const declared = new AwsEc2Instance({
+        arn: 'arn:aws:ec2:...',
+        name: 'web-1',
+        network: new AwsNetwork({
+          subnet: 'subnet-abc',
+          interface: new AwsNetworkInterface({ publicIpEnabled: true }), // privateIp absent
+        }),
+      });
+
+      expect(hasReadonly({ of: AwsEc2Instance })(declared)).toBe(false);
+    });
+
+    it('should require the nested readonly path on every element of a nested array', () => {
+      interface AwsEc2InstanceMultinic {
+        arn?: string;
+        name: string;
+        interfaces: AwsNetworkInterface[];
+      }
+      class AwsEc2InstanceMultinic
+        extends DomainEntity<AwsEc2InstanceMultinic>
+        implements AwsEc2InstanceMultinic
+      {
+        public static unique = ['name'] as const;
+        public static metadata = ['arn'] as const;
+        public static readonly = ['interfaces.privateIp'] as const;
+        public static nested = { interfaces: AwsNetworkInterface };
+      }
+
+      const allResolved = new AwsEc2InstanceMultinic({
+        arn: 'arn:aws:ec2:...',
+        name: 'web-2',
+        interfaces: [
+          new AwsNetworkInterface({
+            publicIpEnabled: true,
+            privateIp: '10.0.0.5',
+          }),
+          new AwsNetworkInterface({
+            publicIpEnabled: false,
+            privateIp: '10.0.0.6',
+          }),
+        ],
+      });
+      expect(hasReadonly({ of: AwsEc2InstanceMultinic })(allResolved)).toBe(
+        true,
+      );
+
+      const oneAbsent = new AwsEc2InstanceMultinic({
+        arn: 'arn:aws:ec2:...',
+        name: 'web-2',
+        interfaces: [
+          new AwsNetworkInterface({
+            publicIpEnabled: true,
+            privateIp: '10.0.0.5',
+          }),
+          new AwsNetworkInterface({ publicIpEnabled: false }), // privateIp absent on this one
+        ],
+      });
+      expect(hasReadonly({ of: AwsEc2InstanceMultinic })(oneAbsent)).toBe(
+        false,
+      );
+    });
+  });
 });

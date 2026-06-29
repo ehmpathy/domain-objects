@@ -238,6 +238,83 @@ describe('HasReadonly', () => {
     });
   });
 
+  describe('nested readonly (dot-path) keys', () => {
+    interface AwsNetworkInterface {
+      publicIpEnabled: boolean;
+      privateIp?: string;
+    }
+    class AwsNetworkInterface
+      extends DomainLiteral<AwsNetworkInterface>
+      implements AwsNetworkInterface {}
+
+    interface AwsNetwork {
+      subnet: string;
+      interface: AwsNetworkInterface;
+    }
+    class AwsNetwork extends DomainLiteral<AwsNetwork> implements AwsNetwork {
+      public static nested = { interface: AwsNetworkInterface };
+    }
+
+    interface AwsEc2Instance {
+      arn?: string;
+      name: string;
+      network: AwsNetwork;
+    }
+    class AwsEc2Instance
+      extends DomainEntity<AwsEc2Instance>
+      implements AwsEc2Instance
+    {
+      public static unique = ['name'] as const;
+      public static metadata = ['arn'] as const;
+      public static readonly = ['network.interface.privateIp'] as const;
+      public static nested = { network: AwsNetwork };
+    }
+
+    it('should narrow a nested readonly field to required (and keep flat keys required)', () => {
+      const instance: HasReadonly<typeof AwsEc2Instance> = {
+        arn: 'arn:aws:ec2:...',
+        name: 'web-1',
+        network: {
+          subnet: 'subnet-abc',
+          interface: { publicIpEnabled: true, privateIp: '10.0.0.5' },
+        },
+      };
+
+      // nested readonly field narrowed to required (string, not string | undefined)
+      const privateIp: string = instance.network.interface.privateIp;
+      expect(privateIp).toBe('10.0.0.5');
+
+      // flat metadata still narrowed to required
+      const arn: string = instance.arn;
+      expect(arn).toBe('arn:aws:ec2:...');
+    });
+
+    it('should type-error when the nested readonly field is absent', () => {
+      const instance: HasReadonly<typeof AwsEc2Instance> = {
+        arn: 'arn:aws:ec2:...',
+        name: 'web-1',
+        network: {
+          subnet: 'subnet-abc',
+          // @ts-expect-error: Property 'privateIp' is absent on network.interface
+          interface: { publicIpEnabled: true },
+        },
+      };
+      expect(instance).toBeDefined();
+    });
+
+    it('should type-error when flat metadata is absent, even with nested readonly declared', () => {
+      // @ts-expect-error: Property 'arn' is absent
+      const instance: HasReadonly<typeof AwsEc2Instance> = {
+        name: 'web-1',
+        network: {
+          subnet: 'subnet-abc',
+          interface: { publicIpEnabled: true, privateIp: '10.0.0.5' },
+        },
+      };
+      expect(instance).toBeDefined();
+    });
+  });
+
   describe('DomainLiteral', () => {
     describe('default metadata keys (acts as HasMetadata alias)', () => {
       interface Address {

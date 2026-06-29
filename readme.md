@@ -614,6 +614,60 @@ class AwsRdsCluster extends DomainEntity<AwsRdsCluster> implements AwsRdsCluster
 | Default keys | Yes (`id`, `uuid`, etc.) | No (explicit only) |
 | Omit function | `omitMetadata()` | `omitReadonly()` (includes metadata) |
 
+### Nested Readonly Properties (dot-path, declared from the entity)
+
+Some persistence-set attributes belong, by domain, inside a nested sub-object. For example, a `SeaTurtle` carries a satellite tracker — in real sea-turtle telemetry, a **Platform Terminal Transmitter (PTT)**. Once it is registered with the **Argos** satellite system, that system assigns the `argosId` and records each `lastFixAt` (location fix). The researcher-applied `flipperTagId` (a flipper tag) is settable; the Argos-resolved fields are readonly:
+
+```ts
+// a stateless, reusable satellite tracker (PTT) literal — it cannot self-declare readonly
+interface SatelliteTracker {
+  active: boolean;   // settable by the researcher
+  argosId?: string;  // assigned by the Argos satellite system (readonly)
+  lastFixAt?: string; // last Argos location fix (readonly)
+}
+class SatelliteTracker
+  extends DomainLiteral<SatelliteTracker>
+  implements SatelliteTracker {}
+
+interface TurtleGear {
+  flipperTagId: string; // researcher-applied flipper tag (settable)
+  tracker: SatelliteTracker;
+}
+class TurtleGear extends DomainLiteral<TurtleGear> implements TurtleGear {
+  public static nested = { tracker: SatelliteTracker };
+}
+
+class SeaTurtle extends DomainEntity<SeaTurtle> implements SeaTurtle {
+  public static unique = ['seawaterSecurityNumber'] as const;
+  public static metadata = ['uuid'] as const;
+  public static readonly = [
+    'gear.tracker.argosId',   // nested, Argos-resolved
+    'gear.tracker.lastFixAt', // nested, Argos-resolved
+  ] as const;
+  public static nested = { gear: TurtleGear };
+}
+```
+
+Declare nested readonly attributes via **dot-path** keys in `static readonly`. The attribute access chain (`gear.tracker.argosId`) is followed from the entity down into the nested object.
+
+**Why declare it on the entity (not the nested literal)?** A `DomainLiteral` is stateless and reusable across domains — in one domain `argosId` may be user-supplied, in another Argos-resolved. So the literal cannot self-declare readonly; the **entity** owns which of its nested attributes are persistence-set.
+
+Behavior:
+- `omitReadonly(obj)` follows each dot-path and drops the nested readonly field as it recurses into nested objects.
+- When a path traverses an **array** of nested objects (e.g. `sensors.calibratedAt`), it applies to **every element**.
+- The sub-objects along the path must be declared in `static nested` (so they hydrate into `DomainObject` instances the path can follow).
+- `hasReadonly({ of: Entity })(obj)` verifies nested readonly fields are populated at runtime, via a walk of the dot-path (and every array element).
+
+Requirements & limits:
+- **A nested readonly field must be optional in its literal's schema.** `omitReadonly` reconstructs each object after omission (it re-runs schema validation), so a nested readonly field marked _required_ in the literal's schema would fail reconstruction.
+- **Type-level narrow is flat-only.** `HasReadonly<typeof Entity>` narrows flat metadata/readonly keys to required; nested dot-path keys are verified at runtime by `hasReadonly` but are **not** narrowed at the type level (they are gracefully ignored by the type).
+
+```ts
+const omitted = omitReadonly(turtle);
+omitted.gear.tracker.argosId; // undefined (nested readonly dropped)
+omitted.gear.tracker.active;  // preserved (settable)
+```
+
 
 ## `DomainObject.build`
 
