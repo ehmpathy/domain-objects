@@ -1,3 +1,4 @@
+import { UnexpectedCodePathError } from 'helpful-errors';
 import {
   type AssessIsOfTypeMethod,
   type AssessWithAssure,
@@ -11,6 +12,31 @@ import { isOfDomainObject } from '@src/instantiation/inherit/isOfDomainObject';
 
 import { DomainObjectMetadataMustBeDefinedError } from './DomainObjectMetadataMustBeDefinedError';
 import type { ConstructorOf, HasReadonly } from './HasReadonly.type';
+
+/**
+ * checks whether a (possibly nested, dot-path) readonly key resolves to a defined value
+ *
+ * - flat key (no dot) => the value on this object must be defined
+ * - dot-path key => descend each segment; the terminal value must be defined
+ * - array along the path => every element must satisfy the rest of the path
+ */
+const isReadonlyPathDefined = (value: any, path: string): boolean => {
+  // array along the path => every element must satisfy the rest of the path
+  if (Array.isArray(value))
+    return value.every((item) => isReadonlyPathDefined(item, path));
+
+  const dotIndex = path.indexOf('.');
+  const head = dotIndex === -1 ? path : path.slice(0, dotIndex);
+  const tail = dotIndex === -1 ? null : path.slice(dotIndex + 1);
+  const next = value?.[head];
+
+  // terminal segment => the value must be defined
+  if (tail === null) return next !== undefined;
+
+  // non-terminal segment => must be able to descend, then check the rest of the path
+  if (next === undefined || next === null) return false;
+  return isReadonlyPathDefined(next, tail);
+};
 
 /**
  * runtime type guard that asserts that all readonly keys (metadata + explicit readonly)
@@ -49,8 +75,9 @@ export const hasReadonly = <TDobj extends ConstructorOf<DomainObject<any>>>({
   const assess = (obj: InstanceType<TDobj>): obj is HasReadonly<TDobj> => {
     // ensure it's a domain object
     if (!isOfDomainObject(obj))
-      throw new Error(
-        'hasReadonly called on object that is not an instance of a DomainObject. Are you sure you instantiated the object?',
+      throw new UnexpectedCodePathError(
+        'hasReadonly called on object that is not an instance of a DomainObject. Are you sure you instantiated the object? (Related: see `DomainObject.nested`)',
+        { obj },
       );
 
     // fail fast if metadata is not explicitly declared
@@ -71,10 +98,8 @@ export const hasReadonly = <TDobj extends ConstructorOf<DomainObject<any>>>({
     // combine metadata and readonly keys
     const allReadonlyKeys = [...new Set([...metadataKeys, ...readonlyKeys])];
 
-    // check that all readonly keys have defined values
-    return allReadonlyKeys.every(
-      (key) => (obj as Record<string, any>)[key] !== undefined,
-    );
+    // check that all readonly keys (flat or nested dot-path) have defined values
+    return allReadonlyKeys.every((key) => isReadonlyPathDefined(obj, key));
   };
 
   return withAssure(
