@@ -561,6 +561,66 @@ Domain modeling gives additional information that we can use for `change detecti
 due to this deterministic serialization, we are able to use this fn for [`change detection`](#change-detection) and [`identity comparisons`](#identity-comparison). See the [examples](#usage-examples) section above for an example of each.
 
 
+## getter `DomainObject.contract`
+
+`schema` _validates_ your data. `contract` _identifies_ it.
+
+`DomainObject.contract` returns your `Zod` `schema` stamped with the domain object's identity and key metadata as an `x-domain-object` pragma. Whereas `serialize` stamps a `_dobj` marker onto its string output, `contract` stamps identity onto the schema itself - so it survives `z.toJSONSchema()` and rides across the wire.
+
+This is what lets a cross-service consumer detect that a given json-schema _is_ a domain object, learn its name, de-dupe it across endpoints, and reconstruct it (with its `primary` / `unique` / `alias` / `nested` keys) - with no need to re-validate.
+
+> _note:_ `contract` requires a `static schema` that is a `Zod` schema. It throws a `ConstraintError` if the schema is absent or is `Joi`/`Yup` (only `Zod` can carry the json-schema identity pragma). It is memoized per-class, so repeated access returns the same stamped instance.
+
+example:
+
+```ts
+import { z } from 'zod';
+import { DomainEntity } from 'domain-objects';
+
+// declare a domain entity with keys + a zod schema
+interface Seaturtle {
+  uuid?: string;
+  name: string;
+  species: string;
+}
+class Seaturtle extends DomainEntity<Seaturtle> implements Seaturtle {
+  public static primary = ['uuid'] as const;
+  public static unique = ['name'] as const;
+  public static alias = { singular: 'seaturtle', plural: 'seaturtles' };
+  public static schema = z.object({
+    uuid: z.string().optional(),
+    name: z.string(),
+    species: z.string(),
+  });
+}
+
+// `.contract` stamps identity onto the schema; embed it anywhere a zod schema goes
+const wireSchema = z.object({ passenger: Seaturtle.contract });
+
+// the identity + keys survive json-schema serialization
+const json = z.toJSONSchema(wireSchema);
+expect(json.properties.passenger['x-domain-object']).toEqual({
+  name: 'Seaturtle',
+  primary: ['uuid'],
+  unique: ['name'],
+  alias: { singular: 'seaturtle', plural: 'seaturtles' },
+});
+```
+
+For a domain object with `nested` declarations, the contract carries the nested identities by **name** (the array form maps to an array of names, for polymorphic choices):
+
+```ts
+class Wave extends DomainEntity<Wave> implements Wave {
+  public static primary = ['uuid'] as const;
+  public static nested = { surfer: [Seaturtle, Dolphin] }; // polymorphic
+  public static schema = z.object({ /* ... */ });
+}
+
+z.toJSONSchema(Wave.contract)['x-domain-object'].nested;
+// => { surfer: ['Seaturtle', 'Dolphin'] }
+```
+
+
 ## Readonly vs Metadata Properties
 
 Domain objects support two categories of readonly properties. Both are set by the persistence layer, but they differ in what they describe. **Metadata is a special subset of readonly** - all metadata is readonly, but not all readonly is metadata.

@@ -19,14 +19,14 @@ export class HelpfulZodValidationError extends Error {
   }) {
     const message = `
 Errors were found while validating properties for domain object ${domainObject}.:
-${JSON.stringify(error.errors, null, 2)}
+${JSON.stringify(error.issues, null, 2)}
 
 Props Provided:
 ${JSON.stringify(props, null, 2)}
     `.trim();
     super(message);
 
-    this.details = error.errors;
+    this.details = error.issues;
     this.props = props;
     this.domainObject = domainObject;
   }

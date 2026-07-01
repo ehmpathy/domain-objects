@@ -1,4 +1,6 @@
+import { ConstraintError } from 'helpful-errors';
 import Joi from 'joi';
+import { getError } from 'test-fns';
 import { getUuid as uuid } from 'uuid-fns';
 import * as yup from 'yup';
 import { z } from 'zod';
@@ -298,6 +300,56 @@ describe('DomainObject', () => {
         });
         expect(plant.plantedIn).toBeInstanceOf(PlantPot);
       });
+    });
+  });
+
+  describe('.contract', () => {
+    it('should stamp identity + key metadata onto the schema for a seaturtle entity', () => {
+      // define a seaturtle domain entity with a zod schema + keys
+      interface Seaturtle {
+        uuid?: string;
+        name: string;
+        species: string;
+      }
+      class Seaturtle extends DomainObject<Seaturtle> implements Seaturtle {
+        public static primary = ['uuid'] as const;
+        public static unique = ['name'] as const;
+        public static alias = { singular: 'seaturtle', plural: 'seaturtles' };
+        public static schema = z.object({
+          uuid: z.string().optional(),
+          name: z.string(),
+          species: z.string(),
+        });
+      }
+
+      // read the contract and serialize it to json-schema
+      const json: Record<string, any> = z.toJSONSchema(Seaturtle.contract);
+
+      // the x-domain-object pragma carries the seaturtle's identity + keys across the wire
+      expect(json['x-domain-object']).toEqual({
+        name: 'Seaturtle',
+        primary: ['uuid'],
+        unique: ['name'],
+        alias: { singular: 'seaturtle', plural: 'seaturtles' },
+      });
+
+      // snapshot the full json-schema for visual review in prs
+      expect(json).toMatchSnapshot();
+    });
+
+    it('should fail fast with a ConstraintError when no schema is declared', () => {
+      // a seaturtle without a schema has no shape to identify
+      interface Seaturtle {
+        name: string;
+      }
+      class Seaturtle extends DomainObject<Seaturtle> implements Seaturtle {}
+
+      const error = getError(() => Seaturtle.contract);
+      expect(error).toBeInstanceOf(ConstraintError);
+      expect(error.message).toContain('requires a static schema');
+
+      // snapshot the message so hint/word regressions surface in pr diffs
+      expect(error.message).toMatchSnapshot();
     });
   });
 
