@@ -14,8 +14,11 @@ const isJoiSchema = (schema: SchemaOptions<any>): schema is JoiSchema => {
   return false;
 };
 
-const isZodSchema = (schema: SchemaOptions<any>): schema is ZodSchema<any> => {
-  if ((schema as ZodSchema<any>)._refinement) return true; // only zod schemas have _refinement
+export const isZodSchema = (
+  schema: SchemaOptions<any>,
+): schema is ZodSchema<any> => {
+  // detect via the public `.safeParse` method (zod-only); replaces zod 3's `_refinement` internal, which was removed in zod 4 (our baseline)
+  if (typeof (schema as ZodSchema<any>).safeParse === 'function') return true;
   return false;
 };
 

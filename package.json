@@ -56,7 +56,7 @@
     "preversion": "npm run prepush",
     "postversion": "git push origin HEAD --tags --no-verify",
     "prepare:husky": "husky install && chmod ug+x .husky/*",
-    "prepare:rhachet": "rhachet init --keys --hooks --roles mechanic behaver driver reviewer librarian ergonomist architect",
+    "prepare:rhachet": "rhachet init --hooks --roles mechanic architect ergonomist driver reviewer dreamer behaver dispatcher",
     "prepare": "if [ -e .git ] && [ -z $CI ]; then npm run prepare:husky && npm run prepare:rhachet; fi",
     "test:lint:cycles": "dpdm --no-warning --no-tree --exit-code circular:1 --exclude \"$(yq -r '.exclude | join(\"|\")' .dpdmrc.yaml)\" 'src/**/*.ts'",
     "upgrade:rhachet": "rhachet upgrade"
@@ -94,17 +94,18 @@
     "joi": "^18.2.1",
     "rhachet": "1.42.4",
     "rhachet-brains-anthropic": "0.4.1",
+    "rhachet-brains-fireworksai": "^0.1.3",
     "rhachet-brains-xai": "0.3.3",
-    "rhachet-roles-bhrain": "0.29.11",
+    "rhachet-roles-bhrain": "0.29.12",
     "rhachet-roles-bhuild": "0.21.18",
-    "rhachet-roles-ehmpathy": "1.37.1",
+    "rhachet-roles-ehmpathy": "1.37.2",
     "test-fns": "1.15.8",
     "tsc-alias": "1.8.10",
     "tsx": "4.20.6",
     "typescript": "5.4.5",
     "yalc": "1.0.0-pre.53",
     "yup": "^0.29.3",
-    "zod": "^3.23.8"
+    "zod": "^4.4.3"
   },
   "config": {
     "commitizen": {

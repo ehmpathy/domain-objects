@@ -351,6 +351,18 @@
             "command": "./node_modules/.bin/rhachet roles boot --role behaver",
             "timeout": 10,
             "author": "repo=bhuild/role=behaver"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet roles boot --role dispatcher",
+            "timeout": 10,
+            "author": "repo=bhuild/role=dispatcher"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet roles boot --role dreamer",
+            "timeout": 10,
+            "author": "repo=bhuild/role=dreamer"
           }
         ]
       },

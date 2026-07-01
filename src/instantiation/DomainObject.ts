@@ -1,3 +1,6 @@
+import type { ZodSchema } from 'zod';
+
+import { getContract } from '@src/manipulation/getContract';
 import {
   type WithImmute,
   withImmute,
@@ -89,6 +92,24 @@ export class DomainObject<T extends DomainObjectShape> {
   public static schema?: SchemaOptions<any>; // todo: work around typescript's "static members cant reference class type parameters"
 
   /**
+   * DomainObject.contract
+   *
+   * returns the domain object's `schema` stamped with its identity + key metadata, as an `x-domain-object` pragma.
+   *
+   * whereas `schema` *validates* the data, `contract` *identifies* it: the contract is the schema that knows its
+   * own name, primary/unique keys, alias, and nested dobj names. the stamp rides through `z.toJSONSchema()` so a
+   * cross-service consumer can name, de-dupe, and reconstruct the dobj from the wire (no re-validation needed).
+   *
+   * requires a `static schema` that is a `Zod` schema; throws a `ConstraintError` otherwise.
+   *
+   * @example
+   * z.object({ surfboard: SeaturtleSurfboard.contract });
+   */
+  public static get contract(): ZodSchema<any> {
+    return getContract(this);
+  }
+
+  /**
    * DomainObject.nested
    *
    * When set, will be used to hydrate nested DomainObjects. This is especially useful when instantiating nested domain objects from data stores (e.g., apis or databases). This is _required_ in order to safely use the `serialize` and `getUniqueIdentifier` functions - as those functions check static properties of domain objects to function correctly.
@@ -123,7 +144,10 @@ export class DomainObject<T extends DomainObjectShape> {
    * plant.owners.forEach((owner) => expect(owner).toBeInstance(PlantOwner)); // also succeeds, since during instantiation we hydrated each `owner` into an instance of `PlantOwner`, due to `Plant.nested.owners` being set
    * ```
    */
-  public static nested?: Record<string, DomainObject<any>>; // TODO: find a way to make this Record<keyof string>
+  public static nested?: Record<
+    string,
+    DomainObject<any> | DomainObject<any>[]
+  >; // a single nested dobj, or an array of dobj choices (polymorphic); array form matches hydrateNestedDomainObjects' own contract
 
   /**
    * DomainObject.metadata

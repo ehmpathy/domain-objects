@@ -1,0 +1,225 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`getContract given: a DomainEntity with primary, unique, alias, and nested when: the contract is embedded as a field in a parent z.object then: the pragma survives on the nested field of the parent json-schema 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "surfboard": {
+      "additionalProperties": false,
+      "properties": {
+        "rider": {
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "type": "string",
+            },
+            "uuid": {
+              "type": "string",
+            },
+          },
+          "required": [
+            "name",
+          ],
+          "type": "object",
+        },
+        "serialNumber": {
+          "type": "string",
+        },
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "serialNumber",
+        "rider",
+      ],
+      "type": "object",
+      "x-domain-object": {
+        "alias": {
+          "plural": "surfboards",
+          "singular": "surfboard",
+        },
+        "name": "SeaturtleSurfboard",
+        "nested": {
+          "rider": "Seaturtle",
+        },
+        "primary": [
+          "uuid",
+        ],
+        "unique": [
+          "serialNumber",
+        ],
+      },
+    },
+  },
+  "required": [
+    "surfboard",
+  ],
+  "type": "object",
+}
+`;
+
+exports[`getContract given: a DomainEntity with primary, unique, alias, and nested when: the contract is requested via getContract then: the json-schema output matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "rider": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+        },
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "name",
+      ],
+      "type": "object",
+    },
+    "serialNumber": {
+      "type": "string",
+    },
+    "uuid": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "serialNumber",
+    "rider",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "alias": {
+      "plural": "surfboards",
+      "singular": "surfboard",
+    },
+    "name": "SeaturtleSurfboard",
+    "nested": {
+      "rider": "Seaturtle",
+    },
+    "primary": [
+      "uuid",
+    ],
+    "unique": [
+      "serialNumber",
+    ],
+  },
+}
+`;
+
+exports[`getContract given: a DomainLiteral with a primary but no unique/alias/nested when: the contract is requested then: the json-schema output (primary-only form) matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "latitude": {
+      "type": "number",
+    },
+    "longitude": {
+      "type": "number",
+    },
+    "uuid": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "latitude",
+    "longitude",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "name": "Sandbar",
+    "primary": [
+      "uuid",
+    ],
+  },
+}
+`;
+
+exports[`getContract given: a DomainObject whose schema is joi, not zod when: the contract is requested then: it fails fast with a ConstraintError 1`] = `
+"✋ ConstraintError: JoiSandbar.contract requires a zod schema; joi/yup cannot carry json-schema identity. keep .schema for validation, but .contract needs zod
+
+{
+  "domainObject": "JoiSandbar"
+}"
+`;
+
+exports[`getContract given: a DomainObject whose schema is yup, not zod when: the contract is requested then: it fails fast with a ConstraintError 1`] = `
+"✋ ConstraintError: YupSandbar.contract requires a zod schema; joi/yup cannot carry json-schema identity. keep .schema for validation, but .contract needs zod
+
+{
+  "domainObject": "YupSandbar"
+}"
+`;
+
+exports[`getContract given: a DomainObject with no schema declared when: the contract is requested then: it fails fast with a ConstraintError 1`] = `
+"✋ ConstraintError: Driftwood.contract requires a static schema. declare \`static schema\` (zod) on Driftwood to use .contract
+
+{
+  "domainObject": "Driftwood"
+}"
+`;
+
+exports[`getContract given: a DomainObject with polymorphic (array) nested choices when: the contract is requested then: the json-schema output (array nested form) matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "surfer": {
+      "additionalProperties": false,
+      "properties": {
+        "ref": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "ref",
+      ],
+      "type": "object",
+    },
+    "uuid": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "surfer",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "name": "Wave",
+    "nested": {
+      "surfer": [
+        "Seaturtle",
+        "Dolphin",
+      ],
+    },
+    "primary": [
+      "uuid",
+    ],
+  },
+}
+`;
+
+exports[`getContract given: a plain DomainObject with a schema and alias but no keys when: the contract is requested then: the json-schema output (string alias form) matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "bubbles": {
+      "type": "number",
+    },
+  },
+  "required": [
+    "bubbles",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "alias": "foam",
+    "name": "Seafoam",
+  },
+}
+`;
