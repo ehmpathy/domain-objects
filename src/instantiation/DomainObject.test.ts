@@ -300,6 +300,136 @@ describe('DomainObject', () => {
         });
         expect(plant.plantedIn).toBeInstanceOf(PlantPot);
       });
+      it('should leave a bare array of scalars un-hydrated under a single-option nested key', () => {
+        // define the seaturtle's forage wrapper
+        interface SeaturtleForage {
+          include?: string;
+          exclude?: string;
+        }
+        class SeaturtleForage
+          extends DomainObject<SeaturtleForage>
+          implements SeaturtleForage {}
+
+        // define the seaturtle, whose forage may be a bare scalar, bare array, or wrapper
+        interface Seaturtle {
+          forage: string | string[] | SeaturtleForage;
+        }
+        class Seaturtle extends DomainObject<Seaturtle> implements Seaturtle {
+          public static nested = { forage: SeaturtleForage };
+        }
+
+        // a bare array of strings should stay a bare array of strings, not become wrappers
+        const seaturtle = new Seaturtle({ forage: ['seagrass', 'jellyfish'] });
+        expect(seaturtle.forage).toEqual(['seagrass', 'jellyfish']);
+        (seaturtle.forage as string[]).forEach((food) =>
+          expect(food).not.toBeInstanceOf(SeaturtleForage),
+        );
+      });
+      it('should support a mixed union on one nested key: bare scalar, bare array, and object-wrapper', () => {
+        // define the seaturtle's forage wrapper
+        interface SeaturtleForage {
+          include?: string;
+          exclude?: string;
+        }
+        class SeaturtleForage
+          extends DomainObject<SeaturtleForage>
+          implements SeaturtleForage {}
+
+        // define the seaturtle
+        interface Seaturtle {
+          forage: string | string[] | SeaturtleForage;
+        }
+        class Seaturtle extends DomainObject<Seaturtle> implements Seaturtle {
+          public static nested = { forage: SeaturtleForage };
+        }
+
+        // bare scalar stays bare
+        expect(new Seaturtle({ forage: 'seagrass' }).forage).toEqual(
+          'seagrass',
+        );
+
+        // bare array stays bare
+        expect(
+          new Seaturtle({ forage: ['seagrass', 'jellyfish'] }).forage,
+        ).toEqual(['seagrass', 'jellyfish']);
+
+        // object with include maps to a wrapper instance
+        const included = new Seaturtle({ forage: { include: 'seagrass' } });
+        expect(included.forage).toBeInstanceOf(SeaturtleForage);
+        expect((included.forage as SeaturtleForage).include).toEqual(
+          'seagrass',
+        );
+
+        // object with exclude maps to a wrapper instance
+        const excluded = new Seaturtle({ forage: { exclude: 'jellyfish' } });
+        expect(excluded.forage).toBeInstanceOf(SeaturtleForage);
+        expect((excluded.forage as SeaturtleForage).exclude).toEqual(
+          'jellyfish',
+        );
+      });
+      it('should hydrate object elements and leave bare scalar elements in a mixed array', () => {
+        // define the seaturtle's forage wrapper
+        interface SeaturtleForage {
+          include?: string;
+          exclude?: string;
+        }
+        class SeaturtleForage
+          extends DomainObject<SeaturtleForage>
+          implements SeaturtleForage {}
+
+        // define the seaturtle, whose forage may be an array of scalars or wrappers
+        interface Seaturtle {
+          forage: Array<string | SeaturtleForage>;
+        }
+        class Seaturtle extends DomainObject<Seaturtle> implements Seaturtle {
+          public static nested = { forage: SeaturtleForage };
+        }
+
+        // a mixed array leaves the scalar bare and hydrates the object
+        const seaturtle = new Seaturtle({
+          forage: ['seagrass', { include: 'jellyfish' }],
+        });
+        expect(seaturtle.forage[0]).toEqual('seagrass');
+        expect(seaturtle.forage[0]).not.toBeInstanceOf(SeaturtleForage);
+        expect(seaturtle.forage[1]).toBeInstanceOf(SeaturtleForage);
+        expect((seaturtle.forage[1] as SeaturtleForage).include).toEqual(
+          'jellyfish',
+        );
+      });
+      it('should pass through a bare scalar element under a multi-option nested key', () => {
+        // define two forage wrapper options
+        interface SeaturtleForageInclude {
+          include: string;
+        }
+        class SeaturtleForageInclude
+          extends DomainObject<SeaturtleForageInclude>
+          implements SeaturtleForageInclude {}
+
+        interface SeaturtleForageExclude {
+          exclude: string;
+        }
+        class SeaturtleForageExclude
+          extends DomainObject<SeaturtleForageExclude>
+          implements SeaturtleForageExclude {}
+
+        // define the seaturtle with a multi-option nested key
+        interface Seaturtle {
+          forage: Array<
+            string | SeaturtleForageInclude | SeaturtleForageExclude
+          >;
+        }
+        class Seaturtle extends DomainObject<Seaturtle> implements Seaturtle {
+          public static nested = {
+            forage: [SeaturtleForageInclude, SeaturtleForageExclude],
+          };
+        }
+
+        // a bare scalar element passes through instead of a throw over the ambiguous options
+        const seaturtle = new Seaturtle({ forage: ['seagrass'] });
+        expect(seaturtle.forage[0]).toEqual('seagrass');
+        expect(seaturtle.forage[0]).not.toBeInstanceOf(SeaturtleForageInclude);
+        expect(seaturtle.forage[0]).not.toBeInstanceOf(SeaturtleForageExclude);
+      });
     });
   });
 
