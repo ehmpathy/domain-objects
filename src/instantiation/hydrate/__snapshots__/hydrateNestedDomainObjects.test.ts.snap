@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`hydrateNestedDomainObjects given: a multi-option nested key when: an array element is an object without a _dobj hint then: it still throws (the bare-value guard does not swallow objects) 1`] = `
+"DomainObject property Seaturtle.forage was declared as a nested domain object with 2 options but was not already instantiated as one of the declared nested domain objects nor did it have a ._dobj key specified from serialization. Can not determine which option to use without one of those two specified.
+
+Please try one of the following
+- instantiate Seaturtle.forage as a nested DomainObject when instantiating Seaturtle
+- make sure that you are using the 'serialize' method of this library if deserializing
+}
+
+{
+  "key": "forage",
+  "prop": {
+    "include": "seagrass"
+  },
+  "instantiatedClassName": null,
+  "declaredNestedClassNameOptionsForProp": [
+    "SeaturtleForageInclude",
+    "SeaturtleForageExclude"
+  ]
+}"
+`;

@@ -57,6 +57,9 @@ export const hydrateNestedDomainObjects = ({
         (ClassOption) => ClassOption.name,
       );
     const instantiateThisPropIfNeeded = (prop: any) => {
+      // if it's a bare value (scalar or null), leave it un-hydrated - mirror the field-level guard, since no domain object would validate a primitive
+      if (typeof prop !== 'object' || prop === null) return prop;
+
       // if it's already an instance of a domain object, then just check that it's one of the options specified and return it if so
       const instantiatedClassName = isOfDomainObject(prop)
         ? prop.constructor.name
