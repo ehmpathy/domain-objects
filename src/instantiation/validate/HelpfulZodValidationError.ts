@@ -1,7 +1,9 @@
 // only importing types  > dev dep
 import type { ZodError, ZodIssue } from 'zod';
 
-export class HelpfulZodValidationError extends Error {
+import { HelpfulSchemaValidationError } from './HelpfulSchemaValidationError';
+
+export class HelpfulZodValidationError extends HelpfulSchemaValidationError {
   public details: ZodIssue[];
 
   public props: any;

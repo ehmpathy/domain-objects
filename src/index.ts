@@ -11,6 +11,7 @@ export {
   DomainObject,
   MARK_AS_DOMAIN_OBJECT,
 } from './instantiation/DomainObject';
+export { NestedDomainObjectHydrationError } from './instantiation/hydrate/hydrateNestedDomainObjects';
 export { isOfDomainEntity } from './instantiation/inherit/isOfDomainEntity';
 export { isOfDomainEvent } from './instantiation/inherit/isOfDomainEvent';
 export { isOfDomainLiteral } from './instantiation/inherit/isOfDomainLiteral';
@@ -19,7 +20,9 @@ export { Ref } from './instantiation/Ref';
 export { RefByPrimary } from './instantiation/RefByPrimary';
 export { RefByUnique } from './instantiation/RefByUnique';
 export { HelpfulJoiValidationError } from './instantiation/validate/HelpfulJoiValidationError';
+export { HelpfulSchemaValidationError } from './instantiation/validate/HelpfulSchemaValidationError';
 export { HelpfulYupValidationError } from './instantiation/validate/HelpfulYupValidationError';
+export { HelpfulZodValidationError } from './instantiation/validate/HelpfulZodValidationError';
 export { clone } from './manipulation/clone/clone';
 export { DomainEntityUniqueKeysMustBeDefinedError } from './manipulation/DomainEntityUniqueKeysMustBeDefinedError';
 export { DomainEntityUpdatablePropertiesMustBeDefinedError } from './manipulation/DomainEntityUpdatablePropertiesMustBeDefinedError';

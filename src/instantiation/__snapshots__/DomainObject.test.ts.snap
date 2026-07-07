@@ -98,3 +98,9 @@ Props Provided:
   "passengers": 50
 }"
 `;
+
+exports[`DomainObject validation hydration should hydrate nested domain objects correctly when given choice of different options 1`] = `
+PlantPot {
+  "diameterInInches": 7,
+}
+`;

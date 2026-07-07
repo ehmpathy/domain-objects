@@ -1,7 +1,9 @@
 // only importing types  > dev dep
 import type { ValidationError } from 'yup';
 
-export class HelpfulYupValidationError extends Error {
+import { HelpfulSchemaValidationError } from './HelpfulSchemaValidationError';
+
+export class HelpfulYupValidationError extends HelpfulSchemaValidationError {
   public details: string[];
 
   public props: any;

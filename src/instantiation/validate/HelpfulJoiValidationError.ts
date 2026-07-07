@@ -1,12 +1,14 @@
 // only importing types  > dev dep
 import type { ValidationError } from 'joi';
 
+import { HelpfulSchemaValidationError } from './HelpfulSchemaValidationError';
+
 interface HelpfulJoiValidationErrorDetail {
   message: string;
   path: string;
   type: string;
 }
-export class HelpfulJoiValidationError extends Error {
+export class HelpfulJoiValidationError extends HelpfulSchemaValidationError {
   public details: HelpfulJoiValidationErrorDetail[];
 
   public props: any;
