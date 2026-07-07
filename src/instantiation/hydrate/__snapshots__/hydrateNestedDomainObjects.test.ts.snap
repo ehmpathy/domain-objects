@@ -1,22 +1,281 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`hydrateNestedDomainObjects given: a multi-option nested key when: an array element is an object without a _dobj hint then: it still throws (the bare-value guard does not swallow objects) 1`] = `
-"DomainObject property Seaturtle.forage was declared as a nested domain object with 2 options but was not already instantiated as one of the declared nested domain objects nor did it have a ._dobj key specified from serialization. Can not determine which option to use without one of those two specified.
+"✋ NestedDomainObjectHydrationError: DomainObject property Seaturtle.forage was given a plain object with 2 nested options and no ._dobj discriminator. Structural disambiguation requires every option to declare a strict (closed) schema, but these options are not strict (or declare no schema): [SeaturtleForageInclude, SeaturtleForageExclude] — so a superset object could fit one silently.
 
-Please try one of the following
-- instantiate Seaturtle.forage as a nested DomainObject when instantiating Seaturtle
-- make sure that you are using the 'serialize' method of this library if deserializing
-}
+Please declare strict schemas on all options for Seaturtle.forage, or pass a ._dobj discriminator, or instantiate Seaturtle.forage as a nested DomainObject explicitly.
 
 {
   "key": "forage",
   "prop": {
     "include": "seagrass"
   },
-  "instantiatedClassName": null,
+  "optionsNotStrict": [
+    "SeaturtleForageInclude",
+    "SeaturtleForageExclude"
+  ],
   "declaredNestedClassNameOptionsForProp": [
     "SeaturtleForageInclude",
     "SeaturtleForageExclude"
+  ]
+}"
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case1] plain object fits exactly one option when: [t0] input fits the species option then: should hydrate into that option, no _dobj needed 1`] = `
+SeaturtleForageSpecies {
+  "slug": "seagrass",
+}
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case1] plain object fits exactly one option when: [t1] input fits the scope option then: should hydrate into that option, no _dobj needed 1`] = `
+SeaturtleForageScope {
+  "exclude": [
+    SeaturtleForageSpecies {
+      "slug": "jellyfish",
+    },
+  ],
+  "include": [
+    SeaturtleForageSpecies {
+      "slug": "seagrass",
+    },
+  ],
+}
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case2] plain object fits zero options when: [t0] input fits neither schema then: should throw a "no option fits" error 1`] = `
+"✋ NestedDomainObjectHydrationError: DomainObject property Seaturtle.forage was given a plain object that fits no declared nested option by schema. Checked options: [SeaturtleForageSpecies, SeaturtleForageScope].
+
+Please ensure the object matches one option's schema, or pass a ._dobj discriminator, or instantiate Seaturtle.forage as a nested DomainObject explicitly.
+
+{
+  "key": "forage",
+  "prop": {
+    "depth": 40
+  },
+  "declaredNestedClassNameOptionsForProp": [
+    "SeaturtleForageSpecies",
+    "SeaturtleForageScope"
+  ]
+}"
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case3] plain object fits many options when: [t0] input fits more than one option, no _dobj then: should throw an "ambiguous, disambiguate via _dobj" error 1`] = `
+"✋ NestedDomainObjectHydrationError: DomainObject property Diver.spot was given a plain object that fits more than one declared nested option ([SpotBySlug, SpotBySlugToo]) — it is ambiguous. Please disambiguate via a ._dobj discriminator, or instantiate Diver.spot as a nested DomainObject explicitly.
+
+{
+  "key": "spot",
+  "prop": {
+    "slug": "coral gardens"
+  },
+  "optionsFit": [
+    "SpotBySlug",
+    "SpotBySlugToo"
+  ],
+  "declaredNestedClassNameOptionsForProp": [
+    "SpotBySlug",
+    "SpotBySlugToo"
+  ]
+}"
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case3] plain object fits many options when: [t1] input fits more than one option, with _dobj then: should use the _dobj discriminator directly 1`] = `
+SpotBySlugToo {
+  "slug": "coral gardens",
+}
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case4] _dobj present — checked first, try-each skipped when: [t0] input carries _dobj on a strict multi-option key then: should use _dobj directly 1`] = `
+SeaturtleForageSpecies {
+  "slug": "seagrass",
+}
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case4] _dobj present — checked first, try-each skipped when: [t1] schemaless options disambiguated by _dobj (back-compat) then: should use _dobj without any schema check 1`] = `
+PlantPot {
+  "diameterInInches": 7,
+}
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case4] _dobj present — checked first, try-each skipped when: [t2] _dobj names an option that was not declared then: should throw a "._dobj not among declared options" error 1`] = `
+"✋ NestedDomainObjectHydrationError: DomainObject property Seaturtle.forage was declared as a nested domain object with 2 options and had a ._dobj key specified on the input. However, the specified ._dobj was not found as one of the declared nested domain object options. In other words, the correct class constructor was not present on the DomainObject.nested definition.
+
+Please check the declared nested domain object options for Seaturtle.forage and update it to include SeaturtleForageMystery, or correct the ._dobj value in the data to match a declared option.
+
+{
+  "key": "forage",
+  "prop": {
+    "_dobj": "SeaturtleForageMystery",
+    "slug": "seagrass"
+  },
+  "declaredNestedClassNameOptionsForProp": [
+    "SeaturtleForageSpecies",
+    "SeaturtleForageScope"
+  ]
+}"
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case4] _dobj present — checked first, try-each skipped when: [t3] _dobj is present but falsy (null) then: should strip it and fall through to try-each, not failfast 1`] = `
+SeaturtleForageSpecies {
+  "slug": "seagrass",
+}
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case5] try-each requires strict schemas — failfast otherwise when: [t0] a fit option has no schema then: should failfast, request strict schemas or _dobj 1`] = `
+"✋ NestedDomainObjectHydrationError: DomainObject property Diver.spot was given a plain object with 2 nested options and no ._dobj discriminator. Structural disambiguation requires every option to declare a strict (closed) schema, but these options are not strict (or declare no schema): [SpotBare] — so a superset object could fit one silently.
+
+Please declare strict schemas on all options for Diver.spot, or pass a ._dobj discriminator, or instantiate Diver.spot as a nested DomainObject explicitly.
+
+{
+  "key": "spot",
+  "prop": {
+    "slug": "coral gardens"
+  },
+  "optionsNotStrict": [
+    "SpotBare"
+  ],
+  "declaredNestedClassNameOptionsForProp": [
+    "SpotTagged",
+    "SpotBare"
+  ]
+}"
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case5] try-each requires strict schemas — failfast otherwise when: [t1] a fit option has a non-strict schema then: should failfast when a non-strict option fits the input 1`] = `
+"✋ NestedDomainObjectHydrationError: DomainObject property Diver.spot was given a plain object with 2 nested options and no ._dobj discriminator. Structural disambiguation requires every option to declare a strict (closed) schema, but these options are not strict (or declare no schema): [SpotLoose] — so a superset object could fit one silently.
+
+Please declare strict schemas on all options for Diver.spot, or pass a ._dobj discriminator, or instantiate Diver.spot as a nested DomainObject explicitly.
+
+{
+  "key": "spot",
+  "prop": {
+    "slug": "kelp forest"
+  },
+  "optionsNotStrict": [
+    "SpotLoose"
+  ],
+  "declaredNestedClassNameOptionsForProp": [
+    "SpotStrict",
+    "SpotLoose"
+  ]
+}"
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case5] try-each requires strict schemas — failfast otherwise when: [t2] a non-strict option does not accept the input then: should hydrate into the strict option that fits, no failfast 1`] = `
+SpotStrict {
+  "reef": "coral gardens",
+}
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case6] already-instantiated option when: [t0] input is already an instance of a valid option then: should keep it as-is 1`] = `
+SeaturtleForageSpecies {
+  "slug": "seagrass",
+}
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case7] disambiguation is schema-lib-agnostic (joi) when: [t0] input fits exactly one joi option then: should disambiguate structurally via joi schemas 1`] = `
+JoiKelp {
+  "blades": 12,
+}
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case7] disambiguation is schema-lib-agnostic (joi) when: [t1] a joi option is non-strict (unknown allowed) then: should failfast when a non-strict joi option fits 1`] = `
+"✋ NestedDomainObjectHydrationError: DomainObject property JoiHome.home was given a plain object with 2 nested options and no ._dobj discriminator. Structural disambiguation requires every option to declare a strict (closed) schema, but these options are not strict (or declare no schema): [JoiLoose] — so a superset object could fit one silently.
+
+Please declare strict schemas on all options for JoiHome.home, or pass a ._dobj discriminator, or instantiate JoiHome.home as a nested DomainObject explicitly.
+
+{
+  "key": "home",
+  "prop": {
+    "tag": "anemone"
+  },
+  "optionsNotStrict": [
+    "JoiLoose"
+  ],
+  "declaredNestedClassNameOptionsForProp": [
+    "JoiLoose",
+    "JoiTight"
+  ]
+}"
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case8] a declared nested option is not a DomainObject when: [t0] the nested declaration includes a non-DomainObject option then: should throw a "must be a DomainObject" error 1`] = `
+"✋ NestedDomainObjectHydrationError: each value of each Reef.nested.spot must be a single typeof DomainObject or an array of options of typeof DomainObject
+
+{
+  "dobj": "Reef",
+  "key": "spot",
+  "declaredNestedClassNameOptionsForProp": [
+    "SeaturtleForageSpecies",
+    "NotADomainObject"
+  ]
+}"
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case9] array-valued nested key with mixed options when: [t0] the array holds one of each option then: should run try-each per element and hydrate each into its own option 1`] = `
+[
+  SeaturtleForageSpecies {
+    "slug": "seagrass",
+  },
+  SeaturtleForageScope {
+    "exclude": [
+      SeaturtleForageSpecies {
+        "slug": "jellyfish",
+      },
+    ],
+    "include": [
+      SeaturtleForageSpecies {
+        "slug": "seagrass",
+      },
+    ],
+  },
+]
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case9] array-valued nested key with mixed options when: [t1] one array element fits zero options then: should throw a "no option fits" error for that element 1`] = `
+"✋ NestedDomainObjectHydrationError: DomainObject property SeaturtleColony.forages was given a plain object that fits no declared nested option by schema. Checked options: [SeaturtleForageSpecies, SeaturtleForageScope].
+
+Please ensure the object matches one option's schema, or pass a ._dobj discriminator, or instantiate SeaturtleColony.forages as a nested DomainObject explicitly.
+
+{
+  "key": "forages",
+  "prop": {
+    "depth": 40
+  },
+  "declaredNestedClassNameOptionsForProp": [
+    "SeaturtleForageSpecies",
+    "SeaturtleForageScope"
+  ]
+}"
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case10] a nullable multi-option nested value is null when: [t0] the nested value is null then: should leave it null — no hydration, no failfast 1`] = `null`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case11] single-option fast path still short-circuits when: [t0] a single declared option (not an array) then: should build into it directly, no disambiguation 1`] = `
+SeaturtleForageSpecies {
+  "slug": "seagrass",
+}
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case12] root-level _dobj discriminator is stripped when: [t0] the parent props carry a root _dobj then: should drop _dobj from the hydrated object 1`] = `
+Seaturtle {
+  "forage": SeaturtleForageSpecies {
+    "slug": "seagrass",
+  },
+  "name": "crush",
+}
+`;
+
+exports[`hydrateNestedDomainObjects multi-option structural disambiguation given: [case13] plain empty object fits zero options when: [t0] input is an empty object then: should throw a "no option fits" error 1`] = `
+"✋ NestedDomainObjectHydrationError: DomainObject property Seaturtle.forage was given a plain object that fits no declared nested option by schema. Checked options: [SeaturtleForageSpecies, SeaturtleForageScope].
+
+Please ensure the object matches one option's schema, or pass a ._dobj discriminator, or instantiate Seaturtle.forage as a nested DomainObject explicitly.
+
+{
+  "key": "forage",
+  "prop": {},
+  "declaredNestedClassNameOptionsForProp": [
+    "SeaturtleForageSpecies",
+    "SeaturtleForageScope"
   ]
 }"
 `;

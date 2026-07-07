@@ -1,0 +1,270 @@
+🦉 the way speaks for itself
+
+🗿 route.stone.set
+   ├─ stone = 5.3.verification
+   ├─ passage = malfunction
+   ├─ reason = reviewer or judge malfunctioned
+   ├─ options
+   │  ├─ overrule the malfunction
+   │  │  └─ rhx route.stone.set --stone 5.3.verification --as overruled
+   │  └─ or fix the reviewer, then retry
+   └─ guard
+      ├─ artifacts
+      │   ├─ $route/5.3.verification.yield.md
+      │   └─ src/**/*
+      ├─ reviews
+      │   ├─ r1: repo-rules (l1, 0/5)
+      │   │   ├─ constraint 1.3s
+      │   │   ├─ 0 blockers ✓
+      │   │   ├─ 0 nitpicks ✓
+      │   │   └─ review: .behavior/v2026_07_05.fix-multi-option-hydration/.reviews/peer/5.3.verification._.review.i6.77563daa702743163c.r1._.given.by_peer.repo-rules.md
+      │   ├─ r2: ergo-contract-snapshots (l1, 5/5)
+      │   │   ├─ approved, cached
+      │   │   ├─ 0 blockers ✓
+      │   │   ├─ 0 nitpicks ✓
+      │   │   └─ review: .behavior/v2026_07_05.fix-multi-option-hydration/.reviews/peer/5.3.verification._.review.i5.4583ab2a3037c78b31.r2._.given.by_peer.ergo-contract-snapshots.md
+      │   ├─ r3: mech-external-contracts (l1, 5/5)
+      │   │   ├─ approved, cached
+      │   │   ├─ 0 blockers ✓
+      │   │   ├─ 0 nitpicks ✓
+      │   │   └─ review: .behavior/v2026_07_05.fix-multi-option-hydration/.reviews/peer/5.3.verification._.review.i5.4583ab2a3037c78b31.r3._.given.by_peer.mech-external-contracts.md
+      │   ├─ r4: ergo-acceptance-journey-coverage (l1, 5/5)
+      │   │   ├─ approved, cached
+      │   │   ├─ 0 blockers ✓
+      │   │   ├─ 0 nitpicks ✓
+      │   │   └─ review: .behavior/v2026_07_05.fix-multi-option-hydration/.reviews/peer/5.3.verification._.review.i5.4583ab2a3037c78b31.r4._.given.by_peer.ergo-acceptance-journey-coverage.md
+      │   ├─ r5: ergo-snapshot-visual-blemishes (l1, 5/5)
+      │   │   ├─ exhausted, cached
+      │   │   ├─ 1 blocker 🔴
+      │   │   ├─ 0 nitpicks ✓
+      │   │   └─ review: .behavior/v2026_07_05.fix-multi-option-hydration/.reviews/peer/5.3.verification._.review.i5.4583ab2a3037c78b31.r5._.given.by_peer.ergo-snapshot-visual-blemishes.md
+      │   ├─ r6: mech-given-when-then (l1, 5/5)
+      │   │   ├─ approved, cached
+      │   │   ├─ 0 blockers ✓
+      │   │   ├─ 0 nitpicks ✓
+      │   │   └─ review: .behavior/v2026_07_05.fix-multi-option-hydration/.reviews/peer/5.3.verification._.review.i5.4583ab2a3037c78b31.r6._.given.by_peer.mech-given-when-then.md
+      │   ├─ r7: mech-test-intent (l1, 5/5)
+      │   │   ├─ approved, cached
+      │   │   ├─ 0 blockers ✓
+      │   │   ├─ 0 nitpicks ✓
+      │   │   └─ review: .behavior/v2026_07_05.fix-multi-option-hydration/.reviews/peer/5.3.verification._.review.i5.4583ab2a3037c78b31.r7._.given.by_peer.mech-test-intent.md
+      │   ├─ r8: mech-test-scope-purity (l1, 0/5)
+      │   │   ├─ constraint 1.3s
+      │   │   ├─ 0 blockers ✓
+      │   │   ├─ 0 nitpicks ✓
+      │   │   └─ review: .behavior/v2026_07_05.fix-multi-option-hydration/.reviews/peer/5.3.verification._.review.i6.77563daa702743163c.r8._.given.by_peer.mech-test-scope-purity.md
+      │   ├─ r9: enroll-verif-snapshot-coverage (l3, 1/3)
+      │   │   ├─ 💥 malfunction
+      │   │   └─ review: .behavior/v2026_07_05.fix-multi-option-hydration/.reviews/peer/5.3.verification._.review.i6.77563daa702743163c.r9._.given.by_peer.enroll-verif-snapshot-coverage.md
+      │   ├─ r10: enroll-verif-snapshot-blemishes (l3, 1/3)
+      │   │   ├─ 💥 malfunction
+      │   │   └─ review: .behavior/v2026_07_05.fix-multi-option-hydration/.reviews/peer/5.3.verification._.review.i6.77563daa702743163c.r10._.given.by_peer.enroll-verif-snapshot-blemishes.md
+      │   └─ r11: enroll-verif-test-intent (l3, 1/3)
+      │       ├─ 💥 malfunction
+      │       └─ review: .behavior/v2026_07_05.fix-multi-option-hydration/.reviews/peer/5.3.verification._.review.i6.77563daa702743163c.r11._.given.by_peer.enroll-verif-test-intent.md
+      └─ judges
+          └─ j1: $rhachet run --repo bhrain --skill route.stone.judge --mechanism reviewed? --stone $stone --route $route --allow-blockers 0 --allow-nitpicks 0
+              └─ finished 0.8s ✓
+
+────────────────────────────────────────────────────────────────
+
+🔎 review 9
+   ├─ stdout
+   │  ├─
+   │  │
+   │  │  **Snapshot coverage: ✅ Comprehensive**
+   │  │  
+   │  │  All 13 `given` cases in `hydrateNestedDomainObjects.test.ts` use `toMatchSnapshot()` on both happy-path outputs and error messages. The snapshot file is fully populated with readable, descriptive entries — class names and nested structure are visible in PR diffs. The `.contract` tests in `DomainObject.test.ts` also snapshot both the JSON schema output and the error message.
+   │  │  
+   │  │  `getSchemaFit.test.ts` appropriately skips snapshots and uses `toEqual` — it returns plain `{ accepts, strict }` objects, no visual review value.
+   │  │  
+   │  │  **Journey/acceptance coverage: ✅ Comprehensive**
+   │  │  
+   │  │  The 13 cases collectively cover the full user journey for the bug fix:
+   │  │  
+   │  │  - **Primary bug journey** (case1): `new Seaturtle({ forage: { slug: 'seagrass' } })` → `instanceof SeaturtleForageSpecies` — the core fix
+   │  │  - **Scope disambiguation** (case1 t1): `forage: { include, exclude }` → `instanceof SeaturtleForageScope`
+   │  │  - **All error paths** (case2, case3, case4 t2, case5 t0/t1): no-fit, ambiguous, undeclared `_dobj`, non-strict options
+   │  │  - **Back-compat** (case4 t1): schemaless options still work via `_dobj`
+   │  │  - **Edge cases** (case6, case10, case11, case13): already-instantiated, null, single-option fast path, empty object
+   │  │  - **Array-valued keys** (case9): mixed-option arrays hydrate element-by-element
+   │  │  - **Cross-schema-lib** (case7): joi works alongside zod
+   │  │  
+   │  │  This is a library, not an API — no `.acceptance.test.ts` is expected. The unit tests here *are* the journey tests; they exercise the library at its public contract boundary (`new DomainObject(props)`).
+   │  │  
+   │  │  **No gaps.** The diff is well-covered on both criteria.
+   │  │
+   │  └─
+   ├─ stderr
+   │  ├─
+   │  │
+   │  │  Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+   │  │  
+   │  │  💥 malfunction: reviewer output lacks a numeric blocker/nitpick count (expected `N blockers` and `N nitpicks`; use `0 blockers` / `0 nitpicks` to declare clean). see .agent/repo=bhrain/role=reviewer/briefs/contract.reviewer-output.md
+   │  │
+   │  └─
+   └─ passage blocked
+      ├─ blocked by malfunction
+      └─ exit code: 1 💥
+
+🔎 review 10
+   ├─ stdout
+   │  ├─
+   │  │
+   │  │  Here's the review of experiential and visual blemishes across the snapshotted error journeys:
+   │  │  
+   │  │  ---
+   │  │  
+   │  │  **Blemish 1 — `declaredNestedClassNameOptionsForProp` is redundant in cases 2, 3, 4, 5, 7, 9, 13**
+   │  │  
+   │  │  In every multi-option error, the narrative already names the options inline:
+   │  │  ```
+   │  │  "fits no declared nested option by schema. Checked options: [SeaturtleForageSpecies, SeaturtleForageScope]."
+   │  │  ```
+   │  │  Then the JSON context block repeats the exact same list under an extremely long key:
+   │  │  ```json
+   │  │  "declaredNestedClassNameOptionsForProp": ["SeaturtleForageSpecies", "SeaturtleForageScope"]
+   │  │  ```
+   │  │  In cases where it provides no new information (case2, case4, case9, case13), this key is pure noise. In cases 3 and 5 where `optionsFit`/`optionsNotStrict` are already present and already name the guilty options, the `declaredNestedClassNameOptionsForProp` entry is still redundant — the declared set is implied.
+   │  │  
+   │  │  **Fix:** drop `declaredNestedClassNameOptionsForProp` from the JSON context block in all cases. The narrative already carries it; the context block should carry only the additional signal (e.g., `optionsFit`, `optionsNotStrict`, the specific `prop` value).
+   │  │  
+   │  │  ---
+   │  │  
+   │  │  **Blemish 2 — case 3: "— it is ambiguous" is redundant**
+   │  │  
+   │  │  ```
+   │  │  "fits more than one declared nested option ([SpotBySlug, SpotBySlugToo]) — it is ambiguous"
+   │  │  ```
+   │  │  "Fits more than one" is already unambiguous about the ambiguity. The trailer `— it is ambiguous` adds nothing and reads like a footnote to its own sentence.
+   │  │  
+   │  │  **Fix:** drop the trailer. End at `([SpotBySlug, SpotBySlugToo]).`
+   │  │  
+   │  │  ---
+   │  │  
+   │  │  **Blemish 3 — case 4: "before serialization" is wrong domain for the user's situation**
+   │  │  
+   │  │  ```
+   │  │  "Please check the declared nested domain object options for Seaturtle.forage and update it to include SeaturtleForageMystery or instantiate Seaturtle.forage with one of the declared options before serialization."
+   │  │  ```
+   │  │  The user is running *hydration* (deserialization). `._dobj` was written during serialization. Instructing them to "instantiate before serialization" is backwards — they are past serialization. The actual fix options are: (a) add the missing class to `DomainObject.nested`, or (b) fix the stale `._dobj` value in the data.
+   │  │  
+   │  │  **Fix:** replace "or instantiate Seaturtle.forage with one of the declared options before serialization" with something like "or correct the `._dobj` value in the data to match a declared option."
+   │  │  
+   │  │  ---
+   │  │  
+   │  │  **Blemish 4 — cases 2, 9, 13: "by schema" dangles awkwardly**
+   │  │  
+   │  │  ```
+   │  │  "was given a plain object that fits no declared nested option by schema"
+   │  │  ```
+   │  │  "by schema" at the end reads as dangling. The natural reading is "fits no declared nested option" → full stop, then "by schema" is hanging.
+   │  │  
+   │  │  **Fix:** "that matches no declared nested option's schema" or "that fits no declared nested option — checked by schema."
+   │  │  
+   │  │  ---
+   │  │  
+   │  │  **Blemish 5 — case 5 / 7: "so a superset object could fit one silently" is awkward**
+   │  │  
+   │  │  ```
+   │  │  "— so a superset object could fit one silently"
+   │  │  ```
+   │  │  "fit one silently" is an odd idiom. The concern is that a non-strict schema will accept objects that contain extra keys, causing false positive matches.
+   │  │  
+   │  │  **Fix:** "— a non-strict schema can silently match superset objects" or "— non-strict schemas accept supersets and cannot safely disambiguate."
+   │  │  
+   │  │  ---
+   │  │  
+   │  │  **Blemish 6 — case 8: inconsistent key name `declaredNestedClassOptions` vs the rest**
+   │  │  
+   │  │  Case 8 uses:
+   │  │  ```json
+   │  │  "declaredNestedClassOptions": ["SeaturtleForageSpecies", "NotADomainObject"]
+   │  │  ```
+   │  │  While every other case uses `declaredNestedClassNameOptionsForProp`. Even if `declaredNestedClassNameOptionsForProp` gets cleaned up (Blemish 1), case 8 should use the same key name for consistency.
+   │  │  
+   │  │  ---
+   │  │  
+   │  │  **Summary table:**
+   │  │  
+   │  │  | Case | Blemish | Fix |
+   │  │  |------|---------|-----|
+   │  │  | 2, 3, 4, 5, 7, 9, 13 | `declaredNestedClassNameOptionsForProp` redundant in context block | drop the key |
+   │  │  | 3 | "— it is ambiguous" trailer | drop it |
+   │  │  | 4 | "before serialization" wrong domain | say "correct the `._dobj` value in the data" |
+   │  │  | 2, 9, 13 | "by schema" dangles | rephrase to "matches no declared nested option's schema" |
+   │  │  | 5, 7 | "a superset object could fit one silently" | rephrase to clarify non-strict schema risk |
+   │  │  | 8 | `declaredNestedClassOptions` inconsistent key name | align to same key as other cases |
+   │  │
+   │  └─
+   ├─ stderr
+   │  ├─
+   │  │
+   │  │  Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+   │  │  
+   │  │  💥 malfunction: reviewer output lacks a numeric blocker/nitpick count (expected `N blockers` and `N nitpicks`; use `0 blockers` / `0 nitpicks` to declare clean). see .agent/repo=bhrain/role=reviewer/briefs/contract.reviewer-output.md
+   │  │
+   │  └─
+   └─ passage blocked
+      ├─ blocked by malfunction
+      └─ exit code: 1 💥
+
+🔎 review 11
+   ├─ stdout
+   │  ├─
+   │  │
+   │  │  ## Test Intent Violation Review — Final Report
+   │  │  
+   │  │  Reviewed all test-related diffs on `vlad/fix-multi-option-hydration` vs `main`.
+   │  │  
+   │  │  ---
+   │  │  
+   │  │  ### Additive changes (no violations)
+   │  │  
+   │  │  | File | Status | Finding |
+   │  │  |------|--------|---------|
+   │  │  | `hydrateNestedDomainObjects.test.ts` | New | No violations — entirely new test file |
+   │  │  | `getSchemaFit.test.ts` | New | No violations — entirely new test file |
+   │  │  | `DomainObject.test.ts` | Modified | No violations — new imports, added snapshot assertion alongside existing assertion (strengthening), new `.contract` describe block |
+   │  │  | `DomainObject.test.ts.snap` | Modified | See below |
+   │  │  
+   │  │  ---
+   │  │  
+   │  │  ### Blocker to flag
+   │  │  
+   │  │  **`src/instantiation/__snapshots__/DomainObject.test.ts.snap`** — one existing snapshot entry was **modified** (not removed, but changed):
+   │  │  
+   │  │  Snapshot: `DomainObject validation Zod schema should throw a helpful error when does not pass zod schema 1`
+   │  │  
+   │  │  **Before (main):**
+   │  │  ```
+   │  │  "type": "number"
+   │  │  "exact": false
+   │  │  message: "Number must be less than or equal to 42"
+   │  │  ```
+   │  │  
+   │  │  **After (branch):**
+   │  │  ```
+   │  │  "origin": "number"
+   │  │  (no "exact" field)
+   │  │  message: "Too big: expected number to be <=42"
+   │  │  ```
+   │  │  
+   │  │  **Root cause:** `HelpfulZodValidationError.ts` switched from `error.errors` to `error.issues` (Zod API migration). The Zod error object shape itself also changed — this is consistent with a Zod version bump changing field names and message formats.
+   │  │  
+   │  │  The `toMatchSnapshot()` assertion still exists and is equally strict — but the **locked-in behavior** (the specific Zod error shape and message the library surfaces to callers) changed. Under the stated rule ("tests were added for a reason, we have to maintain the behavior they locked in"), this is a **blocker** — the prior snapshot documented what callers could expect from `HelpfulZodValidationError`, and that contract changed.
+   │  │  
+   │  │  **Decision needed:** Is this an intentional Zod API migration where the behavior change is accepted? Or does the locked-in error format need to be preserved?
+   │  │
+   │  └─
+   ├─ stderr
+   │  ├─
+   │  │
+   │  │  Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
+   │  │  
+   │  │  💥 malfunction: reviewer output lacks a numeric blocker/nitpick count (expected `N blockers` and `N nitpicks`; use `0 blockers` / `0 nitpicks` to declare clean). see .agent/repo=bhrain/role=reviewer/briefs/contract.reviewer-output.md
+   │  │
+   │  └─
+   └─ passage blocked
+      ├─ blocked by malfunction
+      └─ exit code: 1 💥

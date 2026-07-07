@@ -299,6 +299,7 @@ describe('DomainObject', () => {
           lastWatered: 'monday',
         });
         expect(plant.plantedIn).toBeInstanceOf(PlantPot);
+        expect(plant.plantedIn).toMatchSnapshot(); // capture hydrated shape, not just the class
       });
       it('should leave a bare array of scalars un-hydrated under a single-option nested key', () => {
         // define the seaturtle's forage wrapper

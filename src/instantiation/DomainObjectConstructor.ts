@@ -1,5 +1,6 @@
 import type { DomainObjectShape } from './DomainObjectShape';
 import { MARK_AS_DOMAIN_OBJECT } from './markers';
+import type { SchemaOptions } from './validate/validate';
 
 /**
  * .what = constructor type for domain objects without import cycle
@@ -10,5 +11,6 @@ export interface DomainObjectConstructor {
   build: (props: DomainObjectShape) => DomainObjectShape;
   name: string;
   prototype: DomainObjectShape;
+  schema?: SchemaOptions<any>;
   [MARK_AS_DOMAIN_OBJECT]?: string;
 }
