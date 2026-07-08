@@ -1,7 +1,11 @@
+import { MalfunctionError } from 'helpful-errors';
+
 import type { DomainObject } from '@src/instantiation/DomainObject';
 import { isOfDomainObject } from '@src/instantiation/inherit/isOfDomainObject';
 
-export class DomainObjectNotSafeToManipulateError extends Error {
+// .why = an undeclared nested domain object is a developer misconfiguration of the class (the fix is
+//   to add `static nested`), not a caller's bad input — so it is a MalfunctionError (exit 1, http 500)
+export class DomainObjectNotSafeToManipulateError extends MalfunctionError {
   constructor({
     unsafeKeys,
     className,
@@ -22,7 +26,7 @@ For example:
     public static nested = { ${unsafeKeys[0]}: ... };
   }
 \`\`\`
-    `;
+    `.trim();
     super(message);
   }
 }

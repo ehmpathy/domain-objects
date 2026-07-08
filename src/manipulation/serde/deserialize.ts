@@ -1,16 +1,20 @@
+import { MalfunctionError } from 'helpful-errors';
+
 import type {
   DomainObject,
   DomainObjectInstantiationOptions,
 } from '@src/instantiation/DomainObject';
 import type { WithImmute } from '@src/manipulation/immute/withImmute';
 
-export class DeserializationMissingDomainObjectClassError extends Error {
+// .why = a class absent from the deserialize context is a developer setup bug (the fix is to register
+//   the class via `with`), not a caller's bad input — so it is a MalfunctionError (exit 1, http 500)
+export class DeserializationMissingDomainObjectClassError extends MalfunctionError {
   constructor({ className }: { className: string }) {
     const message = `
 DomainObject '${className}' was referenced in the string being deserialized but was missing from the context given to the deserialize method.
 
 Please make sure all DomainObjects serialized in the string have their classes defined in the context given to the deserialize method, using the 'with' property.
-    `;
+    `.trim();
     super(message);
   }
 }

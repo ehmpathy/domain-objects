@@ -1,4 +1,8 @@
-export class DomainEntityPrimaryKeysMustBeDefinedError extends Error {
+import { MalfunctionError } from 'helpful-errors';
+
+// .why = an absent `static primary` is a developer misconfiguration of the class, not a caller's
+//   bad input — so it is a MalfunctionError (exit 1, http 500), the system's fault to fix
+export class DomainEntityPrimaryKeysMustBeDefinedError extends MalfunctionError {
   constructor({
     entityName,
     nameOfFunctionNeededFor,
@@ -21,7 +25,7 @@ Example:
     public static primary = ['uuid'];
   }
   \`\`\`
-    `;
+    `.trim();
     super(message);
   }
 }
