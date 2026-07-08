@@ -95,11 +95,9 @@ Spaceship {
 exports[`deserialize domain objects should throw a JSON parse error when given invalid JSON 1`] = `"Expected property name or '}' in JSON at position 2 (line 1 column 3)"`;
 
 exports[`deserialize domain objects should throw a helpful error if attempted to deserialize a domain object without its constructor being provided in the context 1`] = `
-"
-DomainObject 'Spaceship' was referenced in the string being deserialized but was missing from the context given to the deserialize method.
+"💥 DeserializationMissingDomainObjectClassError: DomainObject 'Spaceship' was referenced in the string being deserialized but was missing from the context given to the deserialize method.
 
-Please make sure all DomainObjects serialized in the string have their classes defined in the context given to the deserialize method, using the 'with' property.
-    "
+Please make sure all DomainObjects serialized in the string have their classes defined in the context given to the deserialize method, using the 'with' property."
 `;
 
 exports[`deserialize objects should be able to serialize an object with all sorts of types 1`] = `

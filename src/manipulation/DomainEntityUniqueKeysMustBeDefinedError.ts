@@ -1,4 +1,8 @@
-export class DomainEntityUniqueKeysMustBeDefinedError extends Error {
+import { MalfunctionError } from 'helpful-errors';
+
+// .why = an absent `static unique` is a developer misconfiguration of the class, not a caller's
+//   bad input — so it is a MalfunctionError (exit 1, http 500), the system's fault to fix
+export class DomainEntityUniqueKeysMustBeDefinedError extends MalfunctionError {
   constructor({
     entityName,
     nameOfFunctionNeededFor,
@@ -20,7 +24,7 @@ Example:
     public static unique = ['serialNumber'];
   }
   \`\`\`
-    `;
+    `.trim();
     super(message);
   }
 }

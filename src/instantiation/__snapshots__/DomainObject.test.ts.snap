@@ -45,7 +45,7 @@ exports[`DomainObject .contract should stamp identity + key metadata onto the sc
 `;
 
 exports[`DomainObject validation Joi schema should throw a helpful error when does not pass joi schema 1`] = `
-"Errors on 1 properties were found while validating properties for domain object RocketShip.:
+"✋ HelpfulJoiValidationError: Errors on 1 properties were found while validating properties for domain object RocketShip.:
 [
   {
     "message": "\\"serialNumber\\" must be a valid GUID",
@@ -63,7 +63,7 @@ Props Provided:
 `;
 
 exports[`DomainObject validation Yup schema should throw a helpful error when does not pass schema 1`] = `
-"Errors were found while validating properties for domain object RocketShip.:
+"✋ HelpfulYupValidationError: Errors were found while validating properties for domain object RocketShip.:
 [
   "passengers must be less than or equal to 42"
 ]
@@ -77,7 +77,7 @@ Props Provided:
 `;
 
 exports[`DomainObject validation Zod schema should throw a helpful error when does not pass schema 1`] = `
-"Errors were found while validating properties for domain object RocketShip.:
+"✋ HelpfulZodValidationError: Errors were found while validating properties for domain object RocketShip.:
 [
   {
     "origin": "number",

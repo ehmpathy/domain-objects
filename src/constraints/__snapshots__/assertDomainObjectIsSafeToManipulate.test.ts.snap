@@ -1,8 +1,7 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`assertDomainObjectIsSafeToManipulate should throw a helpful error if any of the properties are a nested object not explicitly defined 1`] = `
-"
-DomainObject 'Plant' is not safe to manipulate.
+"💥 DomainObjectNotSafeToManipulateError: DomainObject 'Plant' is not safe to manipulate.
 
 Specifically, the keys: ["pot"].
 
@@ -13,13 +12,11 @@ For example:
   class Plant ... {
     public static nested = { pot: ... };
   }
-\`\`\`
-    "
+\`\`\`"
 `;
 
 exports[`assertDomainObjectIsSafeToManipulate should throw a helpful error if any of the properties are an array with nested objects not explicitly defined 1`] = `
-"
-DomainObject 'Plant' is not safe to manipulate.
+"💥 DomainObjectNotSafeToManipulateError: DomainObject 'Plant' is not safe to manipulate.
 
 Specifically, the keys: ["pastPots"].
 
@@ -30,6 +27,5 @@ For example:
   class Plant ... {
     public static nested = { pastPots: ... };
   }
-\`\`\`
-    "
+\`\`\`"
 `;

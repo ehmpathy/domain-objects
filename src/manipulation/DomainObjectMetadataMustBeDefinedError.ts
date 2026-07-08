@@ -1,6 +1,8 @@
-import { HelpfulError } from 'helpful-errors';
+import { MalfunctionError } from 'helpful-errors';
 
-export class DomainObjectMetadataMustBeDefinedError extends HelpfulError {
+// .why = an absent `static metadata` is a developer misconfiguration of the class, not a caller's
+//   bad input — so it is a MalfunctionError (exit 1, http 500), the system's fault to fix
+export class DomainObjectMetadataMustBeDefinedError extends MalfunctionError {
   constructor({
     domainObjectName,
     nameOfFunctionNeededFor,
@@ -27,7 +29,7 @@ Example:
     public static metadata = ['uuid'] as const;
   }
   \`\`\`
-    `;
+    `.trim();
     super(message, { domainObjectName, nameOfFunctionNeededFor });
   }
 }
