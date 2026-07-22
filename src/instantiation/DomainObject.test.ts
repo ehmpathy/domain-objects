@@ -435,8 +435,8 @@ describe('DomainObject', () => {
   });
 
   describe('.contract', () => {
-    it('should stamp identity + key metadata onto the schema for a seaturtle entity', () => {
-      // define a seaturtle domain entity with a zod schema + keys
+    it('should stamp identity + key metadata onto the schema for a seaturtle domain object', () => {
+      // define a seaturtle plain domain object with a zod schema + keys
       interface Seaturtle {
         uuid?: string;
         name: string;
@@ -457,8 +457,12 @@ describe('DomainObject', () => {
       const json: Record<string, any> = z.toJSONSchema(Seaturtle.contract);
 
       // the x-domain-object pragma carries the seaturtle's identity + keys across the wire
+      // kind = 'object': a plain DomainObject has no entity/literal/event marker, so the marker-based
+      // kind honestly reports 'object' — even though it declares primary/unique (which the old
+      // primary-heuristic would have misread as 'entity')
       expect(json['x-domain-object']).toEqual({
         name: 'Seaturtle',
+        kind: 'object',
         primary: ['uuid'],
         unique: ['name'],
         alias: { singular: 'seaturtle', plural: 'seaturtles' },

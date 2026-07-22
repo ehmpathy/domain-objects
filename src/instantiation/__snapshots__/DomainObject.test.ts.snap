@@ -8,7 +8,7 @@ exports[`DomainObject .contract should fail fast with a ConstraintError when no 
 }"
 `;
 
-exports[`DomainObject .contract should stamp identity + key metadata onto the schema for a seaturtle entity 1`] = `
+exports[`DomainObject .contract should stamp identity + key metadata onto the schema for a seaturtle domain object 1`] = `
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
@@ -33,6 +33,7 @@ exports[`DomainObject .contract should stamp identity + key metadata onto the sc
       "plural": "seaturtles",
       "singular": "seaturtle",
     },
+    "kind": "object",
     "name": "Seaturtle",
     "primary": [
       "uuid",

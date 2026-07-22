@@ -567,7 +567,7 @@ due to this deterministic serialization, we are able to use this fn for [`change
 
 `DomainObject.contract` returns your `Zod` `schema` stamped with the domain object's identity and key metadata as an `x-domain-object` pragma. Whereas `serialize` stamps a `_dobj` marker onto its string output, `contract` stamps identity onto the schema itself - so it survives `z.toJSONSchema()` and rides across the wire.
 
-This is what lets a cross-service consumer detect that a given json-schema _is_ a domain object, learn its name, de-dupe it across endpoints, and reconstruct it (with its `primary` / `unique` / `alias` / `nested` keys) - with no need to re-validate.
+This is what lets a cross-service consumer detect that a given json-schema _is_ a domain object, learn its name and `kind` (which base class it extends), de-dupe it across endpoints, and reconstruct it (with its `primary` / `unique` / `alias` / `nested` keys) - with no need to re-validate.
 
 > _note:_ `contract` requires a `static schema` that is a `Zod` schema. It throws a `ConstraintError` if the schema is absent or is `Joi`/`Yup` (only `Zod` can carry the json-schema identity pragma). It is memoized per-class, so repeated access returns the same stamped instance.
 
@@ -601,10 +601,25 @@ const wireSchema = z.object({ passenger: Seaturtle.contract });
 const json = z.toJSONSchema(wireSchema);
 expect(json.properties.passenger['x-domain-object']).toEqual({
   name: 'Seaturtle',
+  kind: 'entity', // which base class it extends: entity | literal | event | object
   primary: ['uuid'],
   unique: ['name'],
   alias: { singular: 'seaturtle', plural: 'seaturtles' },
 });
+```
+
+The pragma also carries a `kind` (`'entity'` | `'literal'` | `'event'` | `'object'`) so a consumer
+picks the right base class to reconstruct the domain object. The full pragma shape is exported as the
+`DomainObjectPragma` type, so every consumer speaks one shape instead of a local re-declaration:
+
+```ts
+import type { DomainObjectPragma } from 'domain-objects';
+
+// the `x-domain-object` node comes off an untyped json-schema blob, so the cast is a
+// boundary read - domain-objects ships the type, you own the node access
+const pragma = json.properties.passenger['x-domain-object'] as DomainObjectPragma;
+pragma.kind; // 'entity' | 'literal' | 'event' | 'object'
+pragma.primary; // string[] | undefined  (undefined when the class declares no primary)
 ```
 
 For a domain object with `nested` declarations, the contract carries the nested identities by **name** (the array form maps to an array of names, for polymorphic choices):

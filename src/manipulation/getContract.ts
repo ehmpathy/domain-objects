@@ -5,6 +5,8 @@ import type { DomainObjectConstructor } from '@src/instantiation/DomainObjectCon
 import type { SchemaOptions } from '@src/instantiation/validate/validate';
 import { isZodSchema } from '@src/instantiation/validate/validate';
 
+import { getKind } from './getKind';
+
 /**
  * .what = a `.nested` value: a single dobj constructor, or an array of constructor choices (polymorphic nested)
  * .why = mirrors `hydrateNestedDomainObjects`, which supports both forms; getContract must handle both to stay consistent
@@ -85,6 +87,7 @@ export const getContract = (dobj: DomainObjectClass): ZodSchema<any> => {
   // assemble the x-domain-object pragma from the declared statics (omit absent fields)
   const pragma = {
     name: dobj.name,
+    kind: getKind(dobj), // the true subclass (entity/literal/event/object), from the class marker
     ...(dobj.primary ? { primary: dobj.primary } : {}),
     ...(dobj.unique ? { unique: dobj.unique } : {}),
     ...(dobj.alias ? { alias: dobj.alias } : {}),
