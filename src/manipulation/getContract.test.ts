@@ -4,7 +4,11 @@ import { getError, given, then, when } from 'test-fns';
 import * as yup from 'yup';
 import { z } from 'zod';
 
+// import the published type from the package barrel (not the internal file) so these
+// conformance tests also verify ask-1's deliverable: the type is reachable from the public api
+import type { DomainObjectKind, DomainObjectPragma } from '@src/index';
 import { DomainEntity } from '@src/instantiation/DomainEntity';
+import { DomainEvent } from '@src/instantiation/DomainEvent';
 import { DomainLiteral } from '@src/instantiation/DomainLiteral';
 import { DomainObject } from '@src/instantiation/DomainObject';
 
@@ -61,6 +65,7 @@ describe('getContract', () => {
           const pragma = getPragma(getContract(SeaturtleSurfboard));
           expect(pragma).toEqual({
             name: 'SeaturtleSurfboard',
+            kind: 'entity',
             primary: ['uuid'],
             unique: ['serialNumber'],
             alias: { singular: 'surfboard', plural: 'surfboards' },
@@ -78,6 +83,27 @@ describe('getContract', () => {
         expect(json.properties.rider).toBeDefined();
         expect(json).toMatchSnapshot();
       });
+
+      then(
+        'the stamped pragma conforms to the published DomainObjectPragma type',
+        () => {
+          // type the expected shape as the published type: if getContract's runtime output drifts
+          // from DomainObjectPragma, this fails; if the type itself is wrong, `expected` won't compile.
+          // this couples the runtime stamp to the type consumers import (ask 1).
+          // `kind` is bound through the published `DomainObjectKind` name too, so a regression that
+          // drops either export from the barrel fails to compile (both names are ask-1 deliverables).
+          const kind: DomainObjectKind = 'entity';
+          const expected: DomainObjectPragma = {
+            name: 'SeaturtleSurfboard',
+            kind,
+            primary: ['uuid'],
+            unique: ['serialNumber'],
+            alias: { singular: 'surfboard', plural: 'surfboards' },
+            nested: { rider: 'Seaturtle' },
+          };
+          expect(getPragma(getContract(SeaturtleSurfboard))).toEqual(expected);
+        },
+      );
     });
 
     when('the contract is requested via the .contract getter', () => {
@@ -85,6 +111,7 @@ describe('getContract', () => {
         const pragma = getPragma(SeaturtleSurfboard.contract);
         expect(pragma).toEqual({
           name: 'SeaturtleSurfboard',
+          kind: 'entity',
           primary: ['uuid'],
           unique: ['serialNumber'],
           alias: { singular: 'surfboard', plural: 'surfboards' },
@@ -114,7 +141,7 @@ describe('getContract', () => {
 
     when('the contract is embedded as a field in a parent z.object', () => {
       // this is the wish's primary journey: z.object({ surfboard: Dobj.contract })
-      // → z.toJSONSchema on the PARENT must carry x-domain-object on the nested field
+      // → z.toJSONSchema on the parent must carry x-domain-object on the nested field
       then(
         'the pragma survives on the nested field of the parent json-schema',
         () => {
@@ -123,6 +150,10 @@ describe('getContract', () => {
           // the cross-service consumer reads the pragma off the nested field, not the root
           expect(json.properties.surfboard['x-domain-object'].name).toEqual(
             'SeaturtleSurfboard',
+          );
+          // kind must survive the primary journey too — it is the field ask 2 exists to deliver
+          expect(json.properties.surfboard['x-domain-object'].kind).toEqual(
+            'entity',
           );
           expect(json.properties.surfboard['x-domain-object'].primary).toEqual([
             'uuid',
@@ -152,13 +183,20 @@ describe('getContract', () => {
     }
 
     when('the contract is requested', () => {
-      then('the pragma carries name + primary, absent fields left out', () => {
-        const pragma = getPragma(getContract(Sandbar));
-        expect(pragma).toEqual({ name: 'Sandbar', primary: ['uuid'] });
-        expect(pragma.unique).toBeUndefined();
-        expect(pragma.alias).toBeUndefined();
-        expect(pragma.nested).toBeUndefined();
-      });
+      then(
+        'the pragma carries name + kind + primary, absent fields left out',
+        () => {
+          const pragma = getPragma(getContract(Sandbar));
+          expect(pragma).toEqual({
+            name: 'Sandbar',
+            kind: 'literal',
+            primary: ['uuid'],
+          });
+          expect(pragma.unique).toBeUndefined();
+          expect(pragma.alias).toBeUndefined();
+          expect(pragma.nested).toBeUndefined();
+        },
+      );
 
       then(
         'the json-schema output (primary-only form) matches snapshot',
@@ -169,6 +207,7 @@ describe('getContract', () => {
           // assert the deliverable concretely, then snapshot for visual review
           expect(json['x-domain-object']).toEqual({
             name: 'Sandbar',
+            kind: 'literal',
             primary: ['uuid'],
           });
           expect(json).toMatchSnapshot();
@@ -236,12 +275,30 @@ describe('getContract', () => {
     }
 
     when('the contract is requested', () => {
-      then('the pragma carries name + alias only', () => {
+      then('the pragma carries name + kind + alias only', () => {
         const pragma = getPragma(getContract(Seafoam));
-        expect(pragma).toEqual({ name: 'Seafoam', alias: 'foam' });
+        expect(pragma).toEqual({
+          name: 'Seafoam',
+          kind: 'object',
+          alias: 'foam',
+        });
         expect(pragma.primary).toBeUndefined();
         expect(pragma.unique).toBeUndefined();
       });
+
+      then(
+        'a minimal pragma (no primary/unique/nested) conforms to the type',
+        () => {
+          // proves the type's primary/unique/nested keys are genuinely optional (q7): a minimal
+          // pragma without them must satisfy DomainObjectPragma, or a required-key regression breaks it
+          const expected: DomainObjectPragma = {
+            name: 'Seafoam',
+            kind: 'object',
+            alias: 'foam',
+          };
+          expect(getPragma(getContract(Seafoam))).toEqual(expected);
+        },
+      );
 
       then(
         'the json-schema output (string alias form) matches snapshot',
@@ -252,6 +309,7 @@ describe('getContract', () => {
           // assert the deliverable concretely, then snapshot for visual review
           expect(json['x-domain-object']).toEqual({
             name: 'Seafoam',
+            kind: 'object',
             alias: 'foam',
           });
           expect(json).toMatchSnapshot();
@@ -312,6 +370,132 @@ describe('getContract', () => {
         // snapshot the message so hint/word regressions surface in pr diffs
         expect(error.message).toMatchSnapshot();
       });
+    });
+  });
+
+  given('a DomainEvent', () => {
+    interface WaveObservedEvent {
+      sensorUuid: string;
+      height: number;
+      occurredAt: string;
+    }
+    class WaveObservedEvent
+      extends DomainEvent<WaveObservedEvent>
+      implements WaveObservedEvent
+    {
+      public static unique = ['sensorUuid', 'occurredAt'] as const;
+      public static schema = z.object({
+        sensorUuid: z.string(),
+        height: z.number(),
+        occurredAt: z.string(),
+      });
+    }
+
+    when('the contract is requested', () => {
+      then('the pragma stamps kind = event from the event marker', () => {
+        const pragma = getPragma(getContract(WaveObservedEvent));
+        expect(pragma).toEqual({
+          name: 'WaveObservedEvent',
+          kind: 'event',
+          unique: ['sensorUuid', 'occurredAt'],
+        });
+      });
+
+      then('the json-schema output (event kind form) matches snapshot', () => {
+        const json: Record<string, any> = z.toJSONSchema(
+          getContract(WaveObservedEvent),
+        );
+        // assert the deliverable concretely, then snapshot for visual review
+        expect(json['x-domain-object'].kind).toEqual('event');
+        expect(json).toMatchSnapshot();
+      });
+    });
+  });
+
+  given('a 2-level subclass of DomainEntity', () => {
+    // a dobj that extends a subclass of DomainEntity must still read kind = entity,
+    // since the marker symbol inherits down the full static prototype chain
+    interface Seaturtle {
+      uuid?: string;
+      name: string;
+    }
+    class Seaturtle extends DomainEntity<Seaturtle> implements Seaturtle {
+      public static primary = ['uuid'] as const;
+      public static schema = z.object({
+        uuid: z.string().optional(),
+        name: z.string(),
+      });
+    }
+    interface GreenSeaturtle extends Seaturtle {
+      shellPattern: string;
+    }
+    class GreenSeaturtle extends Seaturtle implements GreenSeaturtle {
+      public static schema = z.object({
+        uuid: z.string().optional(),
+        name: z.string(),
+        shellPattern: z.string(),
+      });
+    }
+
+    when('the contract is requested', () => {
+      then('the pragma still stamps kind = entity through 2 levels', () => {
+        const pragma = getPragma(getContract(GreenSeaturtle));
+        expect(pragma.kind).toEqual('entity');
+      });
+
+      then(
+        'the json-schema output (2-level subclass form) matches snapshot',
+        () => {
+          const json: Record<string, any> = z.toJSONSchema(
+            getContract(GreenSeaturtle),
+          );
+          // assert the deliverable concretely, then snapshot for visual review
+          expect(json['x-domain-object'].kind).toEqual('entity');
+          expect(json).toMatchSnapshot();
+        },
+      );
+    });
+  });
+
+  given('a DomainEntity without a static primary', () => {
+    // the mirror of the Sandbar case: the old `primary`-non-empty heuristic omits `primary`
+    // (getContract skips absent fields), so it would misread this entity as a literal.
+    // the marker-based kind must stamp `entity` regardless, and the pragma must omit `primary`.
+    interface Tidepool {
+      name: string;
+      depth: number;
+    }
+    class Tidepool extends DomainEntity<Tidepool> implements Tidepool {
+      public static unique = ['name'] as const;
+      public static schema = z.object({
+        name: z.string(),
+        depth: z.number(),
+      });
+    }
+
+    when('the contract is requested', () => {
+      then('the pragma stamps kind = entity even with no primary', () => {
+        const pragma = getPragma(getContract(Tidepool));
+        expect(pragma).toEqual({
+          name: 'Tidepool',
+          kind: 'entity',
+          unique: ['name'],
+        });
+        expect(pragma.primary).toBeUndefined();
+      });
+
+      then(
+        'the json-schema output (entity without primary form) matches snapshot',
+        () => {
+          const json: Record<string, any> = z.toJSONSchema(
+            getContract(Tidepool),
+          );
+          // assert the deliverable concretely, then snapshot for visual review
+          expect(json['x-domain-object'].kind).toEqual('entity');
+          expect(json['x-domain-object'].primary).toBeUndefined();
+          expect(json).toMatchSnapshot();
+        },
+      );
     });
   });
 });

@@ -1,5 +1,35 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`getContract given: a 2-level subclass of DomainEntity when: the contract is requested then: the json-schema output (2-level subclass form) matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+    },
+    "shellPattern": {
+      "type": "string",
+    },
+    "uuid": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "name",
+    "shellPattern",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "kind": "entity",
+    "name": "GreenSeaturtle",
+    "primary": [
+      "uuid",
+    ],
+  },
+}
+`;
+
 exports[`getContract given: a DomainEntity with primary, unique, alias, and nested when: the contract is embedded as a field in a parent z.object then: the pragma survives on the nested field of the parent json-schema 1`] = `
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -40,6 +70,7 @@ exports[`getContract given: a DomainEntity with primary, unique, alias, and nest
           "plural": "surfboards",
           "singular": "surfboard",
         },
+        "kind": "entity",
         "name": "SeaturtleSurfboard",
         "nested": {
           "rider": "Seaturtle",
@@ -97,6 +128,7 @@ exports[`getContract given: a DomainEntity with primary, unique, alias, and nest
       "plural": "surfboards",
       "singular": "surfboard",
     },
+    "kind": "entity",
     "name": "SeaturtleSurfboard",
     "nested": {
       "rider": "Seaturtle",
@@ -106,6 +138,65 @@ exports[`getContract given: a DomainEntity with primary, unique, alias, and nest
     ],
     "unique": [
       "serialNumber",
+    ],
+  },
+}
+`;
+
+exports[`getContract given: a DomainEntity without a static primary when: the contract is requested then: the json-schema output (entity without primary form) matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "depth": {
+      "type": "number",
+    },
+    "name": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "name",
+    "depth",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "kind": "entity",
+    "name": "Tidepool",
+    "unique": [
+      "name",
+    ],
+  },
+}
+`;
+
+exports[`getContract given: a DomainEvent when: the contract is requested then: the json-schema output (event kind form) matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "height": {
+      "type": "number",
+    },
+    "occurredAt": {
+      "type": "string",
+    },
+    "sensorUuid": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "sensorUuid",
+    "height",
+    "occurredAt",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "kind": "event",
+    "name": "WaveObservedEvent",
+    "unique": [
+      "sensorUuid",
+      "occurredAt",
     ],
   },
 }
@@ -132,6 +223,7 @@ exports[`getContract given: a DomainLiteral with a primary but no unique/alias/n
   ],
   "type": "object",
   "x-domain-object": {
+    "kind": "literal",
     "name": "Sandbar",
     "primary": [
       "uuid",
@@ -190,6 +282,7 @@ exports[`getContract given: a DomainObject with polymorphic (array) nested choic
   ],
   "type": "object",
   "x-domain-object": {
+    "kind": "entity",
     "name": "Wave",
     "nested": {
       "surfer": [
@@ -219,6 +312,7 @@ exports[`getContract given: a plain DomainObject with a schema and alias but no 
   "type": "object",
   "x-domain-object": {
     "alias": "foam",
+    "kind": "object",
     "name": "Seafoam",
   },
 }

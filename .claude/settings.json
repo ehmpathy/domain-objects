@@ -495,5 +495,10 @@
         ]
       }
     ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "node -e \"import('rhachet-roles-bhrain/cli/route').then(m => m.routeStatusLine())\"",
+    "padding": 0
   }
 }

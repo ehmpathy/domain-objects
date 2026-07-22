@@ -27,6 +27,10 @@ export { clone } from './manipulation/clone/clone';
 export { DomainEntityUniqueKeysMustBeDefinedError } from './manipulation/DomainEntityUniqueKeysMustBeDefinedError';
 export { DomainEntityUpdatablePropertiesMustBeDefinedError } from './manipulation/DomainEntityUpdatablePropertiesMustBeDefinedError';
 export { DomainObjectMetadataMustBeDefinedError } from './manipulation/DomainObjectMetadataMustBeDefinedError';
+export type {
+  DomainObjectKind,
+  DomainObjectPragma,
+} from './manipulation/DomainObjectPragma';
 export { getMetadataKeys } from './manipulation/getMetadataKeys';
 export { getPrimaryIdentifier } from './manipulation/getPrimaryIdentifier';
 export { getReadonlyKeys } from './manipulation/getReadonlyKeys';
