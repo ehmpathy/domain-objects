@@ -1,0 +1,284 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`getContractRef roundtrip (acceptance) given: a contract with an ARRAY of references (a heat rosters many riders by key) when: a full roster payload crosses the wire then: the validated roster payload matches snapshot 1`] = `
+{
+  "riders": [
+    {
+      "uuid": "turtle-1",
+    },
+    {
+      "uuid": "turtle-2",
+    },
+  ],
+  "uuid": "heat-1",
+}
+`;
+
+exports[`getContractRef roundtrip (acceptance) given: a contract with an ARRAY of references (a heat rosters many riders by key) when: the consumer reconstructs the whole roster from live riders then: the reconstructed roster of refs matches snapshot 1`] = `
+[
+  {
+    "uuid": "turtle-1",
+  },
+  {
+    "uuid": "turtle-2",
+  },
+  {
+    "uuid": "turtle-3",
+  },
+]
+`;
+
+exports[`getContractRef roundtrip (acceptance) given: a contract with an ARRAY of references (a heat rosters many riders by key) when: the roster contract is published as json-schema then: the whole published array-of-refs wire matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "riders": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "uuid": {
+            "type": "string",
+          },
+        },
+        "type": "object",
+        "x-domain-object-ref": {
+          "by": "primary",
+          "of": "Seaturtle",
+        },
+      },
+      "type": "array",
+    },
+    "uuid": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "riders",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "kind": "entity",
+    "name": "Heat",
+    "primary": [
+      "uuid",
+    ],
+  },
+}
+`;
+
+exports[`getContractRef roundtrip (acceptance) given: a reference by the ref-union grain (either key satisfies the contract) when: the consumer reconstructs by either grain from one live sponsor then: both reconstructed grains match snapshot 1`] = `
+{
+  "primaryRef": {
+    "uuid": "s-1",
+  },
+  "uniqueRef": {
+    "handle": "@acme",
+  },
+}
+`;
+
+exports[`getContractRef roundtrip (acceptance) given: a reference by the ref-union grain (either key satisfies the contract) when: the ref-union is published and read back then: the published union wire matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "additionalProperties": false,
+      "properties": {
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "type": "object",
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "handle": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "handle",
+      ],
+      "type": "object",
+    },
+  ],
+  "x-domain-object-ref": {
+    "by": "ref",
+    "of": "Sponsor",
+  },
+}
+`;
+
+exports[`getContractRef roundtrip (acceptance) given: a reference whose unique key is itself a nested dobj (recursion crosses the wire) when: the consumer reconstructs the nested reference from a live shell then: the reconstructed nested reference matches snapshot 1`] = `
+{
+  "turtle": {
+    "seawaterSecurityNumber": "821",
+  },
+}
+`;
+
+exports[`getContractRef roundtrip (acceptance) given: a reference whose unique key is itself a nested dobj (recursion crosses the wire) when: the shell ref is published and read back then: the published nested-ref wire matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "turtle": {
+      "additionalProperties": false,
+      "properties": {
+        "seawaterSecurityNumber": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "seawaterSecurityNumber",
+      ],
+      "type": "object",
+      "x-domain-object-ref": {
+        "by": "unique",
+        "of": "Seaturtle",
+      },
+    },
+  },
+  "required": [
+    "turtle",
+  ],
+  "type": "object",
+  "x-domain-object-ref": {
+    "by": "unique",
+    "of": "SeaturtleShell",
+  },
+}
+`;
+
+exports[`getContractRef roundtrip (acceptance) given: the vision's day-in-the-life: svc-surf publishes a SurfTrophy that references two dobjs by key when: a full composed payload crosses the wire and validates against the contract then: the validated payload matches snapshot 1`] = `
+{
+  "board": {
+    "brand": "Firewire",
+    "length": 68,
+  },
+  "champion": {
+    "name": "Crush",
+    "seawaterSecurityNumber": "999",
+    "uuid": "turtle-9",
+  },
+  "rider": {
+    "uuid": "turtle-1",
+  },
+  "uuid": "trophy-1",
+}
+`;
+
+exports[`getContractRef roundtrip (acceptance) given: the vision's day-in-the-life: svc-surf publishes a SurfTrophy that references two dobjs by key when: the author publishes the contract as json-schema (the wire) then: the whole published wire artifact matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "board": {
+      "additionalProperties": false,
+      "properties": {
+        "brand": {
+          "type": "string",
+        },
+        "length": {
+          "type": "number",
+        },
+      },
+      "required": [
+        "brand",
+        "length",
+      ],
+      "type": "object",
+      "x-domain-object-ref": {
+        "by": "unique",
+        "of": "Surfboard",
+      },
+    },
+    "champion": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+        },
+        "seawaterSecurityNumber": {
+          "type": "string",
+        },
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "seawaterSecurityNumber",
+        "name",
+      ],
+      "type": "object",
+      "x-domain-object": {
+        "kind": "entity",
+        "name": "Seaturtle",
+        "primary": [
+          "uuid",
+        ],
+        "unique": [
+          "seawaterSecurityNumber",
+        ],
+      },
+    },
+    "rider": {
+      "additionalProperties": false,
+      "properties": {
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "type": "object",
+      "x-domain-object-ref": {
+        "by": "primary",
+        "of": "Seaturtle",
+      },
+    },
+    "uuid": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "rider",
+    "board",
+    "champion",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "kind": "entity",
+    "name": "SurfTrophy",
+    "primary": [
+      "uuid",
+    ],
+  },
+}
+`;
+
+exports[`getContractRef roundtrip (acceptance) given: the vision's day-in-the-life: svc-surf publishes a SurfTrophy that references two dobjs by key when: the consumer reads the wire back then: the extracted pragma map matches snapshot 1`] = `
+{
+  "board": {
+    "by": "unique",
+    "of": "Surfboard",
+  },
+  "champion": undefined,
+  "rider": {
+    "by": "primary",
+    "of": "Seaturtle",
+  },
+}
+`;
+
+exports[`getContractRef roundtrip (acceptance) given: the vision's day-in-the-life: svc-surf publishes a SurfTrophy that references two dobjs by key when: the consumer reconstructs each reference from a live instance (the roundtrip) then: the reconstructed references match snapshot 1`] = `
+{
+  "boardRef": {
+    "brand": "Firewire",
+    "length": 68,
+  },
+  "riderRef": {
+    "uuid": "turtle-1",
+  },
+}
+`;

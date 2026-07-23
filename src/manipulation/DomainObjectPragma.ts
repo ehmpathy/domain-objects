@@ -28,11 +28,11 @@ export type DomainObjectKind = 'entity' | 'literal' | 'event' | 'object';
  *   | pragma (json keyword) | states                    | type                                |
  *   |-----------------------|---------------------------|-------------------------------------|
  *   | `x-domain-object`     | this node **IS** dobj X   | `DomainObjectPragma` (this type)    |
- *   | `x-domain-object-ref` | this node **REFERENCES** X | `DomainObjectPragmaRef` (not yet shipped) |
+ *   | `x-domain-object-ref` | this node **REFERENCES** X | `DomainObjectPragmaRef`             |
  *
- *   the base + `Ref` partner mirrors the runtime pair `DomainObject : Ref`. only the base
- *   (`DomainObjectPragma`) ships today; `DomainObjectPragmaRef` is a peer-branch partner, not yet
- *   exported from this package.
+ *   the base + `Ref` partner mirrors the runtime pair `DomainObject : Ref`. both ship today:
+ *   `DomainObjectPragma` (the full body, via `.contract`) and `DomainObjectPragmaRef` (a key-only
+ *   reference, via `.contract.ref(by)`).
  *
  * .note = fields are **optional** where the stamp omits them: `getContract` writes `primary`/
  *   `unique`/`alias`/`nested` only when the dobj declares them, so a consumer reads e.g.
@@ -77,4 +77,45 @@ export type DomainObjectPragma = {
    * array of names for polymorphic nested choices
    */
   nested?: Record<string, string | string[]>;
+};
+
+/**
+ * .what = which key(s) a domain-object reference carries over the wire
+ * .why = a reference points at a dobj *by* one of its keys — the surrogate (`primary`), the
+ *   natural key (`unique`), or either (`ref`, a union of the two). mirrors the runtime `Ref` family.
+ */
+export type DomainObjectRefBy = 'primary' | 'unique' | 'ref';
+
+/**
+ * .what = the type of a domain object's `x-domain-object-ref` **pragma** — stamped onto a schema
+ *   node that *references* a dobj by key (rather than *is* the dobj, which `x-domain-object` states).
+ *
+ * .why =
+ *   a contract field often references another dobj by its key, not by its whole body:
+ *   `class SurfTrophy { rider: Seaturtle.contract.ref('primary') }` → the wire carries just
+ *   `{ uuid }`, and this pragma states "that `{ uuid }` **references** a Seaturtle by primary".
+ *   a consumer reads it to emit a typed `RefByPrimary<typeof Seaturtle>` instead of an anonymous
+ *   `{ uuid: string }`. deliberately smaller than `DomainObjectPragma`: a reference needs only
+ *   *which dobj* + *which key*, not the full body nor `kind` — the target's own `.contract`
+ *   (bound elsewhere) already states those.
+ *
+ * .note = the schema-level partner of the runtime `refByPrimary` / `refByUnique` ops and the
+ *   `RefByPrimary` / `RefByUnique` types. it is to `DomainObjectPragma` what a reference is to a
+ *   composition — see the table on `DomainObjectPragma`.
+ *
+ * @example
+ * const pragma = jsonSchema.properties.rider['x-domain-object-ref'] as DomainObjectPragmaRef;
+ * pragma.of; // 'Seaturtle'
+ * pragma.by; // 'primary'
+ */
+export type DomainObjectPragmaRef = {
+  /**
+   * the referenced dobj's class name (`constructor.name`) — names the reconstructed reference type
+   */
+  of: string;
+
+  /**
+   * which key(s) the reference carries — `primary` / `unique` / `ref` (a union of both)
+   */
+  by: DomainObjectRefBy;
 };

@@ -1,6 +1,7 @@
-import type { ZodSchema } from 'zod';
-
-import { getContract } from '@src/manipulation/getContract';
+import {
+  type DomainObjectContract,
+  getContract,
+} from '@src/manipulation/getContract';
 import {
   type WithImmute,
   withImmute,
@@ -102,10 +103,15 @@ export class DomainObject<T extends DomainObjectShape> {
    *
    * requires a `static schema` that is a `Zod` schema; throws a `ConstraintError` otherwise.
    *
+   * the returned contract also carries a `.ref(by)` method: `Seaturtle.contract.ref('primary')`
+   * returns the schema-level *reference* to this dobj by key (an `x-domain-object-ref` pragma) —
+   * a key-only slice for a field that references another dobj rather than composes it.
+   *
    * @example
-   * z.object({ surfboard: SeaturtleSurfboard.contract });
+   * z.object({ surfboard: SeaturtleSurfboard.contract });          // composes the whole dobj
+   * z.object({ rider: Seaturtle.contract.ref('primary') });        // references it by primary key
    */
-  public static get contract(): ZodSchema<any> {
+  public static get contract(): DomainObjectContract {
     return getContract(this);
   }
 

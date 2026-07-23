@@ -30,7 +30,10 @@ export { DomainObjectMetadataMustBeDefinedError } from './manipulation/DomainObj
 export type {
   DomainObjectKind,
   DomainObjectPragma,
+  DomainObjectPragmaRef,
+  DomainObjectRefBy,
 } from './manipulation/DomainObjectPragma';
+export type { DomainObjectContract } from './manipulation/getContract';
 export { getMetadataKeys } from './manipulation/getMetadataKeys';
 export { getPrimaryIdentifier } from './manipulation/getPrimaryIdentifier';
 export { getReadonlyKeys } from './manipulation/getReadonlyKeys';
