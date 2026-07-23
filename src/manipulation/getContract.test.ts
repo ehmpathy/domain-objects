@@ -104,6 +104,25 @@ describe('getContract', () => {
           expect(getPragma(getContract(SeaturtleSurfboard))).toEqual(expected);
         },
       );
+
+      then(
+        'the contract still validates data after the .ref augmentation (schema intact)',
+        () => {
+          // `.contract` is a real, publicly-embeddable zod schema, so it must still validate.
+          // guards the in-place `Object.defineProperty` augmentation (and future zod upgrades)
+          // against a silent break of runtime validation via the .ref attachment.
+          const contract = getContract(SeaturtleSurfboard);
+          const valid = {
+            uuid: 'a-uuid',
+            serialNumber: 'SN-1',
+            rider: { uuid: 'r-uuid', name: 'Crush' },
+          };
+          expect(contract.safeParse(valid).success).toEqual(true);
+          expect(contract.safeParse({ serialNumber: 42 }).success).toEqual(
+            false,
+          );
+        },
+      );
     });
 
     when('the contract is requested via the .contract getter', () => {

@@ -382,6 +382,8 @@ const empty: Ref<typeof EarthWorm> = {};
 👉 `RefByUnique` for unique-only references,
 👉 `Ref` when you want to allow either.
 
+> For the **schema-level** counterpart that survives `z.toJSONSchema()`, see [`contract.ref(by)`](#getter-contractrefby) - it stamps an `x-domain-object-ref` pragma so a reference crosses the wire as a first-class, named artifact.
+
 ### Instantiating Reference Objects
 
 You can instantiate reference objects directly using the `RefByUnique` or `RefByPrimary` constructors:
@@ -633,6 +635,49 @@ class Wave extends DomainEntity<Wave> implements Wave {
 
 z.toJSONSchema(Wave.contract)['x-domain-object'].nested;
 // => { surfer: ['Seaturtle', 'Dolphin'] }
+```
+
+### getter `contract.ref(by)`
+
+`contract` carries the **whole** domain object. `contract.ref(by)` carries only its **key** - a schema-level _reference_ to the domain object, stamped with an `x-domain-object-ref` pragma.
+
+Where `.contract` embeds the full domain object (composition), `.contract.ref(by)` returns a `Zod` schema of ONLY the referenced key fields - the wire form of a field that _points at_ another domain object by key, rather than one that carries the whole object. It is the schema-level counterpart of the `RefByPrimary` / `RefByUnique` TypeScript types (which are erased at runtime): the reference relationship those types express now survives `z.toJSONSchema()`.
+
+The `by` argument names which key(s) the reference carries:
+
+- `by: 'primary'` - picks the `static primary` fields. Always a flat pick: primary keys are flat identifiers (e.g. `uuid`), never nested domain objects
+- `by: 'unique'` - picks the `static unique` fields. A unique key that is itself a domain object recurses to that dobj's own `.contract.ref('unique')` (to mirror `refByUnique`); if that nested domain object declares no `static unique`, its whole key sub-schema is embedded flat instead (no recursion, no throw) - the normal shape for a `DomainLiteral` unique key. A **polymorphic** unique key (an array of dobj choices) where any choice declares `static unique` throws a `ConstraintError` - the schema cannot know which arm a live value is, so it fails loud rather than embed a shape that would drift from `refByUnique`
+- `by: 'ref'` - a `z.union` of the primary and unique shapes. The `x-domain-object-ref` pragma is stamped once on the union's top node (the json-schema `anyOf` node), not on each arm - so a consumer that walks `anyOf` reads one pragma at the top, not one per branch
+
+> _note:_ call `.ref(by)` on the RAW `.contract`, before any other `Zod` chain op. Ops like `.optional()` / `.nullable()` return a fresh schema WITHOUT `.ref`, so `X.contract.optional().ref('primary')` fails. Embed the ref first, then chain: `z.object({ rider: X.contract.ref('primary') }).optional()`.
+
+example:
+
+```ts
+// a field that references another domain object by key (not by value)
+const trophySchema = z.object({
+  uuid: z.string(),
+  rider: Seaturtle.contract.ref('primary'), // => { uuid }, stamped "references Seaturtle by primary"
+});
+
+// the reference identity survives json-schema serialization
+const json = z.toJSONSchema(trophySchema);
+expect(json.properties.rider['x-domain-object-ref']).toEqual({
+  of: 'Seaturtle', // which domain object it references
+  by: 'primary', // which key(s) the reference carries
+});
+```
+
+The ref pragma shape is exported as the `DomainObjectPragmaRef` type - the partner to `DomainObjectPragma`:
+
+```ts
+import type { DomainObjectPragmaRef } from 'domain-objects';
+
+// the `x-domain-object-ref` node comes off an untyped json-schema blob, so the cast is a
+// boundary read - domain-objects ships the type, you own the node access
+const refPragma = json.properties.rider['x-domain-object-ref'] as DomainObjectPragmaRef;
+refPragma.of; // string - the referenced domain object's class name
+refPragma.by; // 'primary' | 'unique' | 'ref'
 ```
 
 

@@ -1,0 +1,446 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity that declares unique but not primary when: .contract.ref("primary") is requested but no static primary exists then: it fails fast with a requires-static-primary ConstraintError 1`] = `
+"✋ ConstraintError: Current.contract.ref('primary') requires \`static primary\` on Current
+
+{
+  "domainObject": "Current",
+  "by": "primary"
+}"
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity that declares unique but not primary when: .contract.ref("ref") is requested (unique-only arm) then: the union-of-one degrades to the single unique shape, stamped by:"ref" 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "speed": {
+      "type": "number",
+    },
+  },
+  "required": [
+    "speed",
+  ],
+  "type": "object",
+  "x-domain-object-ref": {
+    "by": "ref",
+    "of": "Current",
+  },
+}
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity that does not declare the requested key when: .contract.ref("unique") is requested but no static unique exists then: it fails fast with a requires-static-unique ConstraintError 1`] = `
+"✋ ConstraintError: Ripple.contract.ref('unique') requires \`static unique\` on Ripple
+
+{
+  "domainObject": "Ripple",
+  "by": "unique"
+}"
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity whose declared key is absent from its schema when: .contract.ref("unique") is requested then: it fails fast with a key-absent-from-schema ConstraintError 1`] = `
+"✋ ConstraintError: Foam.contract.ref('unique'): key 'bubbles' is declared in \`static unique\` but absent from \`static schema\`
+
+{
+  "domainObject": "Foam",
+  "by": "unique",
+  "key": "bubbles"
+}"
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity whose unique key is a nested DomainLiteral when: .contract.ref("unique") is requested then: it does NOT throw; the literal key embeds its whole schema flat (mirrors refByUnique) 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "address": {
+      "additionalProperties": false,
+      "properties": {
+        "postal": {
+          "type": "string",
+        },
+        "street": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "street",
+        "postal",
+      ],
+      "type": "object",
+    },
+  },
+  "required": [
+    "address",
+  ],
+  "type": "object",
+  "x-domain-object-ref": {
+    "by": "unique",
+    "of": "Property",
+  },
+}
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity whose unique key is a polymorphic nested (array) dobj when: .contract.ref("unique") is requested then: it fails fast: a polymorphic unique key whose arms declare unique cannot derive one faithful shape 1`] = `
+"✋ ConstraintError: Reef.contract.ref('unique'): unique key 'resident' is a polymorphic nested dobj (choices: Fish, Shark); at least one choice declares \`static unique\`, so a single faithful ref sub-shape cannot be derived at schema-build time — runtime refByUnique reduces the live instance to its arm's own unique ref. reference each choice by a single-dobj key instead
+
+{
+  "domainObject": "Reef",
+  "by": "unique",
+  "key": "resident"
+}"
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity whose unique key is a polymorphic nested dobj, no arm with unique when: .contract.ref("unique") is requested then: the flat pick is kept (no throw): runtime embeds the whole value for every arm 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "speck": {
+      "additionalProperties": false,
+      "properties": {
+        "color": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "color",
+      ],
+      "type": "object",
+    },
+  },
+  "required": [
+    "speck",
+  ],
+  "type": "object",
+  "x-domain-object-ref": {
+    "by": "unique",
+    "of": "Shore",
+  },
+}
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity whose unique key is itself a nested dobj when: .contract.ref("unique") is requested then: the nested-dobj key recurses to its own unique ref (matches refByUnique) 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "turtle": {
+      "additionalProperties": false,
+      "properties": {
+        "seawaterSecurityNumber": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "seawaterSecurityNumber",
+      ],
+      "type": "object",
+      "x-domain-object-ref": {
+        "by": "unique",
+        "of": "Seaturtle",
+      },
+    },
+  },
+  "required": [
+    "turtle",
+  ],
+  "type": "object",
+  "x-domain-object-ref": {
+    "by": "unique",
+    "of": "SeaturtleShell",
+  },
+}
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity with a (misconfigured) nested primary key when: .contract.ref("primary") is requested then: the nested-dobj primary key stays a flat pick (no recursion into its own ref) 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "marker": {
+      "additionalProperties": false,
+      "properties": {
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "type": "object",
+    },
+  },
+  "required": [
+    "marker",
+  ],
+  "type": "object",
+  "x-domain-object-ref": {
+    "by": "primary",
+    "of": "Buoy",
+  },
+}
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity with a nested field but a scalar unique key when: .contract.ref("unique") is requested then: the scalar unique key is a flat pick; the nested field is not pulled in 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "name",
+  ],
+  "type": "object",
+  "x-domain-object-ref": {
+    "by": "unique",
+    "of": "Cove",
+  },
+}
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity with only a primary (no unique) when: .contract.ref("ref") is requested then: the union-of-one degrades to the single primary shape, stamped by:"ref" 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "uuid": {
+      "type": "string",
+    },
+  },
+  "type": "object",
+  "x-domain-object-ref": {
+    "by": "ref",
+    "of": "Sandbar",
+  },
+}
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity with primary + unique when: .contract.ref is embedded as a field in a parent z.object then: the pragma survives on the nested field of the parent json-schema 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "rider": {
+      "additionalProperties": false,
+      "properties": {
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "type": "object",
+      "x-domain-object-ref": {
+        "by": "primary",
+        "of": "Seaturtle",
+      },
+    },
+  },
+  "required": [
+    "rider",
+  ],
+  "type": "object",
+}
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity with primary + unique when: .contract.ref("primary") is requested then: the pragma is { of, by: "primary" } and only primary fields remain 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "uuid": {
+      "type": "string",
+    },
+  },
+  "type": "object",
+  "x-domain-object-ref": {
+    "by": "primary",
+    "of": "Seaturtle",
+  },
+}
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity with primary + unique when: .contract.ref("ref") is requested then: the pragma is { of, by: "ref" } and the schema is a union (anyOf) 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "anyOf": [
+    {
+      "additionalProperties": false,
+      "properties": {
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "type": "object",
+    },
+    {
+      "additionalProperties": false,
+      "properties": {
+        "seawaterSecurityNumber": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "seawaterSecurityNumber",
+      ],
+      "type": "object",
+    },
+  ],
+  "x-domain-object-ref": {
+    "by": "ref",
+    "of": "Seaturtle",
+  },
+}
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainEntity with primary + unique when: .contract.ref("unique") is requested then: the pragma is { of, by: "unique" } and only unique fields remain 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "seawaterSecurityNumber": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "seawaterSecurityNumber",
+  ],
+  "type": "object",
+  "x-domain-object-ref": {
+    "by": "unique",
+    "of": "Seaturtle",
+  },
+}
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainObject that declares neither primary nor unique when: .contract.ref("ref") is requested then: it fails fast with a needs-at-least-one-key ConstraintError 1`] = `
+"✋ ConstraintError: Tide.contract.ref('ref') requires at least one of \`static primary\` / \`static unique\` on Tide
+
+{
+  "domainObject": "Tide"
+}"
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainObject whose schema is joi, not zod when: .contract.ref is requested then: .contract itself fails fast (non-zod) before .ref 1`] = `
+"✋ ConstraintError: JoiSandbar.contract requires a zod schema; joi/yup cannot carry json-schema identity. keep .schema for validation, but .contract needs zod
+
+{
+  "domainObject": "JoiSandbar"
+}"
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainObject whose zod schema is not object-shaped when: .contract.ref is requested then: it fails fast with an object-schema ConstraintError 1`] = `
+"✋ ConstraintError: Whistle.contract.ref requires an object schema (z.object) to derive key fields
+
+{
+  "domainObject": "Whistle"
+}"
+`;
+
+exports[`getContractRef (.contract.ref) given: a DomainObject with no schema declared when: .contract.ref is requested then: .contract itself fails fast (no schema) before .ref 1`] = `
+"✋ ConstraintError: Driftwood.contract requires a static schema. declare \`static schema\` (zod) on Driftwood to use .contract
+
+{
+  "domainObject": "Driftwood"
+}"
+`;
+
+exports[`getContractRef (.contract.ref) given: a caller that passes an unrecognized \`by\` value when: .contract.ref is called with a value outside the ts union (js caller bypass) then: it fails fast rather than relabel the bad value as by:"ref" 1`] = `
+"✋ ConstraintError: Swell.contract.ref received an unrecognized 'by' value: "primry". expected 'primary' | 'unique' | 'ref'
+
+{
+  "domainObject": "Swell",
+  "by": "primry"
+}"
+`;
+
+exports[`getContractRef (.contract.ref) given: a self-referential unique-key graph (cyclic) when: .contract.ref("unique") is requested then: it fails fast with a cyclic-graph ConstraintError 1`] = `
+"✋ ConstraintError: Node.contract.ref('unique'): cyclic unique-key graph via 'parent' → Node
+
+{
+  "domainObject": "Node",
+  "by": "unique",
+  "key": "parent",
+  "nested": "Node"
+}"
+`;
+
+exports[`getContractRef (.contract.ref) given: a two-hop cyclic unique-key graph (A.unique→B, B.unique→A) when: .contract.ref("unique") is requested on one end then: it fails fast with a cyclic-graph ConstraintError 1`] = `
+"✋ ConstraintError: Flow.contract.ref('unique'): cyclic unique-key graph via 'ebb' → Ebb
+
+{
+  "domainObject": "Flow",
+  "by": "unique",
+  "key": "ebb",
+  "nested": "Ebb"
+}"
+`;
+
+exports[`getContractRef (.contract.ref) given: the vision's multi-ref parent: two distinct .contract.ref fields plus a .contract compose on one schema when: a parent z.object composes rider(ref primary) + board(ref unique) + shaper(contract) then: each nested field carries its own distinct pragma, side by side 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "board": {
+      "additionalProperties": false,
+      "properties": {
+        "brand": {
+          "type": "string",
+        },
+        "length": {
+          "type": "number",
+        },
+      },
+      "required": [
+        "brand",
+        "length",
+      ],
+      "type": "object",
+      "x-domain-object-ref": {
+        "by": "unique",
+        "of": "Surfboard",
+      },
+    },
+    "rider": {
+      "additionalProperties": false,
+      "properties": {
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "type": "object",
+      "x-domain-object-ref": {
+        "by": "primary",
+        "of": "Seaturtle",
+      },
+    },
+    "shaper": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+        },
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "name",
+      ],
+      "type": "object",
+      "x-domain-object": {
+        "kind": "entity",
+        "name": "Seaturtle",
+        "primary": [
+          "uuid",
+        ],
+      },
+    },
+  },
+  "required": [
+    "rider",
+    "board",
+    "shaper",
+  ],
+  "type": "object",
+}
+`;

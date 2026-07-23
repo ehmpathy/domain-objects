@@ -1,5 +1,6 @@
 import { UnexpectedCodePathError } from 'helpful-errors';
 
+import { hasDeclaredUniqueKey } from './hasDeclaredUniqueKey';
 import type { DomainObjectShape, Refable } from './Refable';
 import type { RefByUnique } from './RefByUnique.type';
 
@@ -54,7 +55,12 @@ export const refByUnique = <
     const value = (instance as any)[key];
 
     // if the value is a nested domain object, recursively extract its reference
-    if (value && typeof value === 'object' && value.constructor?.unique) {
+    // (gate shared with buildKeyContract via hasDeclaredUniqueKey — one source of truth)
+    if (
+      value &&
+      typeof value === 'object' &&
+      hasDeclaredUniqueKey(value.constructor)
+    ) {
       ref[key] = refByUnique(value);
     } else {
       ref[key] = value;
