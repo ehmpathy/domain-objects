@@ -22,6 +22,18 @@ export const isZodSchema = (
   return false;
 };
 
+/**
+ * .what = true when a zod schema exposes `.meta()` — i.e. it is zod v4+, not v3
+ * .why = `isZodSchema` duck-types on `.safeParse`, which BOTH v3 and v4 expose, so a v3 schema
+ *   passes that guard and then meets a raw `TypeError: schema.meta is not a function` deep inside
+ *   the pragma stamp. `.meta()` is zod v4's metadata registry and has no v3 equivalent, so it is
+ *   the narrowest honest probe for the version this repo's contract surface requires.
+ * .note = a predicate rather than an assert, to match `isZodSchema`'s shape — each caller owns its
+ *   own error text, since the name of the surface that needs v4 differs by call site.
+ */
+export const isZodSchemaWithMeta = (schema: ZodSchema<any>): boolean =>
+  typeof (schema as { meta?: unknown }).meta === 'function';
+
 const isYupSchema = (schema: SchemaOptions<any>): schema is YupSchema<any> => {
   if ((schema as YupSchema<any>).isValidSync) return true; // only yup schemas have this property
   return false;

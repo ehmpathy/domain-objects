@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`DomainObject .contract should fail fast with a ConstraintError when no schema is declared 1`] = `
-"✋ ConstraintError: Seaturtle.contract requires a static schema. declare \`static schema\` (zod) on Seaturtle to use .contract
+"✋ ConstraintError: Seaturtle.contract() requires a static schema. either declare \`static schema\` (zod) on Seaturtle to use .contract() — or, if this call is a SELF-REFERENCE from inside Seaturtle's own \`static schema\` initializer (a tree-shaped dobj), the field is not assigned yet at that moment: defer it with \`z.lazy(() => Seaturtle.contract())\`
 
 {
   "domainObject": "Seaturtle"
@@ -11,7 +11,6 @@ exports[`DomainObject .contract should fail fast with a ConstraintError when no 
 exports[`DomainObject .contract should stamp identity + key metadata onto the schema for a seaturtle domain object 1`] = `
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
   "properties": {
     "name": {
       "type": "string",

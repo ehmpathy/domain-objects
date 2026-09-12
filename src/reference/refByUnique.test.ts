@@ -91,4 +91,23 @@ describe('refByUnique', () => {
     // should not include the algea property
     expect(ref).not.toHaveProperty('algea');
   });
+
+  it('should throw on a dobj whose static unique is an EMPTY array', () => {
+    // ⚠️ this reaches PRIOR public api, not the new `.contract()` surface, and it is the reason the
+    // gate was fixed in `hasDeclaredUniqueKey` rather than at each call site. `[]` is truthy, so the
+    // old `if (!uniqueKeys)` passed, the loop below it never ran, and this returned `{}` — a
+    // reference that names no key, handed back as a success (`rule.forbid.failhide`).
+    interface Driftwood {
+      grain: string;
+    }
+    class Driftwood extends DomainEntity<Driftwood> implements Driftwood {
+      public static unique = [] as const;
+    }
+
+    const log = new Driftwood({ grain: 'tight' });
+
+    expect(() => refByUnique<typeof Driftwood>(log)).toThrow(
+      'does not declare its .unique keys',
+    );
+  });
 });

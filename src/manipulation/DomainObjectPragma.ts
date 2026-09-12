@@ -10,7 +10,7 @@ export type DomainObjectKind = 'entity' | 'literal' | 'event' | 'object';
 
 /**
  * .what = the type of a domain object's `x-domain-object` **pragma** — the static declarations
- *   stamped onto its `.contract` schema so a cross-service consumer can reconstruct the class.
+ *   stamped onto its `.contract()` schema so a cross-service consumer can reconstruct the class.
  *
  * .why =
  *   a domain object splits into two halves on the wire:
@@ -31,8 +31,8 @@ export type DomainObjectKind = 'entity' | 'literal' | 'event' | 'object';
  *   | `x-domain-object-ref` | this node **REFERENCES** X | `DomainObjectPragmaRef`             |
  *
  *   the base + `Ref` partner mirrors the runtime pair `DomainObject : Ref`. both ship today:
- *   `DomainObjectPragma` (the full body, via `.contract`) and `DomainObjectPragmaRef` (a key-only
- *   reference, via `.contract.ref(by)`).
+ *   `DomainObjectPragma` (the full body, via `.contract()`) and `DomainObjectPragmaRef` (a key-only
+ *   reference, via `.contract().ref(by)`).
  *
  * .note = fields are **optional** where the stamp omits them: `getContract` writes `primary`/
  *   `unique`/`alias`/`nested` only when the dobj declares them, so a consumer reads e.g.
@@ -92,11 +92,11 @@ export type DomainObjectRefBy = 'primary' | 'unique' | 'ref';
  *
  * .why =
  *   a contract field often references another dobj by its key, not by its whole body:
- *   `class SurfTrophy { rider: Seaturtle.contract.ref('primary') }` → the wire carries just
+ *   `class SurfTrophy { rider: Seaturtle.contract().ref('primary') }` → the wire carries just
  *   `{ uuid }`, and this pragma states "that `{ uuid }` **references** a Seaturtle by primary".
  *   a consumer reads it to emit a typed `RefByPrimary<typeof Seaturtle>` instead of an anonymous
  *   `{ uuid: string }`. deliberately smaller than `DomainObjectPragma`: a reference needs only
- *   *which dobj* + *which key*, not the full body nor `kind` — the target's own `.contract`
+ *   *which dobj* + *which key*, not the full body nor `kind` — the target's own `.contract()`
  *   (bound elsewhere) already states those.
  *
  * .note = the schema-level partner of the runtime `refByPrimary` / `refByUnique` ops and the

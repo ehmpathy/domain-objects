@@ -11,6 +11,7 @@ export {
   DomainObject,
   MARK_AS_DOMAIN_OBJECT,
 } from './instantiation/DomainObject';
+export type { DomainObjectInstantiationOptions } from './instantiation/DomainObjectInstantiationOptions';
 export { NestedDomainObjectHydrationError } from './instantiation/hydrate/hydrateNestedDomainObjects';
 export { isOfDomainEntity } from './instantiation/inherit/isOfDomainEntity';
 export { isOfDomainEvent } from './instantiation/inherit/isOfDomainEvent';
@@ -33,7 +34,10 @@ export type {
   DomainObjectPragmaRef,
   DomainObjectRefBy,
 } from './manipulation/DomainObjectPragma';
-export type { DomainObjectContract } from './manipulation/getContract';
+export type {
+  ContractOf,
+  DomainObjectContract,
+} from './manipulation/getContract';
 export { getMetadataKeys } from './manipulation/getMetadataKeys';
 export { getPrimaryIdentifier } from './manipulation/getPrimaryIdentifier';
 export { getReadonlyKeys } from './manipulation/getReadonlyKeys';

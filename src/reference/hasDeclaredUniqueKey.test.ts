@@ -18,10 +18,16 @@ const TEST_CASES: {
     expect: true,
   },
   {
+    // ⚠️ this case READ `true` until i011, and the `true` was a defect this suite had recorded as a
+    // guarantee. `[]` is truthy, so an empty declaration passed every downstream gate and each one
+    // then produced a reference that names no key — `refByUnique` returned `{}`, and
+    // `.contract().ref('unique')` picked an empty object and reported success on it. that is q24's
+    // failhide reached through the DECLARATION rather than the payload, and the same argument
+    // settles both: a reference that names no key is not a reference.
     description:
-      'a class whose static unique is an empty array → true (the static is declared, just empty)',
+      'a class whose static unique is an EMPTY array → false (an empty declaration names no key)',
     given: { dobjClass: { unique: [] } },
-    expect: true,
+    expect: false,
   },
   {
     description: 'a class that does not declare static unique → false',

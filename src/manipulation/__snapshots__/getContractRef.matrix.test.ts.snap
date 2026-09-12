@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`getContractRef matrix (exhaustive edge coverage) given: G · the pragma each grain stamps, and its identity when: each grain is emitted then: G — the pragma survives a wrapper AND an array item 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "many": {
+      "items": {
+        "properties": {
+          "name": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "name",
+        ],
+        "type": "object",
+        "x-domain-object-ref": {
+          "by": "unique",
+          "of": "SurferStrict",
+        },
+      },
+      "type": "array",
+    },
+    "one": {
+      "properties": {
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "uuid",
+      ],
+      "type": "object",
+      "x-domain-object-ref": {
+        "by": "primary",
+        "of": "SurferStrict",
+      },
+    },
+  },
+  "required": [
+    "one",
+    "many",
+  ],
+  "type": "object",
+}
+`;

@@ -1,0 +1,375 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`getContract coerce roundtrip (acceptance) given: a TREE-shaped dobj at a boundary, reached through the barrel when: a caller sends a nested thread of plain wire json then: the published wire contract matches snapshot ($ref recursion) 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "replies": {
+      "items": {
+        "$ref": "#",
+      },
+      "type": "array",
+    },
+    "text": {
+      "type": "string",
+    },
+    "uuid": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "text",
+    "replies",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "kind": "entity",
+    "name": "Thread",
+    "nested": {
+      "replies": "Thread",
+    },
+    "primary": [
+      "uuid",
+    ],
+  },
+}
+`;
+
+exports[`getContract coerce roundtrip (acceptance) given: a boundary that composes dobjs with a zod COMBINATOR when: the endpoint declares a union, a record, and a discriminated union then: introspection — the published document is snapshotted 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "mount": {
+      "oneOf": [
+        {
+          "properties": {
+            "fin": {
+              "properties": {
+                "brand": {
+                  "type": "string",
+                },
+              },
+              "required": [
+                "brand",
+              ],
+              "type": "object",
+              "x-domain-object": {
+                "kind": "literal",
+                "name": "Fin",
+              },
+            },
+            "kind": {
+              "const": "fin",
+              "type": "string",
+            },
+          },
+          "required": [
+            "kind",
+            "fin",
+          ],
+          "type": "object",
+        },
+        {
+          "properties": {
+            "kind": {
+              "const": "leash",
+              "type": "string",
+            },
+            "leash": {
+              "properties": {
+                "length": {
+                  "type": "number",
+                },
+              },
+              "required": [
+                "length",
+              ],
+              "type": "object",
+              "x-domain-object": {
+                "kind": "literal",
+                "name": "Leash",
+              },
+            },
+          },
+          "required": [
+            "kind",
+            "leash",
+          ],
+          "type": "object",
+        },
+      ],
+    },
+    "part": {
+      "anyOf": [
+        {
+          "properties": {
+            "brand": {
+              "type": "string",
+            },
+          },
+          "required": [
+            "brand",
+          ],
+          "type": "object",
+          "x-domain-object": {
+            "kind": "literal",
+            "name": "Fin",
+          },
+        },
+        {
+          "properties": {
+            "length": {
+              "type": "number",
+            },
+          },
+          "required": [
+            "length",
+          ],
+          "type": "object",
+          "x-domain-object": {
+            "kind": "literal",
+            "name": "Leash",
+          },
+        },
+      ],
+    },
+    "spares": {
+      "additionalProperties": {
+        "properties": {
+          "brand": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "brand",
+        ],
+        "type": "object",
+        "x-domain-object": {
+          "kind": "literal",
+          "name": "Fin",
+        },
+      },
+      "propertyNames": {
+        "type": "string",
+      },
+      "type": "object",
+    },
+  },
+  "required": [
+    "part",
+    "spares",
+    "mount",
+  ],
+  "type": "object",
+}
+`;
+
+exports[`getContract coerce roundtrip (acceptance) given: a dobj SUBCLASS at a boundary, reached through the barrel when: the subclass contract is published and parsed then: the emitted document names the SUBCLASS 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "serial": {
+      "type": "string",
+    },
+    "uuid": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "serial",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "kind": "entity",
+    "name": "Longboard",
+    "primary": [
+      "uuid",
+    ],
+    "unique": [
+      "serial",
+    ],
+  },
+}
+`;
+
+exports[`getContract coerce roundtrip (acceptance) given: the vision's day-in-the-life: a lambda books a surf lesson from plain wire json when: the caller sends a payload the boundary cannot accept then: an emit that forgets the flag fails LOUD, never silently wrong 1`] = `"Transforms cannot be represented in JSON Schema"`;
+
+exports[`getContract coerce roundtrip (acceptance) given: the vision's day-in-the-life: a lambda books a surf lesson from plain wire json when: the same declaration is asked to DESCRIBE the boundary then: the published wire contract is the plain shape, snapshotted 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "surfer": {
+      "properties": {
+        "board": {
+          "properties": {
+            "brand": {
+              "type": "string",
+            },
+            "fin": {
+              "properties": {
+                "setup": {
+                  "enum": [
+                    "thruster",
+                    "quad",
+                  ],
+                  "type": "string",
+                },
+              },
+              "required": [
+                "setup",
+              ],
+              "type": "object",
+              "x-domain-object": {
+                "kind": "literal",
+                "name": "Fin",
+              },
+            },
+            "lengthInInches": {
+              "type": "number",
+            },
+          },
+          "required": [
+            "brand",
+            "lengthInInches",
+            "fin",
+          ],
+          "type": "object",
+          "x-domain-object": {
+            "kind": "literal",
+            "name": "Surfboard",
+            "nested": {
+              "fin": "Fin",
+            },
+          },
+        },
+        "name": {
+          "type": "string",
+        },
+        "spares": {
+          "items": {
+            "properties": {
+              "brand": {
+                "type": "string",
+              },
+              "fin": {
+                "properties": {
+                  "setup": {
+                    "enum": [
+                      "thruster",
+                      "quad",
+                    ],
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "setup",
+                ],
+                "type": "object",
+                "x-domain-object": {
+                  "kind": "literal",
+                  "name": "Fin",
+                },
+              },
+              "lengthInInches": {
+                "type": "number",
+              },
+            },
+            "required": [
+              "brand",
+              "lengthInInches",
+              "fin",
+            ],
+            "type": "object",
+            "x-domain-object": {
+              "kind": "literal",
+              "name": "Surfboard",
+              "nested": {
+                "fin": "Fin",
+              },
+            },
+          },
+          "type": "array",
+        },
+        "sponsor": {
+          "anyOf": [
+            {
+              "properties": {
+                "brand": {
+                  "type": "string",
+                },
+                "fin": {
+                  "properties": {
+                    "setup": {
+                      "enum": [
+                        "thruster",
+                        "quad",
+                      ],
+                      "type": "string",
+                    },
+                  },
+                  "required": [
+                    "setup",
+                  ],
+                  "type": "object",
+                  "x-domain-object": {
+                    "kind": "literal",
+                    "name": "Fin",
+                  },
+                },
+                "lengthInInches": {
+                  "type": "number",
+                },
+              },
+              "required": [
+                "brand",
+                "lengthInInches",
+                "fin",
+              ],
+              "type": "object",
+              "x-domain-object": {
+                "kind": "literal",
+                "name": "Surfboard",
+                "nested": {
+                  "fin": "Fin",
+                },
+              },
+            },
+            {
+              "type": "null",
+            },
+          ],
+        },
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "name",
+        "board",
+        "spares",
+        "sponsor",
+      ],
+      "type": "object",
+      "x-domain-object": {
+        "kind": "entity",
+        "name": "Surfer",
+        "nested": {
+          "board": "Surfboard",
+          "spares": "Surfboard",
+          "sponsor": "Surfboard",
+        },
+        "primary": [
+          "uuid",
+        ],
+        "unique": [
+          "name",
+        ],
+      },
+    },
+  },
+  "required": [
+    "surfer",
+  ],
+  "type": "object",
+}
+`;

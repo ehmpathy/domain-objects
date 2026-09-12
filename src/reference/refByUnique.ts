@@ -1,4 +1,4 @@
-import { UnexpectedCodePathError } from 'helpful-errors';
+import { BadRequestError, UnexpectedCodePathError } from 'helpful-errors';
 
 import { hasDeclaredUniqueKey } from './hasDeclaredUniqueKey';
 import type { DomainObjectShape, Refable } from './Refable';
@@ -43,7 +43,12 @@ export const refByUnique = <
   // get the domain object constructor
   const DomainObjectConstructor = (instance as any).constructor;
   const uniqueKeys: readonly string[] = DomainObjectConstructor?.unique;
-  if (!uniqueKeys)
+  // ⚠️ the gate is `hasDeclaredUniqueKey`, not a bare truthy read: `static unique = []` is TRUTHY,
+  // so a bare `!uniqueKeys` let an empty declaration through, the loop below never ran, and this
+  // returned `{}` — a reference that names no key, reported as a success (`rule.forbid.failhide`).
+  // one predicate for the same fact everywhere it is read, so this walk and the schema walk in
+  // `getContractRef` cannot disagree about what "declares a unique key" means.
+  if (!hasDeclaredUniqueKey(DomainObjectConstructor))
     throw new UnexpectedCodePathError(
       'can not create refByUnique on a dobj which does not declare its .unique keys',
       { dobj: DomainObjectConstructor?.name, uniqueKeys },
@@ -53,6 +58,15 @@ export const refByUnique = <
   const ref: Record<string, any> = {};
   for (const key of uniqueKeys) {
     const value = (instance as any)[key];
+
+    // fail loud on an absent key — a reference names a real value, or it names none
+    // (mirrors refByPrimary; the three surfaces that describe a unique ref must agree — see
+    //  RefByUnique.type.ts and getContractRef's `pickDeclaredKeys`)
+    if (value === undefined)
+      throw new BadRequestError(
+        `refByUnique: unique key '${key}' is undefined; unique keys must have defined values at reference time.`,
+        { dobj: DomainObjectConstructor?.name, key },
+      );
 
     // if the value is a nested domain object, recursively extract its reference
     // (gate shared with buildKeyContract via hasDeclaredUniqueKey — one source of truth)

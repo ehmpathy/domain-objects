@@ -3,7 +3,6 @@
 exports[`getContract given: a 2-level subclass of DomainEntity when: the contract is requested then: the json-schema output (2-level subclass form) matches snapshot 1`] = `
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
   "properties": {
     "name": {
       "type": "string",
@@ -30,16 +29,23 @@ exports[`getContract given: a 2-level subclass of DomainEntity when: the contrac
 }
 `;
 
+exports[`getContract given: a DomainEntity whose static nested names a field its schema lacks when: the contract is requested then: it fails fast with a nested-key-absent-from-schema ConstraintError 1`] = `
+"✋ ConstraintError: Rack.contract(): key 'board' is declared in \`static nested\` but absent from \`static schema\`. add 'board' to Rack's schema, or drop it from \`static nested\`
+
+{
+  "domainObject": "Rack",
+  "declaredIn": "static nested",
+  "key": "board"
+}"
+`;
+
 exports[`getContract given: a DomainEntity with primary, unique, alias, and nested when: the contract is embedded as a field in a parent z.object then: the pragma survives on the nested field of the parent json-schema 1`] = `
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
   "properties": {
     "surfboard": {
-      "additionalProperties": false,
       "properties": {
         "rider": {
-          "additionalProperties": false,
           "properties": {
             "name": {
               "type": "string",
@@ -94,10 +100,8 @@ exports[`getContract given: a DomainEntity with primary, unique, alias, and nest
 exports[`getContract given: a DomainEntity with primary, unique, alias, and nested when: the contract is requested via getContract then: the json-schema output matches snapshot 1`] = `
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
   "properties": {
     "rider": {
-      "additionalProperties": false,
       "properties": {
         "name": {
           "type": "string",
@@ -146,7 +150,6 @@ exports[`getContract given: a DomainEntity with primary, unique, alias, and nest
 exports[`getContract given: a DomainEntity without a static primary when: the contract is requested then: the json-schema output (entity without primary form) matches snapshot 1`] = `
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
   "properties": {
     "depth": {
       "type": "number",
@@ -173,7 +176,6 @@ exports[`getContract given: a DomainEntity without a static primary when: the co
 exports[`getContract given: a DomainEvent when: the contract is requested then: the json-schema output (event kind form) matches snapshot 1`] = `
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
   "properties": {
     "height": {
       "type": "number",
@@ -205,7 +207,6 @@ exports[`getContract given: a DomainEvent when: the contract is requested then: 
 exports[`getContract given: a DomainLiteral with a primary but no unique/alias/nested when: the contract is requested then: the json-schema output (primary-only form) matches snapshot 1`] = `
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
   "properties": {
     "latitude": {
       "type": "number",
@@ -232,8 +233,16 @@ exports[`getContract given: a DomainLiteral with a primary but no unique/alias/n
 }
 `;
 
+exports[`getContract given: a DomainObject that declares static nested atop a NON-object schema when: the contract is requested then: it fails fast with a requires-object-schema ConstraintError 1`] = `
+"✋ ConstraintError: Chant.contract() requires an object schema (z.object); a contract coerces the wire payload into a Chant instance, and a domain object is a record of named props — a scalar or array schema carries none, so the construct would yield an instance of indexed characters rather than fail. declare Chant's schema as a z.object (wrap a scalar as z.object({ value: … }) if Chant genuinely models one)
+
+{
+  "domainObject": "Chant"
+}"
+`;
+
 exports[`getContract given: a DomainObject whose schema is joi, not zod when: the contract is requested then: it fails fast with a ConstraintError 1`] = `
-"✋ ConstraintError: JoiSandbar.contract requires a zod schema; joi/yup cannot carry json-schema identity. keep .schema for validation, but .contract needs zod
+"✋ ConstraintError: JoiSandbar.contract() requires a zod schema; joi/yup cannot carry json-schema identity. keep .schema for validation, but .contract() needs zod
 
 {
   "domainObject": "JoiSandbar"
@@ -241,15 +250,23 @@ exports[`getContract given: a DomainObject whose schema is joi, not zod when: th
 `;
 
 exports[`getContract given: a DomainObject whose schema is yup, not zod when: the contract is requested then: it fails fast with a ConstraintError 1`] = `
-"✋ ConstraintError: YupSandbar.contract requires a zod schema; joi/yup cannot carry json-schema identity. keep .schema for validation, but .contract needs zod
+"✋ ConstraintError: YupSandbar.contract() requires a zod schema; joi/yup cannot carry json-schema identity. keep .schema for validation, but .contract() needs zod
 
 {
   "domainObject": "YupSandbar"
 }"
 `;
 
+exports[`getContract given: a DomainObject whose static schema is a SCALAR, not an object when: the contract is requested then: it fails fast with a requires-object-schema ConstraintError 1`] = `
+"✋ ConstraintError: Fin.contract() requires an object schema (z.object); a contract coerces the wire payload into a Fin instance, and a domain object is a record of named props — a scalar or array schema carries none, so the construct would yield an instance of indexed characters rather than fail. declare Fin's schema as a z.object (wrap a scalar as z.object({ value: … }) if Fin genuinely models one)
+
+{
+  "domainObject": "Fin"
+}"
+`;
+
 exports[`getContract given: a DomainObject with no schema declared when: the contract is requested then: it fails fast with a ConstraintError 1`] = `
-"✋ ConstraintError: Driftwood.contract requires a static schema. declare \`static schema\` (zod) on Driftwood to use .contract
+"✋ ConstraintError: Driftwood.contract() requires a static schema. either declare \`static schema\` (zod) on Driftwood to use .contract() — or, if this call is a SELF-REFERENCE from inside Driftwood's own \`static schema\` initializer (a tree-shaped dobj), the field is not assigned yet at that moment: defer it with \`z.lazy(() => Driftwood.contract())\`
 
 {
   "domainObject": "Driftwood"
@@ -259,10 +276,8 @@ exports[`getContract given: a DomainObject with no schema declared when: the con
 exports[`getContract given: a DomainObject with polymorphic (array) nested choices when: the contract is requested then: the json-schema output (array nested form) matches snapshot 1`] = `
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
   "properties": {
     "surfer": {
-      "additionalProperties": false,
       "properties": {
         "ref": {
           "type": "string",
@@ -300,7 +315,6 @@ exports[`getContract given: a DomainObject with polymorphic (array) nested choic
 exports[`getContract given: a plain DomainObject with a schema and alias but no keys when: the contract is requested then: the json-schema output (string alias form) matches snapshot 1`] = `
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "additionalProperties": false,
   "properties": {
     "bubbles": {
       "type": "number",

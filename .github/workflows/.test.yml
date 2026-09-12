@@ -28,17 +28,17 @@ jobs:
     needs: [install, test-shards-omit]
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0 # we need all commits to test:commits
 
       - name: set node-version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: ".nvmrc"
 
       - name: get node-modules from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
@@ -51,15 +51,15 @@ jobs:
     needs: [install, test-shards-omit]
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: set node-version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: ".nvmrc"
 
       - name: get node-modules from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
@@ -75,18 +75,18 @@ jobs:
     needs: [install, test-shards-omit]
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: set node version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: ".nvmrc"
 
       - name: set terraform version
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
 
       - name: get node-modules from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
@@ -99,15 +99,15 @@ jobs:
     needs: [install, test-shards-omit]
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: set node-version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: ".nvmrc"
 
       - name: get node-modules from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
@@ -120,15 +120,15 @@ jobs:
     needs: [install, test-shards-omit]
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: set node-version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: ".nvmrc"
 
       - name: get node-modules from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
@@ -147,7 +147,7 @@ jobs:
       acceptance-patterns: ${{ steps.acceptance.outputs.patterns }}
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           sparse-checkout: |
             jest.integration.shards.jsonc
@@ -188,15 +188,15 @@ jobs:
         shard: ${{ fromJson(needs.enshard.outputs.integration-matrix) }}
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: set node-version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: ".nvmrc"
 
       - name: get node-modules from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
@@ -218,7 +218,7 @@ jobs:
 
       - name: get aws auth, if creds supplied
         if: ${{ inputs.creds-aws-role-arn }}
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
         with:
           role-to-assume: ${{ inputs.creds-aws-role-arn }}
           aws-region: ${{ inputs.creds-aws-region }}
@@ -272,15 +272,15 @@ jobs:
         shard: ${{ fromJson(needs.enshard.outputs.acceptance-matrix) }}
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: set node-version
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: ".nvmrc"
 
       - name: get node-modules from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
@@ -302,7 +302,7 @@ jobs:
 
       - name: get aws auth, if creds supplied
         if: ${{ inputs.creds-aws-role-arn }}
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
         with:
           role-to-assume: ${{ inputs.creds-aws-role-arn }}
           aws-region: ${{ inputs.creds-aws-region }}

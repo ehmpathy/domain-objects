@@ -34,6 +34,10 @@ const config: Config = {
     '!**/*.acceptance.test.ts',
     '!**/*.integration.test.ts',
     '!**/.yalc/**',
+    // .agent holds tool caches — notably rmsafe's trash, which retains deleted files. without
+    // this, an `rhx rmsafe` of any *.test.ts leaves a copy that jest still collects and runs
+    // against src which has since moved on: a failure with no cause anywhere in the repo.
+    '!**/.agent/**',
   ],
   setupFilesAfterEnv: ['./jest.unit.env.ts'],
 
