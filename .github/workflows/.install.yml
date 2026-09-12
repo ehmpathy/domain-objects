@@ -14,7 +14,7 @@ jobs:
       node-modules-cache-key: ${{ steps.cache.outputs.cache-primary-key }}
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: node-modules deps hash
         id: deps-hash
@@ -27,7 +27,7 @@ jobs:
           echo "package-deps-hash=$PACKAGE_DEPS_HASH" >> "$GITHUB_OUTPUT"
 
       - name: node-modules cache check
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         id: cache
         with:
           path: ./node_modules
@@ -36,13 +36,13 @@ jobs:
 
       - name: node-modules cache miss setup node
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version-file: ".nvmrc"
 
       - name: node-modules cache miss setup pnpm
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 
       - name: node-modules cache miss install
         if: steps.cache.outputs.cache-hit != 'true'
@@ -50,7 +50,7 @@ jobs:
 
       - name: node-modules cache set
         if: steps.cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
           path: ./node_modules
           key: ${{ steps.cache.outputs.cache-primary-key }}
