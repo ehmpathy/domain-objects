@@ -16,22 +16,9 @@ import { VERSION } from './version';
 export type { DomainObjectShape } from './DomainObjectShape';
 export { MARK_AS_DOMAIN_OBJECT } from './markers';
 
-export interface DomainObjectInstantiationOptions {
-  /**
-   * allow callers to skip certain aspects of instantiation
-   *
-   * e.g., for performance optimizations in specific usecases
-   */
-  skip?: {
-    /**
-     * allow callers to skip schema validation
-     *
-     * usecase examples
-     * - deserialize: schema validation increases deserialization time dramatically (10-100x) (especially if using Joi, that thing is slow!)
-     */
-    schema?: boolean;
-  };
-}
+import type { DomainObjectInstantiationOptions } from './DomainObjectInstantiationOptions';
+
+export type { DomainObjectInstantiationOptions } from './DomainObjectInstantiationOptions';
 
 /**
  * Domain Object
@@ -95,21 +82,29 @@ export class DomainObject<T extends DomainObjectShape> {
   /**
    * DomainObject.contract
    *
-   * returns the domain object's `schema` stamped with its identity + key metadata, as an `x-domain-object` pragma.
+   * `X.contract()` returns the domain object's boundary schema: its `schema`, stamped with identity
+   * + key metadata as an `x-domain-object` pragma, that PARSES plain wire props INTO a live instance
+   * of `X` — typed as `X`, not as the base.
    *
-   * whereas `schema` *validates* the data, `contract` *identifies* it: the contract is the schema that knows its
-   * own name, primary/unique keys, alias, and nested dobj names. the stamp rides through `z.toJSONSchema()` so a
-   * cross-service consumer can name, de-dupe, and reconstruct the dobj from the wire (no re-validation needed).
+   * whereas `schema` *validates* the data, `contract()` *identifies* and *instantiates* it. a dobj
+   * has exactly two contractual concerns, and this one declaration serves both:
+   * - instantiation — `X.contract().parse(wire)` hands back a real `X` instance (with `.clone`)
+   * - introspection — `z.toJSONSchema(X.contract(), { io: 'input' })` emits the wire shape + pragma
+   *
+   * it is a CALL, not a property, because typescript carries a subclass's identity through a call
+   * and never through a property access. invoke it on the class.
    *
    * requires a `static schema` that is a `Zod` schema; throws a `ConstraintError` otherwise.
    *
-   * the returned contract also carries a `.ref(by)` method: `Seaturtle.contract.ref('primary')`
+   * the returned contract also carries a `.ref(by)` method: `Seaturtle.contract().ref('primary')`
    * returns the schema-level *reference* to this dobj by key (an `x-domain-object-ref` pragma) —
-   * a key-only slice for a field that references another dobj rather than composes it.
+   * a key-only slice for a field that references another dobj rather than composes it. `.ref()`
+   * with no argument yields the union of whichever key refs the dobj declares.
    *
    * @example
-   * z.object({ surfboard: SeaturtleSurfboard.contract });          // composes the whole dobj
-   * z.object({ rider: Seaturtle.contract.ref('primary') });        // references it by primary key
+   * z.object({ surfboard: SeaturtleSurfboard.contract() });        // composes the whole dobj
+   * z.object({ rider: Seaturtle.contract().ref('primary') });      // references it by primary key
+   * z.object({ rider: Seaturtle.contract().ref() });               // by primary OR unique
    */
   public static get contract(): DomainObjectContract {
     return getContract(this);

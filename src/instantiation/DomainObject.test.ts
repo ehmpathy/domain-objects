@@ -453,8 +453,11 @@ describe('DomainObject', () => {
         });
       }
 
-      // read the contract and serialize it to json-schema
-      const json: Record<string, any> = z.toJSONSchema(Seaturtle.contract);
+      // read the contract and serialize it to json-schema. `{ io: 'input' }` at every emit: the
+      // contract coerces, so its OUT side is a class instance, which json-schema cannot represent
+      const json: Record<string, any> = z.toJSONSchema(Seaturtle.contract(), {
+        io: 'input',
+      });
 
       // the x-domain-object pragma carries the seaturtle's identity + keys across the wire
       // kind = 'object': a plain DomainObject has no entity/literal/event marker, so the marker-based

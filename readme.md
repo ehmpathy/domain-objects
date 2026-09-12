@@ -382,7 +382,7 @@ const empty: Ref<typeof EarthWorm> = {};
 👉 `RefByUnique` for unique-only references,
 👉 `Ref` when you want to allow either.
 
-> For the **schema-level** counterpart that survives `z.toJSONSchema()`, see [`contract.ref(by)`](#getter-contractrefby) - it stamps an `x-domain-object-ref` pragma so a reference crosses the wire as a first-class, named artifact.
+> For the **schema-level** counterpart that survives `z.toJSONSchema()`, see [`contract().ref(by?)`](#method-contractrefby) - it stamps an `x-domain-object-ref` pragma so a reference crosses the wire as a first-class, named artifact.
 
 ### Instantiating Reference Objects
 
@@ -563,15 +563,73 @@ Domain modeling gives additional information that we can use for `change detecti
 due to this deterministic serialization, we are able to use this fn for [`change detection`](#change-detection) and [`identity comparisons`](#identity-comparison). See the [examples](#usage-examples) section above for an example of each.
 
 
-## getter `DomainObject.contract`
+## method `DomainObject.contract()`
 
-`schema` _validates_ your data. `contract` _identifies_ it.
+`schema` _validates_ your data. `contract()` _identifies_ and _instantiates_ it.
 
-`DomainObject.contract` returns your `Zod` `schema` stamped with the domain object's identity and key metadata as an `x-domain-object` pragma. Whereas `serialize` stamps a `_dobj` marker onto its string output, `contract` stamps identity onto the schema itself - so it survives `z.toJSONSchema()` and rides across the wire.
+`X.contract()` returns your `Zod` schema, stamped with the domain object's identity and key metadata as an `x-domain-object` pragma, that **parses plain wire json into a live instance of `X`** - typed as `X`, not as the base class.
 
-This is what lets a cross-service consumer detect that a given json-schema _is_ a domain object, learn its name and `kind` (which base class it extends), de-dupe it across endpoints, and reconstruct it (with its `primary` / `unique` / `alias` / `nested` keys) - with no need to re-validate.
+A domain object has exactly **two contractual concerns**, and this one declaration serves both:
 
-> _note:_ `contract` requires a `static schema` that is a `Zod` schema. It throws a `ConstraintError` if the schema is absent or is `Joi`/`Yup` (only `Zod` can carry the json-schema identity pragma). It is memoized per-class, so repeated access returns the same stamped instance.
+| concern | when | you call |
+|---|---|---|
+| **instantiation** | request time, at a boundary | `X.contract().parse(wire)` → a live `X` (with `.clone`) |
+| **introspection** | build / deploy time, for codegen + openapi | `z.toJSONSchema(X.contract(), { io: 'input' })` → the wire shape + the pragma |
+
+> ⚠️ **every emit passes `{ io: 'input' }`** - at **both** borders of an endpoint. `io` names which **side** of the contract you describe (the wire side vs the instance side), never which **border** of the endpoint you sit at. Since `contract()` coerces, its out side is a class instance, which json-schema cannot represent - so `{ io: 'output' }` (and the default) **throws**. See [the two borders](#the-two-borders) below.
+
+> ⛔ **there is no `z.encode`.** `contract()` ships as a `.transform()`, not a `z.codec`, so it has a forward direction only - use `.parse` at **both** borders. See [there is no `z.encode`](#-there-is-no-zencode---use-parse-at-both-borders) below.
+
+> _note:_ it is a **call**, not a property. TypeScript carries a subclass's identity through a call and never through a property access, so only `X.contract()` can hand back a schema that names `X`. Invoke it on the class; a bare `X.contract` is a plain function, and a `z.object` position that gets it throws _"expected a Zod schema"_.
+
+> _note:_ `contract` requires a `static schema` that is a **`Zod` v4+ `z.object`**. It throws a `ConstraintError` if the schema is absent, is `Joi`/`Yup` (only `Zod` can carry the json-schema identity pragma), is `Zod` v3 (the pragma is stamped through `.meta()`, which v4 introduced), or is not object-shaped. It is memoized per-class, so repeated access returns the same instance.
+
+> ⚠️ **a tree-shaped dobj needs `z.lazy()`.** A dobj whose schema references *itself* (`Comment` with `replies: Comment[]`, `Category` with `children`) cannot call `X.contract()` directly inside its own `static schema` - per JS class-field evaluation order the field is not assigned yet at that moment, so the call throws _"requires a static schema"_. Defer it:
+>
+> ```ts
+> class Comment extends DomainEntity<Comment> implements Comment {
+>   public static primary = ['uuid'] as const;
+>   public static nested = { replies: Comment };
+>   public static schema = z.object({
+>     uuid: z.string().optional(),
+>     text: z.string(),
+>     replies: z.array(z.lazy(() => Comment.contract())),  // ✅ deferred to first parse / emit
+>   });
+> }
+> ```
+>
+> Both concerns then work: `.parse()` hydrates recursively (instances all the way down), and `z.toJSONSchema(..., { io: 'input' })` emits the recursion as `{ "$ref": "#" }` with the pragma intact. The error message names this fix, so a first encounter corrects itself.
+
+> ⚠️ **the schema must be a `z.object`, not a scalar.** A contract **coerces** - its decode ends in `X.build(props)`, and a domain object is a record of named props by construction. A scalar schema carries no named props, so a `z.string()` dobj given `'thruster'` would construct `{ "0":"t", "1":"h", "2":"r", ... }`: an object with `instanceof X === true` whose every field is a character index, with no throw and no `Zod` issue. It fails loud at `X.contract()` instead. If a dobj genuinely models a scalar, wrap it - `z.object({ value: z.string() })`.
+
+### ⚠️ upgrade from a prior version
+
+`X.contract` used to **be** the schema. It is now a **function**, and the call is the boundary. Three call-site edits, all in one release, **all loud at compile time** - TypeScript names each one for you, so a caller cannot miss one and find out in production:
+
+| before | now | why |
+|---|---|---|
+| `X.contract` | `X.contract()` | a property access cannot carry the subclass, so the position was typed `any`. The call names `X` |
+| `X.contract.ref(by)` | `X.contract().ref(by)` | `.ref` moved onto the call, where it too can name `X` - it was `any` before |
+| `X.contract.ref('ref')` | `X.contract().ref()` | the no-argument call **is** the union. The published pragma value is unchanged (`by: 'ref'`) |
+
+Two more consequences of the move, which the compiler cannot point at for you:
+
+- **a position now parses to an instance, not to a plain object.** That is the whole feature - but if you had code that read `event.surfer.someProp` off a bare bag, it now reads it off a live `X`, and `X`'s constructor runs (and may reject a payload the schema accepted, as a path-tagged `Zod` issue).
+- **every `z.toJSONSchema` call needs `{ io: 'input' }`**, at **both** borders. The default (`io: 'output'`) asks for the instance side, which json-schema cannot represent, so it **throws**. One unconditional line in your emit helper.
+
+The migration is mechanical:
+
+```ts
+// before
+z.object({ surfer: Surfer.contract, rider: Surfer.contract.ref('primary') });
+const published = z.toJSONSchema(schema);
+
+// after
+z.object({ surfer: Surfer.contract(), rider: Surfer.contract().ref('primary') });
+const published = z.toJSONSchema(schema, { io: 'input' });
+```
+
+A bare `X.contract` left behind fails **loud** rather than degrades: TypeScript refuses `.parse` / `.ref` on it, and at runtime a `z.object` position that gets it throws _"expected a Zod schema"_.
 
 example:
 
@@ -596,11 +654,15 @@ class Seaturtle extends DomainEntity<Seaturtle> implements Seaturtle {
   });
 }
 
-// `.contract` stamps identity onto the schema; embed it anywhere a zod schema goes
-const wireSchema = z.object({ passenger: Seaturtle.contract });
+// `.contract()` stamps identity onto the schema; embed it anywhere a zod schema goes
+const wireSchema = z.object({ passenger: Seaturtle.contract() });
 
-// the identity + keys survive json-schema serialization
-const json = z.toJSONSchema(wireSchema);
+// ✨ concern 1, instantiation: a parse hands back a LIVE domain object, not a bag of props
+const parsed = wireSchema.parse({ passenger: { name: 'Crush', species: 'green' } });
+expect(parsed.passenger).toBeInstanceOf(Seaturtle); // typed as Seaturtle, with `.clone`
+
+// 🔭 concern 2, introspection: the SAME declaration emits the plain wire shape + the pragma
+const json = z.toJSONSchema(wireSchema, { io: 'input' });
 expect(json.properties.passenger['x-domain-object']).toEqual({
   name: 'Seaturtle',
   kind: 'entity', // which base class it extends: entity | literal | event | object
@@ -609,6 +671,93 @@ expect(json.properties.passenger['x-domain-object']).toEqual({
   alias: { singular: 'seaturtle', plural: 'seaturtles' },
 });
 ```
+
+If the constructor rejects what the schema accepted (a stricter ctor, a nested hydration failure), the throw is **contained as a zod issue** rather than let loose from the parse - so a boundary has exactly one failure channel, and the message names the fix:
+
+```ts
+const result = wireSchema.safeParse({ passenger: { name: 'Crush', species: 'green' } });
+result.success; // false
+result.error.issues[0];
+// {
+//   code: 'custom',
+//   path: ['passenger'],
+//   message: 'Seaturtle.contract(): the props satisfied the schema, but `Seaturtle.build(props)`
+//             threw — <cause>. fix: align `static schema` with what the constructor demands …',
+// }
+```
+
+#### where a `contract()` position may sit
+
+A `contract()` composes into every `Zod` combinator, in **one** exception:
+
+| the position | parses to an instance | pragma sits on |
+| --- | --- | --- |
+| a field of a `z.object` | ✅ | the field node |
+| `z.array(X.contract())` | ✅ each element | `items` |
+| `X.contract().optional()` | ✅ | the field node |
+| `X.contract().nullable()` | ✅ | `anyOf[0]` (see the callout above) |
+| an arm of `z.union([...])` | ✅ the matched arm | each `anyOf[i]` |
+| the value of `z.record(k, X.contract())` | ✅ each value | `additionalProperties` |
+| a **field** of a `z.discriminatedUnion` arm | ✅ | the field node |
+| ⛔ an **arm** of a `z.discriminatedUnion` | ❌ refuses at `.parse()` | each `oneOf[i]` |
+
+> ⛔ **a bare `X.contract()` cannot be an ARM of a `z.discriminatedUnion`** - and the refusal is **deferred to `.parse()`**. The build succeeds and `z.toJSONSchema` emits a full `oneOf` with every pragma intact, so a check that stops at the emit reports a false green; only real traffic hits the refusal.
+>
+> ```ts
+> // ⛔ builds fine, emits fine, refuses on the first request
+> const bad = z.discriminatedUnion('kind', [Seaturtle.contract(), Dolphin.contract()]);
+> bad.parse({ name: 'Crush' }); // ✋ Invalid discriminated union option at index "0"
+>
+> // ✅ nest the domain object as a FIELD of each arm, and declare the discriminator alongside it
+> const good = z.discriminatedUnion('kind', [
+>   z.object({ kind: z.literal('turtle'), rider: Seaturtle.contract() }),
+>   z.object({ kind: z.literal('dolphin'), rider: Dolphin.contract() }),
+> ]);
+> good.parse({ kind: 'turtle', rider: { name: 'Crush' } }).rider; // ✅ a Seaturtle
+> ```
+>
+> The cause is `Zod`'s own requirement, not a `domain-objects` choice: a discriminated union switches on a **literal** field, and a domain object's schema declares its own props rather than a discriminator. A plain `z.union` has no such requirement, which is why the row above it works - `z.union` tries each arm, so it needs no key to switch on. Reach for `z.union` when the arms are domain objects, and for `z.discriminatedUnion` when you own a `kind` field to switch on.
+
+### the two borders
+
+`io` names the **side** of the contract (wire vs instance). The **border** of an endpoint (request vs response) is a different axis, and the two do not line up - so **both** borders emit under `{ io: 'input' }`:
+
+```ts
+const contract = {
+  input: z.object({ rider: Seaturtle.contract().ref() }),
+  output: z.object({ trophy: SurfTrophy.contract() }),
+};
+
+z.toJSONSchema(contract.input, { io: 'input' }); // ✅ what the CALLER supplies
+z.toJSONSchema(contract.output, { io: 'input' }); // ✅ what the ENDPOINT supplies back
+z.toJSONSchema(contract.output, { io: 'output' }); // ⛔ throws — the out side is a class instance
+```
+
+The trap is that `{ io: 'output' }` on the **output** border reads natural and is wrong. The rule is blunt on purpose: **every emit, at every border, passes `{ io: 'input' }`** - one line in your emit helper, never a per-schema judgment. It is safe on a position with no coerce too (a `.ref()` is a plain pick, so both faces represent).
+
+#### ⛔ there is no `z.encode` - use `.parse` at both borders
+
+`contract()` ships as a `.transform()`, not a `z.codec`, so it has a forward direction only:
+
+```ts
+z.encode(Seaturtle.contract(), seaturtle); // ⛔ throws $ZodEncodeError — no backward direction
+```
+
+The reason is a dependency fact, not a design taste: `domain-objects` declares `zod` as a **devDependency** and imports it `import type` only, so `z.codec` - which needs a *value* import - is out of reach. What is reachable from your own schema instance is `.transform()`.
+
+**So a consumer uses `.parse` at BOTH borders**, which is safe on two conditions this repo clamps:
+
+| condition | why it holds |
+| --------- | ------------ |
+| decode is **idempotent** | a re-parse of an already-rich value converges to an equal value |
+| the rich form is **wire-equivalent** | `JSON.parse(JSON.stringify(instance))` equals the wire - `.clone` is a function, and `JSON.stringify` skips functions |
+
+```ts
+const response = contract.output.parse({ trophy }); // ✅ an instance in, an equal instance out
+JSON.stringify(response.trophy); // ✅ the same bytes as the plain form
+```
+
+The cost is one extra decode per response; the bytes are identical.
 
 The pragma also carries a `kind` (`'entity'` | `'literal'` | `'event'` | `'object'`) so a consumer
 picks the right base class to reconstruct the domain object. The full pragma shape is exported as the
@@ -624,6 +773,24 @@ pragma.kind; // 'entity' | 'literal' | 'event' | 'object'
 pragma.primary; // string[] | undefined  (undefined when the class declares no primary)
 ```
 
+> ⚠️ **a `.nullable()` field moves the pragma one node down.** The direct lookup above is correct for a plain field and for `.optional()`, but **not** for `.nullable()`: `Zod` emits a nullable field as an `anyOf: [<the schema>, { type: 'null' }]`, so the pragma rides on `anyOf[0]` and the direct read returns `undefined` - silently, with no error at compile, build, or parse.
+>
+> ```ts
+> const json = z.toJSONSchema(z.object({ sponsor: Surfboard.contract().nullable() }), { io: 'input' });
+>
+> json.properties.sponsor['x-domain-object'];           // ⚠️ undefined
+> json.properties.sponsor.anyOf[0]['x-domain-object'];  // ✅ { name: 'Surfboard', kind: 'literal' }
+> ```
+>
+> | at the field | where the pragma sits |
+> | --- | --- |
+> | `X.contract()` | directly on the node |
+> | `X.contract().optional()` | directly on the node |
+> | `X.contract().nullable()` | on `anyOf[0]` |
+> | `z.array(X.contract())` | on `items` |
+>
+> This is `Zod`'s own json-schema shape, not a `domain-objects` choice - the same relocation happens to any `.describe()` or other metadata on a nullable field. **A consumer that walks the document node-by-node (as a codegen does) is unaffected**, since it visits the `anyOf` arm like any other node; only a hand-written direct lookup needs the extra hop. Prefer a walk over a hardcoded path.
+
 For a domain object with `nested` declarations, the contract carries the nested identities by **name** (the array form maps to an array of names, for polymorphic choices):
 
 ```ts
@@ -633,23 +800,37 @@ class Wave extends DomainEntity<Wave> implements Wave {
   public static schema = z.object({ /* ... */ });
 }
 
-z.toJSONSchema(Wave.contract)['x-domain-object'].nested;
+z.toJSONSchema(Wave.contract(), { io: 'input' })['x-domain-object'].nested;
 // => { surfer: ['Seaturtle', 'Dolphin'] }
 ```
 
-### getter `contract.ref(by)`
+### method `contract().ref(by?)`
 
-`contract` carries the **whole** domain object. `contract.ref(by)` carries only its **key** - a schema-level _reference_ to the domain object, stamped with an `x-domain-object-ref` pragma.
+`contract()` carries the **whole** domain object. `contract().ref(by?)` carries only its **key** - a schema-level _reference_ to the domain object, stamped with an `x-domain-object-ref` pragma.
 
-Where `.contract` embeds the full domain object (composition), `.contract.ref(by)` returns a `Zod` schema of ONLY the referenced key fields - the wire form of a field that _points at_ another domain object by key, rather than one that carries the whole object. It is the schema-level counterpart of the `RefByPrimary` / `RefByUnique` TypeScript types (which are erased at runtime): the reference relationship those types express now survives `z.toJSONSchema()`.
+Where `.contract()` embeds the full domain object (composition), `.contract().ref(by?)` returns a `Zod` schema of ONLY the referenced key fields - the wire form of a field that _points at_ another domain object by key, rather than one that carries the whole object. It is the schema-level counterpart of the `RefByPrimary` / `RefByUnique` TypeScript types (which are erased at runtime): the reference relationship those types express now survives `z.toJSONSchema()`.
 
 The `by` argument names which key(s) the reference carries:
 
+- **`.ref()`** (no argument) - a `z.union` of whichever grains the class declares. **This is the default form**: a caller that merely means _"a reference"_ says so, and either key satisfies it. A class that declares only one grain degrades to that single grain (no pointless union). The `x-domain-object-ref` pragma is stamped once on the union's top node (the json-schema `anyOf` node), not on each arm - so a consumer that walks `anyOf` reads one pragma at the top, not one per branch. It still stamps `by: 'ref'`
+  - ⚠️ **`.ref('ref')` is refused**, at both surfaces: TypeScript rejects the argument, and the runtime throws a `ConstraintError` that names the fix. `'ref'` remains the **published pragma value** (`by: 'ref'`) and the internal normalized value - what is refused is a caller who supplies it. Call `.ref()` with no argument
 - `by: 'primary'` - picks the `static primary` fields. Always a flat pick: primary keys are flat identifiers (e.g. `uuid`), never nested domain objects
-- `by: 'unique'` - picks the `static unique` fields. A unique key that is itself a domain object recurses to that dobj's own `.contract.ref('unique')` (to mirror `refByUnique`); if that nested domain object declares no `static unique`, its whole key sub-schema is embedded flat instead (no recursion, no throw) - the normal shape for a `DomainLiteral` unique key. A **polymorphic** unique key (an array of dobj choices) where any choice declares `static unique` throws a `ConstraintError` - the schema cannot know which arm a live value is, so it fails loud rather than embed a shape that would drift from `refByUnique`
-- `by: 'ref'` - a `z.union` of the primary and unique shapes. The `x-domain-object-ref` pragma is stamped once on the union's top node (the json-schema `anyOf` node), not on each arm - so a consumer that walks `anyOf` reads one pragma at the top, not one per branch
+- `by: 'unique'` - picks the `static unique` fields. A unique key that is itself a domain object recurses to that dobj's own `.contract().ref('unique')` (to mirror `refByUnique`); if that nested domain object declares no `static unique`, its whole key sub-schema is embedded flat instead (no recursion, no throw) - the normal shape for a `DomainLiteral` unique key. A **polymorphic** unique key (an array of dobj choices) where any choice declares `static unique` throws a `ConstraintError` - the schema cannot know which arm a live value is, so it fails loud rather than embed a shape that would drift from `refByUnique`
 
-> _note:_ call `.ref(by)` on the RAW `.contract`, before any other `Zod` chain op. Ops like `.optional()` / `.nullable()` return a fresh schema WITHOUT `.ref`, so `X.contract.optional().ref('primary')` fails. Embed the ref first, then chain: `z.object({ rider: X.contract.ref('primary') }).optional()`.
+> _note:_ **every key a ref names is REQUIRED**, on **both** grains, even when the source schema declares it `.optional()` (a `uuid` commonly is, since the db generates it). A reference that names no key is not a reference: `.ref('primary')` **rejects** a payload with no `uuid`, and `.ref()` **falls back to the unique arm** rather than succeed vacuously with `{}`.
+>
+> The three surfaces that describe one reference all say this, so none of them can disagree:
+>
+> | | the type | the ctor | the schema |
+> | --- | --- | --- | --- |
+> | **primary** | `RefByPrimary<X>` = `Required<Pick<…>>` | `refByPrimary()` throws on `undefined` | `.ref('primary')` rejects |
+> | **unique** | `RefByUnique<X>` = `Required<Pick<…>>` | `refByUnique()` throws on `undefined` | `.ref('unique')` rejects |
+>
+> ⚠️ **a break in backcompat:** the `unique` row is new. `RefByUnique<X>` was a bare `Pick` (so an optional key stayed optional), and `refByUnique()` assigned `undefined` in silence. Both now match their `primary` twins. If you declare a `static unique` key whose schema field is `.optional()`, either make it required or reference that dobj by its primary key instead - a unique key that may be absent identifies nobody.
+
+> _note:_ a **full domain object** at a ref position is pruned to its key, natively, with no error - so you can hand `.ref()` a live instance and get back the reference. When both keys are present, `.ref()` takes the **primary** arm.
+
+> _note:_ call `.ref(by?)` on the RAW `.contract()`, before any other `Zod` chain op. Ops like `.optional()` / `.nullable()` return a fresh schema WITHOUT `.ref`, so `X.contract().optional().ref('primary')` fails. Embed the ref first, then chain: `z.object({ rider: X.contract().ref('primary') }).optional()`.
 
 example:
 
@@ -657,11 +838,12 @@ example:
 // a field that references another domain object by key (not by value)
 const trophySchema = z.object({
   uuid: z.string(),
-  rider: Seaturtle.contract.ref('primary'), // => { uuid }, stamped "references Seaturtle by primary"
+  rider: Seaturtle.contract().ref('primary'), // => { uuid }, "references Seaturtle by primary"
+  shaper: Seaturtle.contract().ref(), // => { uuid } | { name }, "references Seaturtle by either"
 });
 
 // the reference identity survives json-schema serialization
-const json = z.toJSONSchema(trophySchema);
+const json = z.toJSONSchema(trophySchema, { io: 'input' });
 expect(json.properties.rider['x-domain-object-ref']).toEqual({
   of: 'Seaturtle', // which domain object it references
   by: 'primary', // which key(s) the reference carries

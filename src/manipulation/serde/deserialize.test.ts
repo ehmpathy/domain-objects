@@ -678,7 +678,7 @@ describe('deserialize', () => {
     });
 
     describe('speed', () => {
-      it.skip('should be faster if schema is skipped', async () => {
+      it('should be faster if schema is skipped', async () => {
         // define the choices
         const shipA = new Spaceship({
           serialNumber: '__SHIP_A__',
@@ -771,6 +771,19 @@ describe('deserialize', () => {
         );
       });
 
+      // ⛔ SKIPPED ON PURPOSE — this one asserts a feature that prod does not currently have.
+      // `deserialize.ts` carries `// todo: restore inmem cache once we have a universal hash lib
+      // (currently, fails on web and in react-native)`, and the cache block beneath it is commented
+      // out. so `durationSecond < 5ms` cannot hold: measured, it is ~73ms, off by 15x.
+      //
+      // the two routes to green are both closed — to relax the threshold changes WHAT the test
+      // verifies (it asserts *instant*, which is the cache's whole claim), and to make it true again
+      // means the cache must come back, which needs the hash lib the todo names.
+      //
+      // ⚠️ its neighbour above was un-skipped rather than left to match: that one PASSES, and was
+      // measured stable across 6 consecutive runs (5 scoped + 1 full-suite under parallel load). the
+      // asymmetry between the two is deliberate and is exactly this note — one tests live behavior,
+      // the other tests a feature that is switched off in prod.
       it.skip('should be instant on repeat attempts, due to in memory cache', async () => {
         // define the choices
         const shipA = new Spaceship({

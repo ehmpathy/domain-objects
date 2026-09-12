@@ -1,0 +1,341 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`getContract coerce (the boundary clamps) given: a TREE-SHAPED dobj that must reference itself when: it self-references DIRECTLY, mid-initializer then: it fails with a message that names z.lazy as the fix 1`] = `
+"✋ ConstraintError: Reply.contract() requires a static schema. either declare \`static schema\` (zod) on Reply to use .contract() — or, if this call is a SELF-REFERENCE from inside Reply's own \`static schema\` initializer (a tree-shaped dobj), the field is not assigned yet at that moment: defer it with \`z.lazy(() => Reply.contract())\`
+
+{
+  "domainObject": "Reply"
+}"
+`;
+
+exports[`getContract coerce (the boundary clamps) given: a TREE-SHAPED dobj that must reference itself when: it self-references through z.lazy then: the introspection concern holds — it emits as a $ref, pragma intact 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kids": {
+      "items": {
+        "$ref": "#",
+      },
+      "type": "array",
+    },
+    "text": {
+      "type": "string",
+    },
+    "uuid": {
+      "type": "string",
+    },
+  },
+  "required": [
+    "text",
+    "kids",
+  ],
+  "type": "object",
+  "x-domain-object": {
+    "kind": "entity",
+    "name": "Node2",
+    "nested": {
+      "kids": "Node2",
+    },
+    "primary": [
+      "uuid",
+    ],
+  },
+}
+`;
+
+exports[`getContract coerce (the boundary clamps) given: a dobj whose constructor rejects what its schema accepts when: the payload reaches the constructor through a PARENT contract then: c10 — the message names the dobj AND the next move 1`] = `"Wave.contract(): the props satisfied the schema, but \`Wave.build(props)\` threw — a wave over 100ft is not rideable. fix: align \`static schema\` with what the constructor demands (e.g. its \`static nested\` hydration), so any payload the schema accepts can also construct"`;
+
+exports[`getContract coerce (the boundary clamps) given: a dobj whose nested hydration fails when: the contract parses a payload the hydrator rejects then: c11 — the hydration error text survives, un-flattened 1`] = `
+"Rig.contract(): the props satisfied the schema, but \`Rig.build(props)\` threw — ✋ NestedDomainObjectHydrationError: DomainObject property Rig.hardware was declared as a nested domain object with 2 options and had a ._dobj key specified on the input. However, the specified ._dobj was not found as one of the declared nested domain object options. In other words, the correct class constructor was not present on the DomainObject.nested definition.
+
+Please check the declared nested domain object options for Rig.hardware and update it to include Skeg, or correct the ._dobj value in the data to match a declared option.
+
+{
+  "key": "hardware",
+  "prop": {
+    "_dobj": "Skeg",
+    "count": 3
+  },
+  "declaredNestedClassNameOptionsForProp": [
+    "Fin",
+    "Leash"
+  ]
+}. fix: align \`static schema\` with what the constructor demands (e.g. its \`static nested\` hydration), so any payload the schema accepts can also construct"
+`;
+
+exports[`getContract coerce (the boundary clamps) given: the BARE property, which is no longer a schema (the removed form) when: it is inspected at runtime then: c7 — a parse through the bare position fails loudly 1`] = `"Invalid element at key "surfer": expected a Zod schema"`;
+
+exports[`getContract coerce (the boundary clamps) given: the pragma on a coerced position when: it rides an emit through .nullable() and .optional() then: the wrapped emit matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "maybeAbsent": {
+      "properties": {
+        "brand": {
+          "type": "string",
+        },
+        "length": {
+          "type": "number",
+        },
+      },
+      "required": [
+        "brand",
+        "length",
+      ],
+      "type": "object",
+      "x-domain-object": {
+        "kind": "literal",
+        "name": "Surfboard",
+      },
+    },
+    "maybeNull": {
+      "anyOf": [
+        {
+          "properties": {
+            "brand": {
+              "type": "string",
+            },
+            "length": {
+              "type": "number",
+            },
+          },
+          "required": [
+            "brand",
+            "length",
+          ],
+          "type": "object",
+          "x-domain-object": {
+            "kind": "literal",
+            "name": "Surfboard",
+          },
+        },
+        {
+          "type": "null",
+        },
+      ],
+    },
+  },
+  "required": [
+    "maybeNull",
+  ],
+  "type": "object",
+}
+`;
+
+exports[`getContract coerce (the boundary clamps) given: the pragma on a coerced position when: it rides an emit through a wrapper and an array item then: the whole emit matches snapshot 1`] = `
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "many": {
+      "items": {
+        "properties": {
+          "board": {
+            "properties": {
+              "brand": {
+                "type": "string",
+              },
+              "length": {
+                "type": "number",
+              },
+            },
+            "required": [
+              "brand",
+              "length",
+            ],
+            "type": "object",
+            "x-domain-object": {
+              "kind": "literal",
+              "name": "Surfboard",
+            },
+          },
+          "boards": {
+            "items": {
+              "properties": {
+                "brand": {
+                  "type": "string",
+                },
+                "length": {
+                  "type": "number",
+                },
+              },
+              "required": [
+                "brand",
+                "length",
+              ],
+              "type": "object",
+              "x-domain-object": {
+                "kind": "literal",
+                "name": "Surfboard",
+              },
+            },
+            "type": "array",
+          },
+          "name": {
+            "type": "string",
+          },
+          "sponsor": {
+            "anyOf": [
+              {
+                "properties": {
+                  "brand": {
+                    "type": "string",
+                  },
+                  "length": {
+                    "type": "number",
+                  },
+                },
+                "required": [
+                  "brand",
+                  "length",
+                ],
+                "type": "object",
+                "x-domain-object": {
+                  "kind": "literal",
+                  "name": "Surfboard",
+                },
+              },
+              {
+                "type": "null",
+              },
+            ],
+          },
+          "uuid": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "name",
+          "board",
+          "boards",
+          "sponsor",
+        ],
+        "type": "object",
+        "x-domain-object": {
+          "kind": "entity",
+          "name": "Surfer",
+          "nested": {
+            "board": "Surfboard",
+            "boards": "Surfboard",
+            "sponsor": "Surfboard",
+          },
+          "primary": [
+            "uuid",
+          ],
+          "unique": [
+            "name",
+          ],
+        },
+      },
+      "type": "array",
+    },
+    "one": {
+      "properties": {
+        "board": {
+          "properties": {
+            "brand": {
+              "type": "string",
+            },
+            "length": {
+              "type": "number",
+            },
+          },
+          "required": [
+            "brand",
+            "length",
+          ],
+          "type": "object",
+          "x-domain-object": {
+            "kind": "literal",
+            "name": "Surfboard",
+          },
+        },
+        "boards": {
+          "items": {
+            "properties": {
+              "brand": {
+                "type": "string",
+              },
+              "length": {
+                "type": "number",
+              },
+            },
+            "required": [
+              "brand",
+              "length",
+            ],
+            "type": "object",
+            "x-domain-object": {
+              "kind": "literal",
+              "name": "Surfboard",
+            },
+          },
+          "type": "array",
+        },
+        "name": {
+          "type": "string",
+        },
+        "sponsor": {
+          "anyOf": [
+            {
+              "properties": {
+                "brand": {
+                  "type": "string",
+                },
+                "length": {
+                  "type": "number",
+                },
+              },
+              "required": [
+                "brand",
+                "length",
+              ],
+              "type": "object",
+              "x-domain-object": {
+                "kind": "literal",
+                "name": "Surfboard",
+              },
+            },
+            {
+              "type": "null",
+            },
+          ],
+        },
+        "uuid": {
+          "type": "string",
+        },
+      },
+      "required": [
+        "name",
+        "board",
+        "boards",
+        "sponsor",
+      ],
+      "type": "object",
+      "x-domain-object": {
+        "kind": "entity",
+        "name": "Surfer",
+        "nested": {
+          "board": "Surfboard",
+          "boards": "Surfboard",
+          "sponsor": "Surfboard",
+        },
+        "primary": [
+          "uuid",
+        ],
+        "unique": [
+          "name",
+        ],
+      },
+    },
+  },
+  "required": [
+    "one",
+    "many",
+  ],
+  "type": "object",
+}
+`;
+
+exports[`getContract coerce (the boundary clamps) given: the two-border endpoint an sdk declares when: each border is emitted then: a coerced position under the DEFAULT io throws too 1`] = `"Transforms cannot be represented in JSON Schema"`;
+
+exports[`getContract coerce (the boundary clamps) given: the two-border endpoint an sdk declares when: each border is emitted then: c19 — the OUTPUT border under { io: output } throws 1`] = `"Transforms cannot be represented in JSON Schema"`;

@@ -11,7 +11,7 @@ import {
 } from '@src/index';
 
 /**
- * .what = the cross-service reference roundtrip journey `.contract.ref` exists to enable: an upstream
+ * .what = the cross-service reference roundtrip journey `.contract().ref` exists to enable: an upstream
  *   author composes a contract that references other dobjs by key, ships it as json-schema over the
  *   wire, and a downstream consumer reads the `x-domain-object-ref` pragma back out to reconstruct
  *   each typed reference — producer → wire → consumer, end to end, through the public barrel alone.
@@ -22,6 +22,18 @@ import {
  */
 
 // ---- the consumer half: a faithful stand-in for the sdk-aws-lambda codegen walk -----------------
+
+/**
+ * .what = emit a contract as json-schema, on the input face
+ * .why = `{ io: 'input' }` unconditionally, at every emit and at every border — the one line an sdk
+ *   owes its emit helper. a `.contract()` coerces, so its OUT face is a live class instance, which
+ *   json-schema cannot represent; the IN face is also the only one that carries the pragma.
+ * .note = named `emit` to match the other three copies of this one-liner (and the word the briefs
+ *   and the `#17` handoff both use). one operation, one word — a second name for it would read as a
+ *   second operation (`rule.require.ubiqlang`).
+ */
+const emit = (schema: z.ZodType<any, any>): Record<string, any> =>
+  z.toJSONSchema(schema, { io: 'input' });
 
 /** .what = read the `x-domain-object-ref` pragma off a json-schema node (undefined when absent) */
 const readRefPragma = (
@@ -84,11 +96,11 @@ describe('getContractRef roundtrip (acceptance)', () => {
         public static schema = z.object({
           uuid: z.string().optional(),
           // rider REFERENCES a Seaturtle by primary — just { uuid }
-          rider: Seaturtle.contract.ref('primary'),
+          rider: Seaturtle.contract().ref('primary'),
           // board REFERENCES a Surfboard by unique — { brand, length }
-          board: Surfboard.contract.ref('unique'),
+          board: Surfboard.contract().ref('unique'),
           // champion COMPOSES the whole Seaturtle — full identity, for contrast
-          champion: Seaturtle.contract,
+          champion: Seaturtle.contract(),
         });
       }
 
@@ -99,7 +111,7 @@ describe('getContractRef roundtrip (acceptance)', () => {
       when(
         'the author publishes the contract as json-schema (the wire)',
         () => {
-          const wire: Record<string, any> = z.toJSONSchema(SurfTrophy.contract);
+          const wire: Record<string, any> = emit(SurfTrophy.contract());
 
           then(
             'each reference field carries its own distinct x-domain-object-ref, whole-compose field carries x-domain-object',
@@ -129,7 +141,7 @@ describe('getContractRef roundtrip (acceptance)', () => {
       );
 
       when('the consumer reads the wire back', () => {
-        const wire: Record<string, any> = z.toJSONSchema(SurfTrophy.contract);
+        const wire: Record<string, any> = emit(SurfTrophy.contract());
         const pragmas = {
           rider: readRefPragma(wire.properties.rider),
           board: readRefPragma(wire.properties.board),
@@ -160,7 +172,7 @@ describe('getContractRef roundtrip (acceptance)', () => {
       when(
         'the consumer reconstructs each reference from a live instance (the roundtrip)',
         () => {
-          const wire: Record<string, any> = z.toJSONSchema(SurfTrophy.contract);
+          const wire: Record<string, any> = emit(SurfTrophy.contract());
 
           // upstream owns live instances; the consumer reduces them to refs, pragma-driven
           const riderInstance = new Seaturtle({
@@ -199,10 +211,10 @@ describe('getContractRef roundtrip (acceptance)', () => {
               // the ref schema the author published parses exactly what the runtime ref op produces —
               // no drift between the wire contract and the value that rides it
               expect(() =>
-                Seaturtle.contract.ref('primary').parse(riderRef),
+                Seaturtle.contract().ref('primary').parse(riderRef),
               ).not.toThrow();
               expect(() =>
-                Surfboard.contract.ref('unique').parse(boardRef),
+                Surfboard.contract().ref('unique').parse(boardRef),
               ).not.toThrow();
             },
           );
@@ -228,14 +240,43 @@ describe('getContractRef roundtrip (acceptance)', () => {
             },
           };
 
-          then('the whole composed contract parses the payload', () => {
-            const parsed = SurfTrophy.contract.parse(payload);
-            expect(parsed).toEqual(payload);
-          });
+          then(
+            'the whole composed contract parses the payload INTO instances — refs stay plain',
+            () => {
+              const parsed = SurfTrophy.contract().parse(payload);
 
-          then('the validated payload matches snapshot', () => {
-            expect(SurfTrophy.contract.parse(payload)).toMatchSnapshot();
-          });
+              // the props survive intact
+              expect(parsed).toEqual(payload);
+
+              // ...and the composed positions are live dobjs, while the ref positions are not.
+              // that split is the whole point: a ref names a dobj, a compose IS one.
+              expect(parsed).toBeInstanceOf(SurfTrophy);
+              expect(parsed.champion).toBeInstanceOf(Seaturtle);
+              expect(parsed.rider).not.toBeInstanceOf(Seaturtle);
+              expect(parsed.board).not.toBeInstanceOf(Surfboard);
+            },
+          );
+
+          then(
+            'the HYDRATED value matches snapshot (a runtime value, not a wire document)',
+            () => {
+              // ⚠️ this snapshot opens `SurfTrophy {`, not `{`, and the prefix is the POINT rather
+              // than a blemish: jest prints a constructor name, so the diff shows which positions
+              // hydrated and which stayed plain — `SurfTrophy {` and `champion: Seaturtle {` are
+              // coerced `.contract()` positions, while `rider` and `board` are `.ref()` picks and
+              // correctly stay plain objects. no pure-json snapshot can carry that distinction, and
+              // it is the clearest proof of the feature a reviewer can read without a run.
+              //
+              // ⭐ the two snapshot KINDS in this file are deliberately different, and each is
+              // internally consistent (`rule.forbid.snapshot-visual-blemishes` asks for consistency
+              // across *similar* outputs, and these two are not similar):
+              //   - a HYDRATED value  → a runtime object; constructor names carry the guarantee
+              //   - a PUBLISHED wire  → a json document; pure json, no prefix anywhere
+              // the labels now say which is which, so the two are not mistaken for one format
+              // applied inconsistently — which is exactly how a peer lens first read them.
+              expect(SurfTrophy.contract().parse(payload)).toMatchSnapshot();
+            },
+          );
         },
       );
     },
@@ -268,14 +309,14 @@ describe('getContractRef roundtrip (acceptance)', () => {
         public static schema = z.object({
           uuid: z.string().optional(),
           // an ARRAY of references — each item points at a Seaturtle by primary
-          riders: z.array(Seaturtle.contract.ref('primary')),
+          riders: z.array(Seaturtle.contract().ref('primary')),
         });
       }
 
       const registry: Record<string, any> = { Seaturtle };
 
       when('the roster contract is published as json-schema', () => {
-        const wire: Record<string, any> = z.toJSONSchema(Heat.contract);
+        const wire: Record<string, any> = emit(Heat.contract());
 
         then(
           'the ref pragma rides on the array items, not the array node itself',
@@ -302,7 +343,7 @@ describe('getContractRef roundtrip (acceptance)', () => {
       when(
         'the consumer reconstructs the whole roster from live riders',
         () => {
-          const wire: Record<string, any> = z.toJSONSchema(Heat.contract);
+          const wire: Record<string, any> = emit(Heat.contract());
           const pragma = readRefPragma(wire.properties.riders.items)!;
 
           // upstream owns a roster of live turtles; the consumer reduces each to its ref, pragma-driven
@@ -331,7 +372,7 @@ describe('getContractRef roundtrip (acceptance)', () => {
             () => {
               // the array ref contract parses exactly the array of runtime refs — no drift, at scale
               expect(() =>
-                z.array(Seaturtle.contract.ref('primary')).parse(riderRefs),
+                z.array(Seaturtle.contract().ref('primary')).parse(riderRefs),
               ).not.toThrow();
             },
           );
@@ -355,13 +396,29 @@ describe('getContractRef roundtrip (acceptance)', () => {
           riders: [{ uuid: 'turtle-1' }, { uuid: 'turtle-2' }],
         };
 
-        then('the array-of-refs contract parses the roster payload', () => {
-          expect(Heat.contract.parse(payload)).toEqual(payload);
-        });
+        then(
+          'the array-of-refs contract parses the roster INTO a Heat, refs stay plain',
+          () => {
+            const parsed = Heat.contract().parse(payload);
 
-        then('the validated roster payload matches snapshot', () => {
-          expect(Heat.contract.parse(payload)).toMatchSnapshot();
-        });
+            expect(parsed).toEqual(payload);
+
+            // the root composes, so it hydrates; every array ITEM is a ref, so none does
+            expect(parsed).toBeInstanceOf(Heat);
+            for (const rider of parsed.riders)
+              expect(rider).not.toBeInstanceOf(Seaturtle);
+          },
+        );
+
+        then(
+          'the HYDRATED roster matches snapshot (a runtime value, not a wire document)',
+          () => {
+            // `Heat {` at the root and plain `{` for every array item — the prefix asymmetry IS
+            // the assertion: the root composes, so it hydrates; each item is a `.ref()`, so none
+            // does. see the twin note above for why the two snapshot kinds in this file differ.
+            expect(Heat.contract().parse(payload)).toMatchSnapshot();
+          },
+        );
       });
     },
   );
@@ -403,8 +460,8 @@ describe('getContractRef roundtrip (acceptance)', () => {
       }
 
       when('the shell ref is published and read back', () => {
-        const wire: Record<string, any> = z.toJSONSchema(
-          SeaturtleShell.contract.ref('unique'),
+        const wire: Record<string, any> = emit(
+          SeaturtleShell.contract().ref('unique'),
         );
 
         then(
@@ -448,7 +505,7 @@ describe('getContractRef roundtrip (acceptance)', () => {
             'the reconstructed nested ref validates against the published ref schema',
             () => {
               expect(() =>
-                SeaturtleShell.contract.ref('unique').parse(shellRef),
+                SeaturtleShell.contract().ref('unique').parse(shellRef),
               ).not.toThrow();
             },
           );
@@ -478,9 +535,7 @@ describe('getContractRef roundtrip (acceptance)', () => {
       }
 
       when('the ref-union is published and read back', () => {
-        const wire: Record<string, any> = z.toJSONSchema(
-          Sponsor.contract.ref('ref'),
-        );
+        const wire: Record<string, any> = emit(Sponsor.contract().ref());
 
         then(
           'the wire is a union (anyOf) stamped once at the top with by:"ref"',
@@ -509,13 +564,17 @@ describe('getContractRef roundtrip (acceptance)', () => {
           then(
             'both a primary-shaped and a unique-shaped ref validate against the union contract',
             () => {
-              // the union accepts either grain — the by:"ref" promise, proven both ways
-              expect(() =>
-                Sponsor.contract.ref('ref').parse(primaryRef),
-              ).not.toThrow();
-              expect(() =>
-                Sponsor.contract.ref('ref').parse(uniqueRef),
-              ).not.toThrow();
+              // the union accepts either grain — the by:"ref" promise, proven both ways.
+              // ⚠️ asserted on the parsed VALUE, not merely `.not.toThrow()`: q24 was a defect where
+              // the parse SUCCEEDED and handed back `{}`, so a throw was never the symptom. a clamp
+              // that asserts the absence of the wrong signal reads as coverage of the case it walks
+              // past — the lesson this suite's own p24/p26 repairs were written from.
+              expect(Sponsor.contract().ref().parse(primaryRef)).toEqual({
+                uuid: 's-1',
+              });
+              expect(Sponsor.contract().ref().parse(uniqueRef)).toEqual({
+                handle: '@acme',
+              });
             },
           );
 
@@ -524,6 +583,59 @@ describe('getContractRef roundtrip (acceptance)', () => {
           });
         },
       );
+
+      when('a caller supplies only the UNIQUE key (the q24 fallback)', () => {
+        // ⭐ raised to acceptance grain on a converged read from BOTH l3 lenses. this is the shape
+        // that was the single blocker-severity defect of the whole feature (i005/i010 → i011):
+        // `Sponsor.primary` is `uuid`, declared `.optional()` in the schema, so before the
+        // `.required()` fix the primary arm succeeded VACUOUSLY on a payload with no uuid — the
+        // union never reached the unique arm, and a reference that named a real sponsor came back
+        // as `{}`. a success, with the key destroyed.
+        //
+        // it is exhaustively covered at unit grain (`getContractRef.matrix.test.ts`, tables A/B).
+        // it belongs here too because the readme promises this behavior to a consumer in prose
+        // (*"a reference that names no key is not a reference"*), and the snapshot-diff flow is
+        // what a reviewer actually reads.
+
+        then('⭐ the union FALLS BACK to the unique arm — never `{}`', () => {
+          const parsed = Sponsor.contract().ref().parse({ handle: '@acme' });
+          // the assertion that bites: `toEqual({})` is what the defect produced, and `toBeDefined()`
+          // or a `.not.toThrow()` would have passed under it
+          expect(parsed).toEqual({ handle: '@acme' });
+        });
+
+        then('the narrow primary grain REFUSES the same payload', () => {
+          // the negative control for the fallback: had `.required()` been lost, this arm would
+          // accept `{}` and the fallback above would silently stop.
+          //
+          // ⛔ asserted on `safeParse().success`, NOT on `expect(getError(…)).toBeDefined()` — that
+          // form is a failhide, and it slipped into this very clamp on first write. `getError`
+          // returns a `NoErrorThrownError` when the subject does NOT throw, and that IS an `Error`
+          // instance, so `.toBeDefined()` / `.toBeInstanceOf(Error)` pass in BOTH directions.
+          // measured, then rewritten: with `.required()` reverted this arm genuinely succeeds and
+          // hands back `{}`, and the `getError` form stayed green through it.
+          // a `getError` clamp must assert the error's CLASS or MESSAGE (as every other clamp in
+          // this repo does) — or, as here, sidestep the throw channel entirely.
+          const result = Sponsor.contract()
+            .ref('primary')
+            .safeParse({ handle: '@acme' });
+          expect(result.success).toEqual(false);
+        });
+
+        then('a payload with NEITHER key is refused outright', () => {
+          // the third row: a vacuous success is impossible in both directions
+          const result = Sponsor.contract()
+            .ref()
+            .safeParse({ nickname: 'acme' });
+          expect(result.success).toEqual(false);
+        });
+
+        then('the fallback ref matches snapshot', () => {
+          expect(
+            Sponsor.contract().ref().parse({ handle: '@acme' }),
+          ).toMatchSnapshot();
+        });
+      });
     },
   );
 });

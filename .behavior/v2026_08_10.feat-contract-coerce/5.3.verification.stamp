@@ -1,0 +1,82 @@
+🦉 the way speaks for itself
+
+🗿 route.stone.set
+   ├─ stone = 5.3.verification
+   ├─ passage = allowed
+   ├─ guard
+   │  ├─ artifacts
+   │  │   ├─ $route/5.3.verification.yield.md
+   │  │   └─ src/**/*
+   │  ├─ reviews
+   │  │   ├─ r1: repo-rules (l1, 3/3)
+   │  │   │   ├─ approved, cached
+   │  │   │   ├─ 0 blockers ✓
+   │  │   │   ├─ 0 nitpicks ✓
+   │  │   │   ├─ given: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r001._.given.by_peer.repo-rules.md
+   │  │   │   └─ taken: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r001._.taken.by_self.repo-rules.md
+   │  │   ├─ r2: ergo-contract-snapshots (l1, 3/3)
+   │  │   │   ├─ approved, cached
+   │  │   │   ├─ 0 blockers ✓
+   │  │   │   ├─ 0 nitpicks ✓
+   │  │   │   ├─ given: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r002._.given.by_peer.ergo-contract-snapshots.md
+   │  │   │   └─ taken: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r002._.taken.by_self.ergo-contract-snapshots.md
+   │  │   ├─ r3: mech-external-contracts (l1, 3/3)
+   │  │   │   ├─ approved, cached
+   │  │   │   ├─ 0 blockers ✓
+   │  │   │   ├─ 0 nitpicks ✓
+   │  │   │   ├─ given: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r003._.given.by_peer.mech-external-contracts.md
+   │  │   │   └─ taken: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r003._.taken.by_self.mech-external-contracts.md
+   │  │   ├─ r4: ergo-acceptance-journey-coverage (l1, 3/3)
+   │  │   │   ├─ approved, cached
+   │  │   │   ├─ 0 blockers ✓
+   │  │   │   ├─ 0 nitpicks ✓
+   │  │   │   ├─ given: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r004._.given.by_peer.ergo-acceptance-journey-coverage.md
+   │  │   │   └─ taken: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r004._.taken.by_self.ergo-acceptance-journey-coverage.md
+   │  │   ├─ r5: ergo-snapshot-visual-blemishes (l1, 3/3)
+   │  │   │   ├─ approved, cached
+   │  │   │   ├─ 0 blockers ✓
+   │  │   │   ├─ 0 nitpicks ✓
+   │  │   │   ├─ given: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r005._.given.by_peer.ergo-snapshot-visual-blemishes.md
+   │  │   │   └─ taken: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r005._.taken.by_self.ergo-snapshot-visual-blemishes.md
+   │  │   ├─ r6: mech-given-when-then (l1, 3/3)
+   │  │   │   ├─ approved, cached
+   │  │   │   ├─ 0 blockers ✓
+   │  │   │   ├─ 0 nitpicks ✓
+   │  │   │   ├─ given: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r006._.given.by_peer.mech-given-when-then.md
+   │  │   │   └─ taken: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r006._.taken.by_self.mech-given-when-then.md
+   │  │   ├─ r7: mech-test-intent (l1, 3/3)
+   │  │   │   ├─ approved, cached
+   │  │   │   ├─ 0 blockers ✓
+   │  │   │   ├─ 0 nitpicks ✓
+   │  │   │   ├─ given: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r007._.given.by_peer.mech-test-intent.md
+   │  │   │   └─ taken: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r007._.taken.by_self.mech-test-intent.md
+   │  │   ├─ r8: mech-test-scope-purity (l1, 3/3)
+   │  │   │   ├─ approved, cached
+   │  │   │   ├─ 0 blockers ✓
+   │  │   │   ├─ 0 nitpicks ✓
+   │  │   │   ├─ given: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r008._.given.by_peer.mech-test-scope-purity.md
+   │  │   │   └─ taken: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i004.b48c596a6dd613ab84.r008._.taken.by_self.mech-test-scope-purity.md
+   │  │   ├─ r9: enroll-verif-snapshot-coverage (l3, 3/3)
+   │  │   │   ├─ approved 224.6s
+   │  │   │   ├─ 0 blockers ✓
+   │  │   │   ├─ 0 nitpicks ✓
+   │  │   │   ├─ given: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i005.0e1e3a860485ec66ad.r009._.given.by_peer.enroll-verif-snapshot-coverage.md
+   │  │   │   └─ taken: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i005.0e1e3a860485ec66ad.r009._.taken.by_self.enroll-verif-snapshot-coverage.md
+   │  │   ├─ r10: enroll-verif-snapshot-blemishes (l3, 3/3)
+   │  │   │   ├─ approved 281.2s
+   │  │   │   ├─ 0 blockers ✓
+   │  │   │   ├─ 0 nitpicks ✓
+   │  │   │   ├─ given: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i005.0e1e3a860485ec66ad.r010._.given.by_peer.enroll-verif-snapshot-blemishes.md
+   │  │   │   └─ taken: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i005.0e1e3a860485ec66ad.r010._.taken.by_self.enroll-verif-snapshot-blemishes.md
+   │  │   └─ r11: enroll-verif-test-intent (l3, 3/3)
+   │  │       ├─ approved 333.8s
+   │  │       ├─ 0 blockers ✓
+   │  │       ├─ 0 nitpicks ✓
+   │  │       ├─ given: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i005.0e1e3a860485ec66ad.r011._.given.by_peer.enroll-verif-test-intent.md
+   │  │       └─ taken: .behavior/v2026_08_10.feat-contract-coerce/.reviews/peer/5.3.verification._.review.i005.0e1e3a860485ec66ad.r011._.taken.by_self.enroll-verif-test-intent.md
+   │  └─ judges
+   │      └─ j1: $rhachet run --repo bhrain --skill route.stone.judge --mechanism reviewed? --stone $stone --route $route --allow-blockers 0 --allow-nitpicks 7
+   │          └─ finished 2.4s ✓
+   │
+   └─ the way continues, run
+      └─ rhx route.drive

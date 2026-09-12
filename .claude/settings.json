@@ -90,13 +90,18 @@
       "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin --mode apply --push)",
       "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin --unstaged ignore)",
       "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin --unstaged include)",
+      "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin --mode apply --push --auth as-human)",
+      "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin --mode apply --push --auth as-ehmpath)",
       "Bash(rhx git.commit.set:*)",
       "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin)",
       "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --mode apply)",
       "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --mode apply --push)",
       "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --unstaged ignore)",
       "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --unstaged include)",
+      "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --mode apply --push --auth as-human)",
+      "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --mode apply --push --auth as-ehmpath)",
       "Bash(npx rhachet run --skill git.commit.push:*)",
+      "Bash(rhx git.commit.push:*)",
       "Bash(npx rhachet run --skill git.stage.add:*)",
       "Bash(npx rhachet run --skill git.stage.add src/file1.ts src/file2.ts)",
       "Bash(npx rhachet run --skill git.stage.add --glob 'src/**/*.ts')",
@@ -477,6 +482,17 @@
             "type": "command",
             "command": "./node_modules/.bin/rhachet run --repo ehmpathy --role mechanic --init claude.hooks/posttooluse.guardBorder.onWebfetch",
             "timeout": 60,
+            "author": "repo=ehmpathy/role=mechanic"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet run --repo ehmpathy --role mechanic --init claude.hooks/pretooluse.forbid-shouted-readme",
+            "timeout": 5,
             "author": "repo=ehmpathy/role=mechanic"
           }
         ]

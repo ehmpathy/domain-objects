@@ -1,8 +1,8 @@
 import type { SchemaOptions } from '@src/instantiation/validate/validate';
 
 /**
- * .what = the static-metadata view of a domain object class, by the statics `.contract` /
- *   `.contract.ref` read off the class — never an instance
+ * .what = the static-metadata view of a domain object class, by the statics `.contract()` /
+ *   `.contract().ref` read off the class — never an instance
  * .why =
  *   - typed structurally (not as `typeof DomainObject`) so concrete dobj subclass constructors are
  *     assignable; `typeof DomainObject` has a generic `<T>` construct signature that subclass
