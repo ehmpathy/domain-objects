@@ -1,14 +1,35 @@
 name: .declastruct
 
+# .what = reusable declastruct plan/apply for a wish, against either a github-app or an
+#   aws-oidc backend. one workflow, two auth models — each auth step fires only when its
+#   creds are supplied.
+# .why = declastruct wishes share the plan->artifact->apply shape regardless of backend;
+#   only the auth differs. github-provider wishes auth via a github-app token; aws-provider
+#   wishes auth via oidc role assumption (with a plan/apply role split — plan readonly, apply
+#   writer) + the ACCESS envar (read by the wish via sdk-environment). the plan is uploaded as
+#   an artifact so apply executes the EXACT plan reviewers saw.
+
 on:
   workflow_call:
     inputs:
       wish-path:
         type: string
         description: "the path to the wish declaration"
-      github-environment:
+        required: true
+      scope:
         type: string
-        description: "the github environment that the apply step will be executed in"
+        description: "the provider backend this wish targets (github | aws)"
+        required: true
+      access:
+        type: string
+        description: "the access to provision with (test | prep | prod)"
+        required: true
+      github-environment-plan:
+        type: string
+        description: "github environment for the plan job"
+      github-environment-apply:
+        type: string
+        description: "github environment for the apply job"
       allow-apply:
         type: boolean
         description: "whether the apply step is enabled. defaults to true on main"
@@ -16,24 +37,50 @@ on:
       creds-github-app-owner:
         type: string
         required: false
-        description: "the owner of the github app to generate a token for"
+        description: "github-app wishes: the owner of the github app to generate a token for"
       creds-github-app-id:
         type: string
         required: false
-        description: "the id of the github app to generate a token for"
+        description: "github-app wishes: the id of the github app to generate a token for"
+      creds-aws-region:
+        type: string
+        required: false
+        description: "aws wishes: the aws region for oidc auth"
+      creds-aws-role-arn-plan:
+        type: string
+        required: false
+        description: "aws wishes: oidc role arn for the plan job (readonly — DescribeParameters, no kms:Decrypt)"
+      creds-aws-role-arn-apply:
+        type: string
+        required: false
+        description: "aws wishes: oidc role arn for the apply job (writer — PutParameter, kms:Encrypt)"
     secrets:
       creds-github-app-private-key:
         required: false
-        description: the private key of the github app to generate a token for
+        description: "github-app wishes: the private key of the github app to generate a token for"
+
+# .why = least privilege: only the jobs that assume the aws role grant id-token, at job scope
+permissions:
+  contents: read
 
 jobs:
-  # install the dependencies
   install:
     uses: ./.github/workflows/.install.yml
 
   plan:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write # required for aws oidc (unused by github-app wishes)
+    environment:
+      # deployment: false keeps the built-in gate but suppresses the auto-Deployment, so a plan
+      # run posts no "deployed to <env>" status to the PR timeline. the environment is ALWAYS
+      # declared — for prep and prod alike.
+      name: ${{ inputs.github-environment-plan }}
+      deployment: false
     needs: [install]
+    env:
+      ACCESS: ${{ inputs.access }} # aws wishes: sdk-environment getEnvironment reads ACCESS
     outputs:
       has-changes-planned: ${{ steps.evaluate-plan.outputs.has-changes-planned }}
     steps:
@@ -50,6 +97,7 @@ jobs:
         with:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
+          fail-on-cache-miss: true
 
       - name: get github auth, if creds supplied
         if: ${{ inputs.creds-github-app-id }}
@@ -60,6 +108,13 @@ jobs:
           repositories: ${{ github.event.repository.name }}
           app-id: ${{ inputs.creds-github-app-id }}
           private-key: ${{ secrets.creds-github-app-private-key }}
+
+      - name: get aws auth, if creds supplied
+        if: ${{ inputs.creds-aws-role-arn-plan }}
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
+        with:
+          role-to-assume: ${{ inputs.creds-aws-role-arn-plan }}
+          aws-region: ${{ inputs.creds-aws-region }}
 
       - name: declastruct plan
         id: plan
@@ -72,8 +127,12 @@ jobs:
       - name: evaluate plan
         id: evaluate-plan
         run: |
-          # check whether it said there were required changes
-          if grep "Everything is in sync" ./plan.log
+          # declastruct prints `🎉 everything is in sync!` (LOWERCASE) when there is no diff.
+          # grep -qF: fixed-string (no char read as regex), quiet (the exit code is the whole
+          # signal), and the full phrase so an unrelated line that holds "in sync" cannot
+          # false-match. the marker is lowercase — a capital-lead grep never matches it, so the
+          # fast path would be dead code.
+          if grep -qF "everything is in sync" ./plan.log
           then
             echo "has-changes-planned=false" >> "$GITHUB_OUTPUT"
           else
@@ -87,17 +146,27 @@ jobs:
         if: ${{ inputs.allow-apply == true && steps.evaluate-plan.outputs.has-changes-planned == 'true' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: declastruct-plan
+          name: declastruct-${{ inputs.scope }}-${{ inputs.access }}-plan
           path: |
             ${{ inputs.wish-path }}.plan.json
           retention-days: 1
           include-hidden-files: false
 
   apply:
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.github-environment }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write # required for aws oidc (unused by github-app wishes)
+    environment:
+      # deployment: false keeps the built-in gate but suppresses the auto-Deployment, so the apply
+      # run posts no "deployed to <env>" status to the PR timeline. the environment is ALWAYS
+      # declared — for prep and prod alike.
+      name: ${{ inputs.github-environment-apply }}
+      deployment: false
     needs: [install, plan]
     if: ${{ inputs.allow-apply == true && needs.plan.outputs.has-changes-planned == 'true' }}
+    env:
+      ACCESS: ${{ inputs.access }} # aws wishes: sdk-environment getEnvironment reads ACCESS
     steps:
       - name: checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -112,6 +181,7 @@ jobs:
         with:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
+          fail-on-cache-miss: true
 
       - name: extract directory from wish-path
         id: extract-dir
@@ -120,7 +190,7 @@ jobs:
       - name: download plan artifact
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
-          name: declastruct-plan
+          name: declastruct-${{ inputs.scope }}-${{ inputs.access }}-plan
           path: ${{ steps.extract-dir.outputs.wish-dir }}
 
       - name: get github auth, if creds supplied
@@ -132,6 +202,13 @@ jobs:
           repositories: ${{ github.event.repository.name }}
           app-id: ${{ inputs.creds-github-app-id }}
           private-key: ${{ secrets.creds-github-app-private-key }}
+
+      - name: get aws auth, if creds supplied
+        if: ${{ inputs.creds-aws-role-arn-apply }}
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
+        with:
+          role-to-assume: ${{ inputs.creds-aws-role-arn-apply }}
+          aws-region: ${{ inputs.creds-aws-region }}
 
       - name: declastruct apply
         run: |

@@ -1,0 +1,25 @@
+# boot.yml — which briefs load into context at each boot
+#   say = full content, every boot (costs tokens)
+#   ref = path only, read on demand
+#   not = never booted
+#
+# no `say` key = say all, minus `ref` and `not`. a non-empty `say` = say only what it
+# matches, ref all else. `say: []` = ref all. skills curate the same way, via `skills:`.
+# to curate a large corpus, add a `say:` allowlist, e.g. `- briefs/rule.*.md`.
+#
+# an upgrade keeps your own entries and budget; it only adds the `not` globs below.
+
+# budget = the token cap on the say payload; a boot over it halts.
+# to fix a halt: demote a say glob to ref, use a .min brief, or raise the cap.
+# plain `5000`, never `5_000`: yaml 1.2 reads an underscore integer as a string.
+budget:
+  tokens: 5000
+
+# each term's say file names its .reason path, so its variants never boot
+briefs:
+  # the define.* briefs are deep domain references (~2.4k tokens each); read on demand
+  ref:
+    - briefs/define.*.md
+  not:
+    - briefs/domain.terms/term=*._.choice.reason.md
+    - briefs/domain.terms/term=*._.choice.example=*.md

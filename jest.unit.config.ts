@@ -30,16 +30,29 @@ const config: Config = {
   ],
   testMatch: [
     // note: order matters
-    '**/*.test.ts',
+    '**/*.test.ts', // also matches the `._.unit.test` kind seam
     '!**/*.acceptance.test.ts',
     '!**/*.integration.test.ts',
+    '!**/*.evaluation.test.ts',
+    '!**/*._.acpt.test.ts',
+    '!**/*._.intg.test.ts',
+    '!**/*._.eval.test.ts',
+    '!**/.agent/.actors/**', // rhachet host-local state; holds a scratch clone of this repo, whose suites are not ours
+    '!**/.agent/.cache/**',
     '!**/.yalc/**',
-    // .agent holds tool caches — notably rmsafe's trash, which retains deleted files. without
-    // this, an `rhx rmsafe` of any *.test.ts leaves a copy that jest still collects and runs
-    // against src which has since moved on: a failure with no cause anywhere in the repo.
-    '!**/.agent/**',
   ],
+  // skip all of `.agent/`: rhachet roles, host-local clones, and the rmsafe trash live there. a test
+  // there would run as ours, and a snapshot there would read as obsolete (the haste map scans it)
+  testPathIgnorePatterns: ['/node_modules/', '/.agent/'],
+  modulePathIgnorePatterns: ['<rootDir>/.agent/'],
   setupFilesAfterEnv: ['./jest.unit.env.ts'],
+
+  // reclaim every temp dir genTempDir made this run (test-fns autoprune; needs test-fns >=1.16,
+  // the floor is 1.17). jest needs BOTH keys -- globalSetup stamps the run, globalTeardown reclaims
+  // its dirs. one key without the other stamps and never reclaims, a half-wired state test-fns itself
+  // detects + reports at runtime.
+  globalSetup: 'test-fns/autoprune.setup.jest',
+  globalTeardown: 'test-fns/autoprune.teardown.jest',
 
   // use 50% of threads to leave headroom for other processes
   maxWorkers: '50%', // https://stackoverflow.com/questions/71287710/why-does-jest-run-faster-with-maxworkers-50

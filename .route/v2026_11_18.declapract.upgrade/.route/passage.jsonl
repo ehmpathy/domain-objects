@@ -1,0 +1,53 @@
+{"stone":"1.upgrade.invoke","status":"arrived","reason":"entered guard reviews"}
+{"stone":"1.upgrade.invoke","status":"blocked","blocker":"review.self","reason":"review.self required: has-completed-exec-successfully"}
+{"stone":"1.upgrade.invoke","status":"promised","reason":"promised review.self: has-completed-exec-successfully"}
+{"stone":"1.upgrade.invoke","status":"arrived","reason":"entered guard reviews"}
+{"stone":"1.upgrade.invoke","status":"passed"}
+{"stone":"2.detect.hazards","status":"arrived","reason":"entered guard reviews"}
+{"stone":"2.detect.hazards","status":"blocked","blocker":"review.self","reason":"review.self required: has-complete-hazard-scan"}
+{"stone":"2.detect.hazards","status":"promised","reason":"promised review.self: has-complete-hazard-scan"}
+{"stone":"2.detect.hazards","status":"arrived","reason":"entered guard reviews"}
+{"stone":"2.detect.hazards","status":"blocked","blocker":"review.self","reason":"review.self required: has-validated-hazards"}
+{"stone":"2.detect.hazards","status":"promised","reason":"promised review.self: has-validated-hazards"}
+{"stone":"2.detect.hazards","status":"arrived","reason":"entered guard reviews"}
+{"stone":"2.detect.hazards","status":"passed"}
+{"stone":"3.1.repair.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.1.repair.test.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-all-tests-passed-static"}
+{"stone":"3.1.repair.test.defects","status":"promised","reason":"promised review.self: has-all-tests-passed-static"}
+{"stone":"3.1.repair.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.1.repair.test.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-eliminated-dependency-cycles"}
+{"stone":"3.1.repair.test.defects","status":"promised","reason":"promised review.self: has-eliminated-dependency-cycles"}
+{"stone":"3.1.repair.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.1.repair.test.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-respected-dpdm-exclude"}
+{"stone":"3.1.repair.test.defects","status":"promised","reason":"promised review.self: has-respected-dpdm-exclude"}
+{"stone":"3.1.repair.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.1.repair.test.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-all-tests-passed-dynamic"}
+{"stone":"3.1.repair.test.defects","status":"promised","reason":"promised review.self: has-all-tests-passed-dynamic"}
+{"stone":"3.1.repair.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.1.repair.test.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-protected-test-intentions"}
+{"stone":"3.1.repair.test.defects","status":"promised","reason":"promised review.self: has-protected-test-intentions"}
+{"stone":"3.1.repair.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.1.repair.test.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-compared-against-main"}
+{"stone":"3.1.repair.test.defects","status":"promised","reason":"promised review.self: has-compared-against-main"}
+{"stone":"3.1.repair.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.1.repair.test.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-complete-defect-entries"}
+{"stone":"3.1.repair.test.defects","status":"promised","reason":"promised review.self: has-complete-defect-entries"}
+{"stone":"3.1.repair.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.1.repair.test.defects","status":"passed"}
+{"stone":"3.2.reflect.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.2.reflect.test.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-complete-defect-coverage"}
+{"stone":"3.2.reflect.test.defects","status":"promised","reason":"promised review.self: has-complete-defect-coverage"}
+{"stone":"3.2.reflect.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.2.reflect.test.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-searched-declapract-repo"}
+{"stone":"3.2.reflect.test.defects","status":"promised","reason":"promised review.self: has-searched-declapract-repo"}
+{"stone":"3.2.reflect.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.2.reflect.test.defects","status":"blocked","blocker":"approval","reason":"wait for human approval"}
+{"stone":"3.2.reflect.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.2.reflect.test.defects","status":"blocked","blocker":"approval","reason":"wait for human approval"}
+{"stone":"3.2.reflect.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.2.reflect.test.defects","status":"blocked","blocker":"approval","reason":"wait for human approval"}
+{"stone":"3.2.reflect.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.2.reflect.test.defects","status":"blocked","blocker":"approval","reason":"wait for human approval"}
+{"stone":"3.2.reflect.test.defects","status":"approved"}
+{"stone":"3.2.reflect.test.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.2.reflect.test.defects","status":"passed"}
