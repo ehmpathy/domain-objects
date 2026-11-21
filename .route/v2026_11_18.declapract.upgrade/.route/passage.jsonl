@@ -51,3 +51,28 @@
 {"stone":"3.2.reflect.test.defects","status":"approved"}
 {"stone":"3.2.reflect.test.defects","status":"arrived","reason":"entered guard reviews"}
 {"stone":"3.2.reflect.test.defects","status":"passed"}
+{"stone":"3.3.repair.cicd.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.3.repair.cicd.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-zero-cicd-failures"}
+{"stone":"3.3.repair.cicd.defects","status":"promised","reason":"promised review.self: has-zero-cicd-failures"}
+{"stone":"3.3.repair.cicd.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.3.repair.cicd.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-protected-test-intentions"}
+{"stone":"3.3.repair.cicd.defects","status":"promised","reason":"promised review.self: has-protected-test-intentions"}
+{"stone":"3.3.repair.cicd.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.3.repair.cicd.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-compared-against-main"}
+{"stone":"3.3.repair.cicd.defects","status":"promised","reason":"promised review.self: has-compared-against-main"}
+{"stone":"3.3.repair.cicd.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.3.repair.cicd.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-complete-defect-entries"}
+{"stone":"3.3.repair.cicd.defects","status":"promised","reason":"promised review.self: has-complete-defect-entries"}
+{"stone":"3.3.repair.cicd.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.3.repair.cicd.defects","status":"passed"}
+{"stone":"3.4.reflect.cicd.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.4.reflect.cicd.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-complete-defect-coverage"}
+{"stone":"3.4.reflect.cicd.defects","status":"promised","reason":"promised review.self: has-complete-defect-coverage"}
+{"stone":"3.4.reflect.cicd.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.4.reflect.cicd.defects","status":"blocked","blocker":"review.self","reason":"review.self required: has-searched-declapract-repo"}
+{"stone":"3.4.reflect.cicd.defects","status":"promised","reason":"promised review.self: has-searched-declapract-repo"}
+{"stone":"3.4.reflect.cicd.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.4.reflect.cicd.defects","status":"blocked","blocker":"approval","reason":"wait for human approval"}
+{"stone":"3.4.reflect.cicd.defects","status":"approved"}
+{"stone":"3.4.reflect.cicd.defects","status":"arrived","reason":"entered guard reviews"}
+{"stone":"3.4.reflect.cicd.defects","status":"passed"}
