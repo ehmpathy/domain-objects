@@ -3,16 +3,25 @@ import {
   type DeclaredGithubBranch,
   DeclaredGithubBranchProtection,
   DeclaredGithubEnvironment,
+  type DeclaredGithubOrg,
   DeclaredGithubRepo,
   DeclaredGithubRepoConfig,
+  DeclaredGithubRepoRuleset,
+  type DeclaredGithubTeam,
+  DeclaredGithubTeamRepoAccess,
   getDeclastructGithubProvider,
 } from 'declastruct-github';
 import { UnexpectedCodePathError } from 'helpful-errors';
+import { genLogMethods } from 'sdk-logs';
 
-import pkgRaw from '../../package.json';
+import pkgJson from '../../package.json';
 import { type DomainEntity, RefByUnique } from '../../src';
 
-const pkg = pkgRaw as typeof pkgRaw & { private?: boolean };
+const pkg = pkgJson as {
+  description?: string;
+  private?: boolean;
+  homepage?: string;
+};
 
 export const getProviders = async (): Promise<DeclastructProvider[]> => [
   getDeclastructGithubProvider(
@@ -24,12 +33,8 @@ export const getProviders = async (): Promise<DeclastructProvider[]> => [
       },
     },
     {
-      log: {
-        info: () => {},
-        debug: () => {},
-        warn: console.warn,
-        error: console.error,
-      },
+      // MUST be an sdk-logs logger — 1.6.0 DAOs read log._.level via as-procedure
+      log: genLogMethods(),
     },
   ),
 ];
@@ -40,11 +45,8 @@ export const getResources = async (): Promise<DomainEntity<any>[]> => {
     owner: 'ehmpathy',
     name: 'domain-objects',
     description: pkg.description ?? null,
-    visibility: pkg.private === true ? 'private' : 'public',
-    private: pkg.private ?? false, // todo: why do we have to specify this twice?
+    visibility: pkg.private === false ? 'public' : 'private', // fail closed: public only via an explicit `"private": false`
     homepage: pkg.homepage ?? null,
-
-    // things we haven't changed from the defaults
     archived: false,
   });
 
@@ -91,13 +93,13 @@ export const getResources = async (): Promise<DomainEntity<any>[]> => {
   const branchMainProtection = DeclaredGithubBranchProtection.as({
     branch: branchMain,
 
-    enforceAdmins: true, // yes, even admins need to follow this (note: they can still take the time to go and change the settings temporarily for the exceptions)
-    allowsDeletions: false, // dont allow the `main` branch to be deleted
-    allowsForcePushes: false, // dont allow `main` branch to be force pushed to
-    requireLinearHistory: false, //  # no ugly merge commits, woo! 🎉
+    enforceAdmins: true, // admins too; an exception means a deliberate settings change
+    allowsDeletions: false,
+    allowsForcePushes: false,
+    requireLinearHistory: false, // squash-only merges (repoConfig) already keep history linear
 
     requiredStatusChecks: {
-      strict: true, // branch must be up to date. otherwise, we dont know if it will really pass once it is merged
+      strict: true, // the branch must be up to date, so a green check holds after the merge
       contexts: [
         'suite / install / pnpm',
         'suite / enshard',
@@ -108,11 +110,11 @@ export const getResources = async (): Promise<DomainEntity<any>[]> => {
         'suite / test-unit',
         'suite / test-integration',
         'suite / test-acceptance-locally',
-        'pullreq-title', // "review / pullreq-title",
+        'pullreq-title',
       ],
     },
 
-    // things we haven't changed from the defaults
+    // github's defaults, declared so drift shows in a plan
     allowForkSyncing: false,
     blockCreations: false,
     lockBranch: false,
@@ -122,24 +124,95 @@ export const getResources = async (): Promise<DomainEntity<any>[]> => {
     restrictions: null,
   });
 
+  // ref the releasers team
+  const teamReleasers = RefByUnique.as<typeof DeclaredGithubTeam>({
+    org: RefByUnique.as<typeof DeclaredGithubOrg>({
+      login: 'ehmpathy',
+    }),
+    slug: 'releasers',
+  });
+
+  // grant the releasers team push access to the repo (standalone; no env depends on it)
+  const teamReleasersRepoAccess = DeclaredGithubTeamRepoAccess.as({
+    team: teamReleasers,
+    repo,
+    permission: 'push', // write access needed to deploy
+  });
+
+  // declare the sole preparation environment — one env for every prep/test deploy
+  const envPreparation = DeclaredGithubEnvironment.as({
+    repo,
+    name: 'preparation',
+    reviewers: null, // no approval — prep is the pre-production tier; feature branches deploy freely
+    waitTimer: null, // no delay
+    deploymentBranchPolicy: null, // any branch
+    preventSelfReview: false,
+  });
+
   // declare environment for production deployments from main (auto-approved)
   const envProductionOnMain = DeclaredGithubEnvironment.as({
     repo,
     name: 'production-on-main',
     reviewers: null, // no approval required — PR merge is the gate
     waitTimer: null, // no delay
-    deploymentBranchPolicy: { customBranches: ['main'] }, // only main branch
+    deploymentBranchPolicy: {
+      // admit `v*` tags beside main: a prod deploy is triggered by a release tag cut from main
+      customPatterns: [
+        { name: 'main', target: 'branch' },
+        { name: 'v*', target: 'tag' },
+      ],
+    },
     preventSelfReview: false,
   });
 
-  // declare environment for production deployments from other branches (requires approval)
-  const envProductionOnElse = DeclaredGithubEnvironment.as({
+  // declare environment for adhoc production apply from a non-main branch
+  // .why = its name is the oidc `sub` anchor of the WRITER role, gated in aws by an `actor_id`
+  //        allowlist. do NOT merge it with production-on-else-plan, or a plan job could write
+  const envProductionOnElseApply = DeclaredGithubEnvironment.as({
     repo,
-    name: 'production-on-else',
-    reviewers: { users: ['uladkasach'], teams: null },
-    waitTimer: null, // no delay once approved
+    name: 'production-on-else-apply',
+    reviewers: null, // do NOT add reviewers: off enterprise plans, a private repo's api returns 422
+    waitTimer: null,
     deploymentBranchPolicy: null, // any branch
-    preventSelfReview: false, // self-approval allowed if in reviewers list
+    preventSelfReview: false,
+  });
+
+  // declare environment for production plan from any branch (readonly, no approval)
+  // .why = its name is the oidc `sub` anchor of the READONLY plan role
+  const envProductionOnElsePlan = DeclaredGithubEnvironment.as({
+    repo,
+    name: 'production-on-else-plan',
+    reviewers: null, // no approval required — plan is readonly, safe
+    waitTimer: null, // no delay
+    deploymentBranchPolicy: null, // any branch
+    preventSelfReview: false,
+  });
+
+  // restrict who may cut `v*` release tags to the rhelease app only
+  // .why = prod apply is gated on a release tag; a tag anyone could push is no gate
+  const rulesetReleaseTags = DeclaredGithubRepoRuleset.as({
+    repo,
+    name: 'protect-release-tags',
+    target: 'tag',
+    enforcement: 'active',
+
+    // only the rhelease github app may create `v*` tags
+    bypassActors: [
+      {
+        actorId: 2472031, // rhelease github app id (gh api /apps/rhelease)
+        actorType: 'Integration',
+        bypassMode: 'always',
+      },
+    ],
+
+    // applies to release tags only
+    conditions: {
+      refNameInclude: ['refs/tags/v*'],
+      refNameExclude: [],
+    },
+
+    // a cut release tag is immutable: only the bypass actor may create, move, or delete it
+    rules: [{ type: 'creation' }, { type: 'update' }, { type: 'deletion' }],
   });
 
   // and return the full set
@@ -147,7 +220,11 @@ export const getResources = async (): Promise<DomainEntity<any>[]> => {
     repo,
     repoConfig,
     branchMainProtection,
+    teamReleasersRepoAccess,
+    envPreparation,
     envProductionOnMain,
-    envProductionOnElse,
+    envProductionOnElseApply,
+    envProductionOnElsePlan,
+    rulesetReleaseTags,
   ];
 };

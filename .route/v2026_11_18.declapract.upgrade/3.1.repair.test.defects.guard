@@ -1,0 +1,135 @@
+reviews:
+  self:
+    - slug: has-all-tests-passed-static
+      say: |
+        did static checks pass? cite the exact command and output for each:
+
+        1. types: `rhx git.repo.test --what types --mode apply`
+        2. lint: `rhx git.repo.test --what lint --mode apply`
+
+        these are compile-time checks with no external dependencies.
+        if either fails, fix the code — no exceptions.
+
+    - slug: has-eliminated-dependency-cycles
+      say: |
+        were all dependency cycles eliminated?
+
+        cycles in prod deps — direct or transitive, owned or not — are
+        categorically forbidden. zero exceptions.
+
+        if dpdm detects cycles, you must eliminate them:
+
+        1. **upgrade direct dependencies** — upgrade every direct dep to
+           latest version. often cycles exist in older versions and are
+           fixed upstream.
+
+        2. **escalate for owned packages** — if cycle is caused by an
+           ehmpathy/ package that you can't upgrade to fix:
+           - this is a BLOCKER
+           - create issue in that package repo
+           - ask owner to fix the cycle upstream
+           - do not exclude it — wait for fix
+
+        3. **evaluate replacement for third-party** — if cycle is caused
+           by a non-ehmpathy package with no fix available:
+           - this is a BLOCKER
+           - research alternatives that don't have cycles
+           - document the replacement plan
+           - do not exclude it — replace the dependency
+
+        4. **use dependency injection** — if cycles exist because of
+           import-time evaluation, refactor to inject deps at runtime
+           instead of import-time. this breaks the static cycle.
+
+        run `npm run test:lint` to verify zero cycles remain.
+        if cycles persist after upgrades, escalate via BLOCKER.
+
+    - slug: has-respected-dpdm-exclude
+      say: |
+        did the driver modify .dpdmrc.yaml exclude array incorrectly?
+
+        we avoid all cycles, even in dependencies — ON PURPOSE.
+        we check node_modules for all deps (prod and dev) by default.
+
+        the .dpdmrc.yaml file controls dpdm cycle detection:
+        - exclude: [] means check all files, node_modules included
+        - devDeps may be excluded as escape hatch if needed
+        - prod dependencies must never be excluded
+        - node_modules must never be excluded
+
+        forbidden changes:
+        - add prod dep to exclude array
+        - add node_modules or ^node_modules to exclude
+        - change default to exclude node_modules
+
+        if you exclude a prod dependency or node_modules, you ship
+        cycles to consumers and break their builds.
+        see brief rule.forbid.dpdm-exclude-change.
+
+        if git diff shows any forbidden change to .dpdmrc.yaml:
+        - this is a BLOCKER
+        - revert the change
+        - fix the actual circular imports instead
+
+    - slug: has-all-tests-passed-dynamic
+      say: |
+        did dynamic tests pass? cite the exact command and output for each:
+
+        1. unit: `rhx git.repo.test --what unit --mode apply`
+        2. integration: `rhx git.repo.test --what integration --mode apply`
+        3. acceptance: `rhx git.repo.test --what acceptance --against local --env test --mode apply`
+
+        if any grain cannot run due to absent resources (creds, db, etc),
+        declare a BLOCKER and escalate via:
+        `rhx route.stone.set --stone $stone --as blocked`
+
+        zero exceptions. if you can't run it, escalate — don't skip.
+
+    - slug: has-protected-test-intentions
+      say: |
+        were test intentions preserved?
+
+        we tolerate zero degradation of coverage. never skip, never drop.
+
+        this is an infra upgrade — zero domain logic should be impacted.
+
+        review test file changes and confirm:
+        - no tests were newly skipped (no added `.skip`, `xit`, `xdescribe`)
+        - no tests were dropped (no deleted `it()`, `test()`, `then()` blocks)
+        - no test assertions were weakened or removed
+        - no behavioral expectations were changed
+
+        ```sh
+        git diff origin/main -- '**/*.test.ts' '**/*.integration.test.ts'
+        ```
+
+        if any test was modified beyond infra fixes (imports, types, config),
+        this is a BLOCKER.
+
+        1. justify why domain behavior needed to change
+        2. then severely criticize that justification — how does it possibly
+           make sense if this is just a generic infra update? it doesn't.
+           revert the domain change and fix the root cause instead.
+           compare against "what changed?" via origin/main.
+
+    - slug: has-compared-against-main
+      say: |
+        was each defect compared against origin/main?
+
+        for each defect, confirm:
+        - "what changed?" was explicitly asked
+        - `git diff origin/main -- <file>` was run
+        - the diff informed the root cause analysis
+
+        this ensures we understand why the upgrade caused the defect,
+        not just that a defect exists.
+
+    - slug: has-complete-defect-entries
+      say: |
+        does each defect entry have what, how, why, fix?
+
+        go through each defect in the artifact and confirm:
+        - what: the defect is described
+        - how: what changed? (diff against origin/main is documented)
+        - why: root cause is documented (why the change caused the defect)
+        - fix: how it was fixed is documented

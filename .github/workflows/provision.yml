@@ -14,12 +14,19 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }} # per [workflow] x [branch, tag]
   cancel-in-progress: true #  cancel workflows for non-latest commits
 
+permissions:
+  id-token: write # required for oidc; a called workflow cannot exceed its caller's grant
+  contents: read
+
 jobs:
   github:
     uses: ./.github/workflows/.declastruct.yml
     with:
       wish-path: provision/github.repo/resources.ts
-      github-environment: prod
+      scope: github
+      access: prod # github repo settings are inherently a prod resource
+      github-environment-plan: production-on-else-plan
+      github-environment-apply: ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')) && 'production-on-main' || 'production-on-else-apply' }} # main/tag => on-main; else => on-else-apply
       creds-github-app-owner: ${{ github.repository_owner }}
       creds-github-app-id: ${{ vars.DECLASTRUCT_GITHUB_CONFORMER_APP_ID }}
     secrets:

@@ -9,9 +9,11 @@
     "includes": [
       "**/src/**/*.ts",
       "**/provision/**/*.ts",
+      "**/blackbox/**/*.ts",
       "!**/dist",
       "!**/coverage",
       "!**/node_modules",
+      "!**/.agent/.cache",
       "!**/.artifact",
       "!**/.generated",
       "!**/.test*"
@@ -75,7 +77,15 @@
           "fix": "none"
         },
         "useImportType": "error",
-        "noParameterAssign": "off"
+        "noParameterAssign": "off",
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "simple-lambda-testing-methods": "use runLambdaEndpoint from sdk-aws-lambda — .onReferenced in integration tests, .onSerialized in acceptance tests"
+            }
+          }
+        }
       },
       "suspicious": {
         "noExplicitAny": "warn",
@@ -84,7 +94,8 @@
         "noUnsafeDeclarationMerging": "off",
         "useIterableCallbackReturn": "warn",
         "noDuplicateTestHooks": "off",
-        "noThenProperty": "warn"
+        "noThenProperty": "warn",
+        "noFocusedTests": "error"
       },
       "nursery": {
         "noFloatingPromises": "error",

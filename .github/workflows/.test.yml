@@ -13,8 +13,8 @@ on:
         type: string
         default: "us-east-1"
 
+# .why = least privilege: only the jobs that assume the aws role grant id-token, at job scope
 permissions:
-  id-token: write # required for oidc
   contents: read
 
 jobs:
@@ -82,9 +82,6 @@ jobs:
         with:
           node-version-file: ".nvmrc"
 
-      - name: set terraform version
-        uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
-
       - name: get node-modules from cache
         uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
         with:
@@ -111,6 +108,10 @@ jobs:
         with:
           path: ./node_modules
           key: ${{ needs.install.outputs.node-modules-cache-key }}
+
+      # .why = lint the same linked .agent/repo=* role tree a laptop holds
+      - name: prepare:rhachet
+        run: npm run prepare:rhachet --if-present
 
       - name: test:lint
         run: npm run test:lint
@@ -182,6 +183,9 @@ jobs:
   test-shards-integration:
     runs-on: ubuntu-24.04
     needs: [install, enshard]
+    permissions:
+      contents: read
+      id-token: write # required for oidc
     strategy:
       fail-fast: false
       matrix:
@@ -226,8 +230,8 @@ jobs:
       - name: start:testdb
         run: npm run start:testdb --if-present
 
-      - name: start:livedb:dev
-        run: npm run start:livedb:dev --if-present
+      - name: start:livedb:prep
+        run: npm run start:livedb:prep --if-present
 
       - name: build
         run: npm run build
@@ -252,20 +256,14 @@ jobs:
 
       - name: report slow tests
         if: always() && hashFiles('jest-results.json') != ''
-        run: |
-          set -eu
-          jq -r '.testResults[] | select(.perfStats.runtime != null) | "\(.name):\(.perfStats.runtime)"' jest-results.json | while IFS=: read -r name runtime; do
-            seconds=$((runtime / 1000))
-            if [[ $seconds -ge 30 ]]; then
-              echo "::warning file=${name}::slow test: ${seconds}s"
-            elif [[ $seconds -ge 10 ]]; then
-              echo "::notice file=${name}::test duration: ${seconds}s"
-            fi
-          done
+        run: bash .github/workflows/report-slow-tests.sh jest-results.json
 
   test-shards-acceptance:
     runs-on: ubuntu-24.04
     needs: [install, enshard]
+    permissions:
+      contents: read
+      id-token: write # required for oidc
     strategy:
       fail-fast: false
       matrix:
@@ -310,18 +308,24 @@ jobs:
       - name: start:testdb
         run: npm run start:testdb --if-present
 
-      - name: start:livedb:dev
-        run: npm run start:livedb:dev --if-present
+      - name: start:livedb:prep
+        run: npm run start:livedb:prep --if-present
 
       - name: build
         run: npm run build
 
+      # .why = the PR acceptance gate runs IN-PROCESS (LOCALLY=true), not against a deployed fleet.
+      #        a PR has no deployed lambda to invoke, and a service that publishes only dev/prep (no
+      #        `test` fleet) would target `svc-<name>-test-*` — a slug that does not exist — and 404
+      #        on every call. in-process runs the handler directly, so a fleetless service inherits a
+      #        green PR gate out of the box rather than hand-patching LOCALLY=true into this shard.
+      #        the deployed-fleet acceptance run is a separate post-deploy grain (.deploy-sls.yml).
       - name: test:acceptance (explicit ${{ matrix.shard.index }})
         if: matrix.shard.type == 'explicit'
         run: |
           set -eu
           patterns='${{ join(matrix.shard.patterns, '|') }}'
-          THOROUGH=true npm run test:acceptance -- --testPathPatterns="$patterns" --json --outputFile=jest-results.json
+          LOCALLY=true THOROUGH=true npm run test:acceptance -- --testPathPatterns="$patterns" --json --outputFile=jest-results.json
 
       - name: test:acceptance (dynamic ${{ matrix.shard.shard }}/${{ matrix.shard.total }})
         if: matrix.shard.type == 'dynamic'
@@ -329,23 +333,73 @@ jobs:
           set -eu
           exclude='${{ needs.enshard.outputs.acceptance-patterns }}'
           if [[ -n "$exclude" ]]; then
-            THOROUGH=true npm run test:acceptance -- --testPathIgnorePatterns="$exclude" --shard=${{ matrix.shard.shard }}/${{ matrix.shard.total }} --json --outputFile=jest-results.json
+            LOCALLY=true THOROUGH=true npm run test:acceptance -- --testPathIgnorePatterns="$exclude" --shard=${{ matrix.shard.shard }}/${{ matrix.shard.total }} --json --outputFile=jest-results.json
           else
-            THOROUGH=true npm run test:acceptance -- --shard=${{ matrix.shard.shard }}/${{ matrix.shard.total }} --json --outputFile=jest-results.json
+            LOCALLY=true THOROUGH=true npm run test:acceptance -- --shard=${{ matrix.shard.shard }}/${{ matrix.shard.total }} --json --outputFile=jest-results.json
           fi
 
       - name: report slow tests
         if: always() && hashFiles('jest-results.json') != ''
-        run: |
-          set -eu
-          jq -r '.testResults[] | select(.perfStats.runtime != null) | "\(.name):\(.perfStats.runtime)"' jest-results.json | while IFS=: read -r name runtime; do
-            seconds=$((runtime / 1000))
-            if [[ $seconds -ge 30 ]]; then
-              echo "::warning file=${name}::slow test: ${seconds}s"
-            elif [[ $seconds -ge 10 ]]; then
-              echo "::notice file=${name}::test duration: ${seconds}s"
-            fi
-          done
+        run: bash .github/workflows/report-slow-tests.sh jest-results.json
+
+  # .why = evaluation tests grade a brain's output and sit outside the unit, integration, and
+  #        acceptance globs, so no other job runs them. in a repo with no `test:evaluation`
+  #        command, every step after the presence check is skipped, so the job costs one checkout
+  test-evaluation:
+    runs-on: ubuntu-24.04
+    needs: [install]
+    permissions:
+      contents: read
+      id-token: write # required for oidc
+    steps:
+      - name: checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: has test:evaluation?
+        id: presence
+        run: echo "declared=$(jq -r '.scripts["test:evaluation"] != null' package.json)" >> "$GITHUB_OUTPUT"
+
+      - name: set node-version
+        if: steps.presence.outputs.declared == 'true'
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version-file: ".nvmrc"
+
+      - name: get node-modules from cache
+        if: steps.presence.outputs.declared == 'true'
+        uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ./node_modules
+          key: ${{ needs.install.outputs.node-modules-cache-key }}
+
+      - name: prepare:rhachet
+        if: steps.presence.outputs.declared == 'true'
+        run: npm run prepare:rhachet --if-present
+
+      - name: keyrack firewall
+        if: steps.presence.outputs.declared == 'true'
+        run: npx rhachet keyrack firewall --env test --from 'json(env://SECRETS_JSON)' --into github.actions
+        env:
+          SECRETS_JSON: ${{ toJSON(secrets) }}
+
+      - name: get aws auth, if creds supplied
+        if: ${{ steps.presence.outputs.declared == 'true' && inputs.creds-aws-role-arn }}
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4
+        with:
+          role-to-assume: ${{ inputs.creds-aws-role-arn }}
+          aws-region: ${{ inputs.creds-aws-region }}
+
+      - name: start:testdb
+        if: steps.presence.outputs.declared == 'true'
+        run: npm run start:testdb --if-present
+
+      - name: build
+        if: steps.presence.outputs.declared == 'true'
+        run: npm run build
+
+      - name: test:evaluation
+        if: steps.presence.outputs.declared == 'true'
+        run: npm run test:evaluation --if-present
 
   # union job: aggregates shard results into single status for pr merge constraints
   test-integration:

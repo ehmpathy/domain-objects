@@ -1,0 +1,13 @@
+# .what = tells git to ignore this dir
+# .why = holds ephemeral, local-only runtime state, never source
+#   - enrolled-actor records + caches are host-local
+#   - regenerated on demand; none of it belongs in git history
+# .note = safe to delete; rhachet recreates it as needed
+# .note = the repo actor's brain dir is the one exception: it holds the ambient roles' brain config
+/*
+!/.gitignore
+!/actor.via.repo=ambient/
+/actor.via.repo=ambient/*
+!/actor.via.repo=ambient/brain/
+/actor.via.repo=ambient/brain/*
+!/actor.via.repo=ambient/brain/.claude/

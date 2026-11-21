@@ -6,3 +6,9 @@ fi
 . "$(dirname -- "$0")/_/husky.sh"
 
 . "$(dirname -- "$0")/check.yalc.sh"
+
+. "$(dirname -- "$0")/check.timestamps.lock.sh"
+
+. "$(dirname -- "$0")/check.timestamps.sh"
+
+. "$(dirname -- "$0")/check.secrets.sh"

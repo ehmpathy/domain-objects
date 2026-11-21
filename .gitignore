@@ -1,7 +1,10 @@
+**/.claude/scheduled_tasks*
 *.bak.*
 *.local.json
 *.log
 *.tsbuildinfo
+.agent/.cache/
+.agent/.notes/
 .artifact
 .cache/
 .env
@@ -17,3 +20,4 @@ dist
 node_modules
 !.test*/**/node_modules
 !.test*/**/node_modules/**
+!.agent/.actors/actor.via.repo=ambient/

@@ -31,13 +31,24 @@ const config: Config = {
   ],
   testMatch: [
     '**/*.acceptance.test.ts',
+    '**/*._.acpt.test.ts', // the `._.` kind seam; both suffix forms match
+    '!**/.agent/.actors/**', // rhachet host-local state; holds a scratch clone of this repo, whose suites are not ours
+    '!**/.agent/.cache/**',
     '!**/.yalc/**',
-    // .agent holds tool caches — notably rmsafe's trash, which retains deleted files. without
-    // this, an `rhx rmsafe` of any *.test.ts leaves a copy that jest still collects and runs
-    // against src which has since moved on: a failure with no cause anywhere in the repo.
-    '!**/.agent/**',
   ],
+  // skip all of `.agent/`: rhachet roles, host-local clones, and the rmsafe trash live there. a test
+  // there would run as ours, and a snapshot there would read as obsolete (the haste map scans it)
+  testPathIgnorePatterns: ['/node_modules/', '/.agent/'],
+  modulePathIgnorePatterns: ['<rootDir>/.agent/'],
   setupFilesAfterEnv: ['./jest.acceptance.env.ts'],
+
+  // reclaim every temp dir genTempDir made this run (test-fns autoprune). jest needs BOTH keys;
+  // one without the other stamps and never reclaims. the globalSetup COMPOSES the livedb wake
+  // (resume the shared aurora-serverless cluster before the first query) with autoprune's setup,
+  // and forwards globalConfig to it — a bare 'test-fns/autoprune.setup.jest' would leave the db
+  // un-woken.
+  globalSetup: './jest.acceptance.prepare.ts',
+  globalTeardown: 'test-fns/autoprune.teardown.jest',
 
   // use 50% of threads to leave headroom for other processes
   maxWorkers: '50%', // https://stackoverflow.com/questions/71287710/why-does-jest-run-faster-with-maxworkers-50

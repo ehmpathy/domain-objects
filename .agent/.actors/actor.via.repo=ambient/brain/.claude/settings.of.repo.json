@@ -1,0 +1,597 @@
+{
+  "statusLine": {
+    "type": "command",
+    "command": "node -e \"import('rhachet-roles-bhrain/cli/route.status.line').then(m => m.routeStatusLine())\"",
+    "padding": 0
+  },
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(cmd | npx rhachet run --skill teesafe file.txt)",
+      "Bash(cmd | rhx teesafe --into file.txt --append)",
+      "Bash(cmd | rhx teesafe file.txt)",
+      "Bash(diff:*)",
+      "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin --mode apply --push --auth as-ehmpath)",
+      "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin --mode apply --push --auth as-human)",
+      "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin --mode apply --push)",
+      "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin --mode apply)",
+      "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin --unstaged ignore)",
+      "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin --unstaged include)",
+      "Bash(echo $MESSAGE | npx rhachet run --skill git.commit.set -m @stdin)",
+      "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --mode apply --push --auth as-ehmpath)",
+      "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --mode apply --push --auth as-human)",
+      "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --mode apply --push)",
+      "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --mode apply)",
+      "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --unstaged ignore)",
+      "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin --unstaged include)",
+      "Bash(echo $MESSAGE | rhx git.commit.set -m @stdin)",
+      "Bash(echo $REASON | npx rhachet run --skill set.package.install --package zod --at 3.22.4 --for prod --reason @stdin)",
+      "Bash(echo '{ pattern }' | npx rhachet run --skill sedreplace --old @stdin --new 'replacement' --glob 'src/**/*.ts')",
+      "Bash(echo:*)",
+      "Bash(file:*)",
+      "Bash(gh api --method GET:*)",
+      "Bash(gh api -X GET:*)",
+      "Bash(gh issue list:*)",
+      "Bash(gh issue status:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh pr diff:*)",
+      "Bash(gh pr list:*)",
+      "Bash(gh pr status:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh release list:*)",
+      "Bash(gh release view:*)",
+      "Bash(gh repo list:*)",
+      "Bash(gh repo view:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh run watch:*)",
+      "Bash(gh search code:*)",
+      "Bash(gh search commits:*)",
+      "Bash(gh search issues:*)",
+      "Bash(gh search prs:*)",
+      "Bash(gh search repos:*)",
+      "Bash(gh workflow list:*)",
+      "Bash(gh workflow view:*)",
+      "Bash(git blame:*)",
+      "Bash(git cat-file:*)",
+      "Bash(git check-ignore:*)",
+      "Bash(git describe:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git ls-files:*)",
+      "Bash(git ls-tree:*)",
+      "Bash(git show:*)",
+      "Bash(git status:*)",
+      "Bash(head:*)",
+      "Bash(jq)",
+      "Bash(npm ci)",
+      "Bash(npm help:*)",
+      "Bash(npm list:*)",
+      "Bash(npm remove:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run build:compile)",
+      "Bash(npm run fix:*)",
+      "Bash(npm run fix:format:*)",
+      "Bash(npm run fix:lint:*)",
+      "Bash(npm run start:testdb:*)",
+      "Bash(npm view:*)",
+      "Bash(npm why:*)",
+      "Bash(npx jest --listTests:*)",
+      "Bash(npx rhachet run --skill condense --from 'briefs/**/*.md' --mode apply)",
+      "Bash(npx rhachet run --skill condense --from briefs/rule.md --mode apply)",
+      "Bash(npx rhachet run --skill condense --from briefs/rule.md --mode plan)",
+      "Bash(npx rhachet run --skill condense --from briefs/rule.md --onVerify restore)",
+      "Bash(npx rhachet run --skill condense --from briefs/rule.md)",
+      "Bash(npx rhachet run --skill condense:*)",
+      "Bash(npx rhachet run --skill cpsafe:*)",
+      "Bash(npx rhachet run --skill get.package.docs filetree --of iso-price)",
+      "Bash(npx rhachet run --skill get.package.docs readme --of iso-price)",
+      "Bash(npx rhachet run --skill get.package.docs:*)",
+      "Bash(npx rhachet run --skill git.branch.cutover:*)",
+      "Bash(npx rhachet run --skill git.branch.rebase begin --mode apply)",
+      "Bash(npx rhachet run --skill git.branch.rebase begin)",
+      "Bash(npx rhachet run --skill git.branch.rebase:*)",
+      "Bash(npx rhachet run --skill git.branch.uses:*)",
+      "Bash(npx rhachet run --skill git.commit.bind get)",
+      "Bash(npx rhachet run --skill git.commit.bind:*)",
+      "Bash(npx rhachet run --skill git.commit.push:*)",
+      "Bash(npx rhachet run --skill git.commit.set:*)",
+      "Bash(npx rhachet run --skill git.commit.sponsor get)",
+      "Bash(npx rhachet run --skill git.commit.sponsor:*)",
+      "Bash(npx rhachet run --skill git.commit.uses get)",
+      "Bash(npx rhachet run --skill git.commit.uses:*)",
+      "Bash(npx rhachet run --skill git.release:*)",
+      "Bash(npx rhachet run --skill git.repo.get:*)",
+      "Bash(npx rhachet run --skill git.repo.test:*)",
+      "Bash(npx rhachet run --skill git.stage.add --glob 'src/**/*.ts')",
+      "Bash(npx rhachet run --skill git.stage.add src/file1.ts src/file2.ts)",
+      "Bash(npx rhachet run --skill git.stage.add:*)",
+      "Bash(npx rhachet run --skill globsafe --pattern '*.md' --path docs/)",
+      "Bash(npx rhachet run --skill globsafe --pattern 'src/**/*.ts')",
+      "Bash(npx rhachet run --skill globsafe:*)",
+      "Bash(npx rhachet run --skill grepsafe --pattern 'foo|bar' --glob '*.ts')",
+      "Bash(npx rhachet run --skill grepsafe --pattern 'foo|bar')",
+      "Bash(npx rhachet run --skill grepsafe:*)",
+      "Bash(npx rhachet run --skill mkdirsafe --path 'src/deep/nested' --parents)",
+      "Bash(npx rhachet run --skill mkdirsafe --path 'src/domain')",
+      "Bash(npx rhachet run --skill mkdirsafe:*)",
+      "Bash(npx rhachet run --skill mvsafe:*)",
+      "Bash(npx rhachet run --skill permissions.get:*)",
+      "Bash(npx rhachet run --skill rmsafe:*)",
+      "Bash(npx rhachet run --skill sedreplace --old 'oldName' --new 'newName' --glob 'src/**/*.ts' --mode apply)",
+      "Bash(npx rhachet run --skill sedreplace --old 'oldName' --new 'newName' --glob 'src/**/*.ts')",
+      "Bash(npx rhachet run --skill sedreplace:*)",
+      "Bash(npx rhachet run --skill set.package.install --package zod --at 3.22.4 --for prod --reason 'runtime validation')",
+      "Bash(npx rhachet run --skill set.package.install:*)",
+      "Bash(npx rhachet run --skill set.package.upgrade --package zod --to 3.23.0)",
+      "Bash(npx rhachet run --skill set.package.upgrade --package zod --to @latest)",
+      "Bash(npx rhachet run --skill set.package.upgrade:*)",
+      "Bash(npx rhachet run --skill show.gh.action.logs:*)",
+      "Bash(npx rhachet run --skill show.gh.test.errors --scope test-integration)",
+      "Bash(npx rhachet run --skill show.gh.test.errors:*)",
+      "Bash(npx rhachet run --skill symlink:*)",
+      "Bash(npx rhachet run --skill teesafe:*)",
+      "Bash(npx rhachet run:*)",
+      "Bash(npx rhachet:*)",
+      "Bash(npx rhx keyrack unlock --owner ehmpath --env:*)",
+      "Bash(npx rhx:*)",
+      "Bash(npx tsx ./bin/run:*)",
+      "Bash(pnpm help:*)",
+      "Bash(pnpm list:*)",
+      "Bash(pnpm remove:*)",
+      "Bash(pnpm view:*)",
+      "Bash(pnpm why:*)",
+      "Bash(printf '{ old }\\0{ new }' | npx rhachet run --skill sedreplace --old @stdin --new @stdin --glob 'src/**/*.ts')",
+      "Bash(printf:*)",
+      "Bash(pwd)",
+      "Bash(rhx git.branch.cutover abort)",
+      "Bash(rhx git.branch.cutover begin --from @main --into turtle/wave-report-v2 --pick a1b2c3d --mode apply)",
+      "Bash(rhx git.branch.cutover begin --from @main --into turtle/wave-report-v2 --pick a1b2c3d)",
+      "Bash(rhx git.branch.cutover continue)",
+      "Bash(rhx git.branch.cutover:*)",
+      "Bash(rhx git.branch.rebase abort)",
+      "Bash(rhx git.branch.rebase begin --mode apply)",
+      "Bash(rhx git.branch.rebase begin)",
+      "Bash(rhx git.branch.rebase continue)",
+      "Bash(rhx git.branch.rebase take --whos ours .eslintrc.json)",
+      "Bash(rhx git.branch.rebase take --whos theirs .)",
+      "Bash(rhx git.branch.rebase take --whos theirs pnpm-lock.yaml)",
+      "Bash(rhx git.branch.rebase take:*)",
+      "Bash(rhx git.branch.rebase:*)",
+      "Bash(rhx git.branch.uses get)",
+      "Bash(rhx git.branch.uses:*)",
+      "Bash(rhx git.commit.push:*)",
+      "Bash(rhx git.commit.set:*)",
+      "Bash(rhx git.release:*)",
+      "Bash(rhx git.repo.get files --in ehmpathy/domain-objects)",
+      "Bash(rhx git.repo.get files --repos 'ehmpathy/*' --words 'DomainEntity')",
+      "Bash(rhx git.repo.get lines --in ehmpathy/domain-objects --paths 'src/index.ts')",
+      "Bash(rhx git.repo.get lines --in ehmpathy/domain-objects --words 'DomainEntity')",
+      "Bash(rhx git.repo.get repos --repos 'ehmpathy/*')",
+      "Bash(rhx git.repo.get:*)",
+      "Bash(rhx git.repo.test --what acceptance)",
+      "Bash(rhx git.repo.test --what format)",
+      "Bash(rhx git.repo.test --what integration --resnap)",
+      "Bash(rhx git.repo.test --what integration --scope 'name://invoice')",
+      "Bash(rhx git.repo.test --what integration --scope invoice)",
+      "Bash(rhx git.repo.test --what integration)",
+      "Bash(rhx git.repo.test --what lint)",
+      "Bash(rhx git.repo.test --what types)",
+      "Bash(rhx git.repo.test --what unit --resnap)",
+      "Bash(rhx git.repo.test --what unit --scope 'name://getUserById')",
+      "Bash(rhx git.repo.test --what unit --scope 'path://src/domain.operations/customer')",
+      "Bash(rhx git.repo.test --what unit --scope getUserById --resnap)",
+      "Bash(rhx git.repo.test --what unit --scope getUserById)",
+      "Bash(rhx git.repo.test --what unit --scope src/domain.operations/customer)",
+      "Bash(rhx git.repo.test --what unit)",
+      "Bash(rhx git.repo.test:*)",
+      "Bash(rhx git.stage.add --glob 'src/**/*.ts')",
+      "Bash(rhx git.stage.add src/file1.ts src/file2.ts)",
+      "Bash(rhx git.stage.add:*)",
+      "Bash(rhx globsafe --pattern 'src/**/*.ts' --long)",
+      "Bash(rhx globsafe:*)",
+      "Bash(rhx grepsafe --pattern '(ERROR|WARN):' --context 3)",
+      "Bash(rhx grepsafe:*)",
+      "Bash(rhx keyrack unlock --owner ehmpath --env:*)",
+      "Bash(rhx mkdirsafe --path 'src' --path 'test' --path 'docs')",
+      "Bash(rhx mkdirsafe:*)",
+      "Bash(rhx permissions.get --for 'ls src')",
+      "Bash(rhx permissions.get --head git)",
+      "Bash(rhx permissions.get:*)",
+      "Bash(rhx set.package.install:*)",
+      "Bash(rhx set.package.upgrade:*)",
+      "Bash(rhx teesafe:*)",
+      "Bash(rhx:*)",
+      "Bash(tail:*)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(which:*)",
+      "Edit(**/.test/**)",
+      "Edit(.agent/.notes/**)",
+      "Edit(.route/**)",
+      "WebFetch",
+      "WebSearch",
+      "Write(.route/**)",
+      "mcp__ide__getDiagnostics"
+    ],
+    "deny": [
+      "Bash(bash:*)",
+      "Bash(cd:*)",
+      "Bash(find:*)",
+      "Bash(gh api --method DELETE:*)",
+      "Bash(gh api --method PATCH:*)",
+      "Bash(gh api --method POST:*)",
+      "Bash(gh api --method PUT:*)",
+      "Bash(gh api -X DELETE:*)",
+      "Bash(gh api -X PATCH:*)",
+      "Bash(gh api -X POST:*)",
+      "Bash(gh api -X PUT:*)",
+      "Bash(gh gist create:*)",
+      "Bash(gh gist delete:*)",
+      "Bash(gh gist edit:*)",
+      "Bash(gh issue close:*)",
+      "Bash(gh issue comment:*)",
+      "Bash(gh issue create:*)",
+      "Bash(gh issue edit:*)",
+      "Bash(gh issue reopen:*)",
+      "Bash(gh label create:*)",
+      "Bash(gh label delete:*)",
+      "Bash(gh label edit:*)",
+      "Bash(gh pr close:*)",
+      "Bash(gh pr comment:*)",
+      "Bash(gh pr create:*)",
+      "Bash(gh pr edit:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(gh pr reopen:*)",
+      "Bash(gh pr review:*)",
+      "Bash(gh project create:*)",
+      "Bash(gh project delete:*)",
+      "Bash(gh project edit:*)",
+      "Bash(gh release create:*)",
+      "Bash(gh release delete:*)",
+      "Bash(gh release edit:*)",
+      "Bash(gh repo create:*)",
+      "Bash(gh repo delete:*)",
+      "Bash(gh repo edit:*)",
+      "Bash(gh repo fork:*)",
+      "Bash(gh run cancel:*)",
+      "Bash(gh run rerun:*)",
+      "Bash(gh workflow disable:*)",
+      "Bash(gh workflow enable:*)",
+      "Bash(gh workflow run:*)",
+      "Bash(git add --all:*)",
+      "Bash(git add -A:*)",
+      "Bash(git add .)",
+      "Bash(git branch -D:*)",
+      "Bash(git branch -d:*)",
+      "Bash(git checkout:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)",
+      "Bash(git reflog delete:*)",
+      "Bash(git reflog expire:*)",
+      "Bash(git release:*)",
+      "Bash(git remote add:*)",
+      "Bash(git remote remove:*)",
+      "Bash(git remote set-url:*)",
+      "Bash(git stash:*)",
+      "Bash(git tag -d:*)",
+      "Bash(grep:*)",
+      "Bash(ln:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(npx biome:*)",
+      "Bash(npx jest:*)",
+      "Bash(npx rhachet run --skill git.branch.uses -- allow:*)",
+      "Bash(npx rhachet run --skill git.branch.uses -- set:*)",
+      "Bash(npx rhachet run --skill git.branch.uses --global allow:*)",
+      "Bash(npx rhachet run --skill git.branch.uses --org * allow:*)",
+      "Bash(npx rhachet run --skill git.branch.uses --org * del:*)",
+      "Bash(npx rhachet run --skill git.branch.uses allow:*)",
+      "Bash(npx rhachet run --skill git.branch.uses set:*)",
+      "Bash(npx rhachet run --skill git.commit.bind -- del:*)",
+      "Bash(npx rhachet run --skill git.commit.bind -- set:*)",
+      "Bash(npx rhachet run --skill git.commit.bind del:*)",
+      "Bash(npx rhachet run --skill git.commit.bind set:*)",
+      "Bash(npx rhachet run --skill git.commit.sponsor -- del:*)",
+      "Bash(npx rhachet run --skill git.commit.sponsor -- set:*)",
+      "Bash(npx rhachet run --skill git.commit.sponsor del:*)",
+      "Bash(npx rhachet run --skill git.commit.sponsor set:*)",
+      "Bash(npx rhachet run --skill git.commit.uses -- allow:*)",
+      "Bash(npx rhachet run --skill git.commit.uses -- set:*)",
+      "Bash(npx rhachet run --skill git.commit.uses --global allow:*)",
+      "Bash(npx rhachet run --skill git.commit.uses --org * allow:*)",
+      "Bash(npx rhachet run --skill git.commit.uses --org * del:*)",
+      "Bash(npx rhachet run --skill git.commit.uses allow:*)",
+      "Bash(npx rhachet run --skill git.commit.uses set:*)",
+      "Bash(rhx git.branch.uses -- allow:*)",
+      "Bash(rhx git.branch.uses -- set:*)",
+      "Bash(rhx git.branch.uses --global allow:*)",
+      "Bash(rhx git.branch.uses --org * allow:*)",
+      "Bash(rhx git.branch.uses --org * del:*)",
+      "Bash(rhx git.branch.uses allow:*)",
+      "Bash(rhx git.branch.uses set:*)",
+      "Bash(rhx git.commit.bind -- del:*)",
+      "Bash(rhx git.commit.bind -- set:*)",
+      "Bash(rhx git.commit.bind del:*)",
+      "Bash(rhx git.commit.bind set:*)",
+      "Bash(rhx git.commit.sponsor -- del:*)",
+      "Bash(rhx git.commit.sponsor -- set:*)",
+      "Bash(rhx git.commit.sponsor del:*)",
+      "Bash(rhx git.commit.sponsor set:*)",
+      "Bash(rhx git.commit.uses -- allow:*)",
+      "Bash(rhx git.commit.uses -- set:*)",
+      "Bash(rhx git.commit.uses --global allow:*)",
+      "Bash(rhx git.commit.uses --org * allow:*)",
+      "Bash(rhx git.commit.uses --org * del:*)",
+      "Bash(rhx git.commit.uses allow:*)",
+      "Bash(rhx git.commit.uses set:*)",
+      "Bash(sed:*)",
+      "Bash(tee:*)",
+      "Edit(.branch/.bind/*)",
+      "Edit(.meter/*)",
+      "EnterPlanMode",
+      "Read(.quarantine/*)"
+    ],
+    "ask": [
+      "Bash(chmod:*)",
+      "Bash(npm install:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm install:*)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhx route.drive --when hook.onBoot",
+            "timeout": 25,
+            "author": "repo=bhrain/role=driver"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet run --repo bhuild --role behaver --init claude.hooks/sessionstart.boot-behavior",
+            "timeout": 10,
+            "author": "repo=bhuild/role=behaver"
+          },
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/sessionstart.notify-permissions.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          },
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/sessionstart.git-pull-watch.sh",
+            "timeout": 45,
+            "author": "repo=ehmpathy/role=mechanic"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhx goal.triage.next --when hook.onBoot",
+            "timeout": 10,
+            "author": "repo=bhrain/role=achiever"
+          }
+        ]
+      },
+      {
+        "matcher": "PostCompact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/postcompact.trust-but-verify.sh",
+            "timeout": 30,
+            "author": "repo=ehmpathy/role=mechanic"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhx route.bounce --mode hook",
+            "timeout": 5,
+            "author": "repo=bhrain/role=driver"
+          },
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/pretooluse.forbid-terms.gerunds.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          },
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/pretooluse.forbid-terms.blocklist.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          }
+        ]
+      },
+      {
+        "matcher": "Read|Write|Edit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhx route.mutate.guard --mode hook",
+            "timeout": 5,
+            "author": "repo=bhrain/role=driver"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhx goal.guard",
+            "timeout": 5,
+            "author": "repo=bhrain/role=achiever"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhx route.foreground.guard --mode hook",
+            "timeout": 5,
+            "author": "repo=bhrain/role=driver"
+          },
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/pretooluse.forbid-test-background.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          },
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/pretooluse.forbid-sedreplace-special-chars.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          },
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/pretooluse.forbid-suspicious-shell-syntax.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          },
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/pretooluse.forbid-stderr-redirect.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          },
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/pretooluse.check-permissions.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|Read|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/pretooluse.forbid-tmp-writes.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/pretooluse.forbid-shouted-readme.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|Read|NotebookEdit|Grep|Glob|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/pretooluse.forbid-cross-repo-access.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          }
+        ]
+      },
+      {
+        "matcher": "EnterPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/pretooluse.forbid-planmode.sh",
+            "timeout": 10,
+            "author": "repo=ehmpathy/role=mechanic"
+          }
+        ]
+      },
+      {
+        "matcher": "WebFetch",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/posttooluse.guardBorder.onWebfetch.sh",
+            "timeout": 60,
+            "author": "repo=ehmpathy/role=mechanic"
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhx memory.guard --mode hook",
+            "timeout": 5,
+            "author": "repo=bhrain/role=learner"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhx route.drive --when hook.onStop",
+            "timeout": 25,
+            "author": "repo=bhrain/role=driver"
+          },
+          {
+            "type": "command",
+            "command": "node -e \"import('rhachet-roles-bhuild/cli').then(m => m.cli.radioTaskQueue())\" -- get --when hook.onStop",
+            "timeout": 10,
+            "author": "repo=bhuild/role=dispatcher"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhx elucidate.summary --when hook.onStop",
+            "timeout": 5,
+            "author": "repo=bhrain/role=telepath"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhachet roles cost --all --when hook.onStop",
+            "timeout": 60,
+            "author": "repo=.this/role=any"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .agent/repo=ehmpathy/role=mechanic/inits/claude.hooks/userpromptsubmit.git-pull-watch.sh",
+            "timeout": 15,
+            "author": "repo=ehmpathy/role=mechanic"
+          },
+          {
+            "type": "command",
+            "command": "./node_modules/.bin/rhx goal.triage.infer --when hook.onTalk",
+            "timeout": 5,
+            "author": "repo=bhrain/role=achiever"
+          }
+        ]
+      }
+    ]
+  },
+  "claudeMdExcludes": [
+    "/home/camper/.claude/CLAUDE.md",
+    "**/CLAUDE.local.md"
+  ]
+}

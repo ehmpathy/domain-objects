@@ -1,8 +1,19 @@
+# [git] exclude package locks from git diff; https://stackoverflow.com/a/72834452/3068233
+pnpm-lock.yaml -diff
 package-lock.json -diff
 
-# exclude package locks from git diff; https://stackoverflow.com/a/72834452/3068233
-pnpm-lock.yaml -diff
-
-# auto-resolve lock file conflicts by taking theirs; run install after merge
+# [git] auto-resolve lock file conflicts by taking theirs; run install after merge
 pnpm-lock.yaml merge=theirs
 package-lock.json merge=theirs
+
+# [tests-any] collapse test source in pr diffs; snapshots stay open
+*.test.ts linguist-generated
+*.test.tsx linguist-generated
+
+# [rhachet] collapse route robocode in pr diffs; yields and radio stay open
+.route/** linguist-generated
+.route/**/*.yield.* -linguist-generated
+.route/**/.radio/** -linguist-generated
+.behavior/** linguist-generated
+.behavior/**/*.yield.* -linguist-generated
+.behavior/**/.radio/** -linguist-generated

@@ -13,6 +13,6 @@
     "**/*.test.js",
     "**/.test/**/*",
     "**/.scratch/**/*",
-    "**/__test*__/**/*" // todo: deprecate this pattern in favor of .test
+    "**/__test*__/**/*" // legacy dunder test dirs; new test assets live under .test
   ]
 }
